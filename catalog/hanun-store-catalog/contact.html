@@ -1,0 +1,119 @@
+<!-- ═══════════════════════════════════════════════════════
+     SIMPAN FILE INI MENJADI 3 FILE TERPISAH:
+     - contact.html
+     - tnc.html  
+     - refund.html
+     Masing-masing sudah dipisah dengan komentar di bawah
+════════════════════════════════════════════════════════ -->
+
+<!-- ╔══════════════════════════════════════╗ -->
+<!-- ║  FILE 1: contact.html               ║ -->
+<!-- ╚══════════════════════════════════════╝ -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hubungi Kami — Hanun Store</title>
+<link rel="icon" type="image/jpeg" href="GANTI_DENGAN_URL_LOGO_ANDA">
+<link rel="manifest" href="/manifest.json"><meta name="theme-color" content="#1B3A6B">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1B3A6B;--orange:#E07B2A;--cream:#F5EFE6;--cream2:#EDE4D6;--white:#fff;--g50:#F8FAFC;--g100:#F1F5F9;--g200:#E2E8F0;--g500:#64748B;--g700:#334155;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream);color:var(--g700);min-height:100vh;}
+header{background:var(--navy);padding:14px 20px;display:flex;align-items:center;gap:10px;box-shadow:0 2px 12px rgba(0,0,0,.2);}
+.logo-box{width:38px;height:38px;background:var(--cream);border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.logo-box svg{width:24px;height:24px;}
+.brand-name{font-size:16px;font-weight:800;color:#fff;}
+.hspacer{flex:1;}
+.back-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:7px 12px;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;}
+.main{max-width:560px;margin:0 auto;padding:24px 16px 60px;}
+.hero{text-align:center;margin-bottom:28px;}
+.hero h1{font-size:24px;font-weight:800;color:var(--navy);margin-bottom:8px;}
+.hero p{font-size:14px;color:var(--g500);}
+.card{background:var(--white);border-radius:14px;border:1px solid var(--cream2);padding:20px;margin-bottom:14px;}
+.card-title{font-size:13px;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;display:flex;align-items:center;gap:6px;}
+.card-title::before{content:'';width:3px;height:14px;background:var(--orange);border-radius:2px;display:inline-block;}
+.info-row{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px;font-size:14px;}
+.info-row:last-child{margin-bottom:0;}
+.info-icon{width:36px;height:36px;background:var(--cream);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.info-icon svg{width:18px;height:18px;color:var(--navy);}
+.info-label{font-size:11px;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:.5px;}
+.info-val{font-size:14px;font-weight:600;color:var(--g700);margin-top:2px;}
+.btn-wa{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;background:#25D366;color:#fff;border-radius:12px;font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:700;text-decoration:none;margin-bottom:10px;transition:opacity .15s;}
+.btn-wa:hover{opacity:.88;}
+.jam-row{display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:1px solid var(--cream2);}
+.jam-row:last-child{border-bottom:none;}
+footer{text-align:center;padding:16px;font-size:11px;color:var(--g500);}
+footer a{color:var(--orange);text-decoration:none;font-weight:600;}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo-box"><img src="GANTI_DENGAN_URL_LOGO_ANDA" alt="Hanun Store" style="width:100%;height:100%;object-fit:cover;"></div>
+  <span class="brand-name">Hanun Store</span>
+  <div class="hspacer"></div>
+  <button onclick="goBackOrHome()" class="back-btn" style="margin-right:6px;cursor:pointer;border:1px solid rgba(255,255,255,.2);">← Kembali</button>
+  <a href="index.html" class="back-btn">🏠 Beranda</a>
+</header>
+
+<script>
+function goBackOrHome() {
+  if (document.referrer && document.referrer.includes(location.host)) {
+    history.back();
+  } else {
+    location.href = 'index.html';
+  }
+}
+</script>
+<div class="main">
+  <div class="hero">
+    <h1>Hubungi Kami</h1>
+    <p>Kami siap membantu Anda. Pilih cara yang paling mudah untuk menghubungi tim Hanun Store.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Kontak Langsung</div>
+    <a class="btn-wa" href="https://wa.me/GANTI_NOMOR_WA_ADMIN" target="_blank" rel="noopener">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+      Chat via WhatsApp: GANTI-NOMOR-WA-ADMIN
+    </a>
+
+    <div class="info-row">
+      <div class="info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7"/></svg></div>
+      <div><div class="info-label">Email</div><div class="info-val">email@ganti-toko-anda.com</div></div>
+    </div>
+    <div class="info-row">
+      <div class="info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+      <div><div class="info-label">Lokasi</div><div class="info-val">Indonesia (Layanan Seluruh Indonesia)</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Jam Operasional</div>
+    <div class="jam-row"><span>Senin – Jumat</span><span style="font-weight:700;">07.00 – 20.00 WIB</span></div>
+    <div class="jam-row"><span>Sabtu</span><span style="font-weight:700;">08.00 – 17.00 WIB</span></div>
+    <div class="jam-row"><span>Minggu & Hari Libur</span><span style="font-weight:700;">08.00 – 14.00 WIB</span></div>
+    <p style="font-size:12px;color:var(--g500);margin-top:12px;">Pesan WA di luar jam operasional akan kami balas pada jam kerja berikutnya.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Informasi Toko</div>
+    <div class="info-row">
+      <div class="info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div>
+      <div><div class="info-label">Nama Toko</div><div class="info-val">Hanun Store</div></div>
+    </div>
+    <div class="info-row">
+      <div class="info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div>
+      <div><div class="info-label">Kategori</div><div class="info-val">Produk Digital — Perangkat Ajar</div></div>
+    </div>
+    <div class="info-row">
+      <div class="info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
+      <div><div class="info-label">Toko Shopee</div><div class="info-val"><a href="https://shopee.co.id/GANTI_NAMA_TOKO_SHOPEE" target="_blank" rel="noopener" style="color:var(--orange);font-weight:700;text-decoration:none;">shopee.co.id/GANTI_NAMA_TOKO_SHOPEE</a></div></div>
+    </div>
+  </div>
+</div>
+<footer>&copy; 2025 Hanun Store &nbsp;·&nbsp; <a href="tnc.html">Syarat & Ketentuan</a> &nbsp;·&nbsp; <a href="refund.html">Kebijakan Pengembalian</a></footer>
+</body>
+</html>

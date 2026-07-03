@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Detail Produk — Hanun Store</title>
+<link rel="icon" type="image/jpeg" href="GANTI_DENGAN_URL_LOGO_ANDA">
+<meta name="description" content="Detail produk perangkat ajar digital Hanun Store.">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#1B3A6B">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1B3A6B;--navy2:#2A4F8F;--orange:#E07B2A;--orange2:#F5A040;
+  --cream:#F5EFE6;--cream2:#EDE4D6;--white:#fff;
+  --g50:#F8FAFC;--g100:#F1F5F9;--g200:#E2E8F0;--g300:#CBD5E1;
+  --g500:#64748B;--g700:#334155;
+  --green:#16A34A;--green-bg:#DCFCE7;
+  --red:#DC2626;--red-bg:#FEE2E2;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream);color:var(--g700);min-height:100vh;}
+
+/* HEADER */
+header{background:var(--navy);padding:14px 20px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.2);}
+.logo-box{width:38px;height:38px;background:var(--cream);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.logo-box svg{width:24px;height:24px;}
+.brand-name{font-size:16px;font-weight:800;color:#fff;}
+.brand-sub{font-size:10px;color:var(--orange2);font-weight:600;display:block;letter-spacing:.5px;}
+.hspacer{flex:1;}
+.cart-btn{position:relative;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:8px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .15s;}
+.cart-btn:hover{background:rgba(255,255,255,.2);}
+.cart-btn svg{width:18px;height:18px;color:#fff;}
+.cart-badge{position:absolute;top:-6px;right:-6px;background:var(--orange);color:#fff;font-size:10px;font-weight:800;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;display:none;}
+
+/* BREADCRUMB */
+.breadcrumb{padding:12px 20px;font-size:12px;color:var(--g500);display:flex;align-items:center;gap:6px;max-width:640px;margin:0 auto;}
+.breadcrumb a{color:var(--orange);text-decoration:none;font-weight:600;}
+.breadcrumb a:hover{text-decoration:underline;}
+
+/* MAIN */
+.main{max-width:640px;margin:0 auto;padding:0 16px 80px;}
+
+/* FOTO */
+.foto-container{position:relative;margin-bottom:16px;}
+.foto-wrap{background:var(--white);border-radius:16px;overflow:hidden;border:1px solid var(--cream2);aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;}
+.foto-wrap img{width:100%;height:100%;object-fit:cover;}
+.foto-placeholder{display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--g300);}
+.foto-placeholder svg{width:48px;height:48px;}
+.foto-placeholder span{font-size:13px;}
+.btn-share-float{
+  position:absolute;top:12px;right:12px;width:38px;height:38px;border-radius:50%;
+  background:rgba(255,255,255,.92);border:1px solid var(--cream2);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  box-shadow:0 2px 10px rgba(0,0,0,.15);z-index:5;transition:background .15s;
+}
+.btn-share-float:hover{background:#fff;}
+.btn-share-float svg{width:18px;height:18px;color:var(--navy);}
+
+/* SHARE MODAL */
+.share-opts{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 10px;margin:18px 0 4px;}
+.share-opt{display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:600;color:var(--g700);padding:0;}
+.share-opt .icon-circle{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;}
+.share-opt svg{width:22px;height:22px;}
+.share-opt:hover .icon-circle{filter:brightness(1.08);}
+
+/* CARD INFO */
+.info-card{background:var(--white);border-radius:16px;padding:20px;margin-bottom:14px;border:1px solid var(--cream2);overflow:hidden;}
+.produk-nama{font-size:20px;font-weight:800;color:var(--navy);line-height:1.3;margin-bottom:8px;}
+.produk-harga{font-size:24px;font-weight:800;color:var(--orange);margin-bottom:12px;}
+.produk-harga span{font-size:13px;font-weight:500;color:var(--g500);}
+.produk-desc{font-size:14px;color:var(--g700);line-height:1.7;word-break:break-word;overflow-wrap:break-word;max-width:100%;margin-top:14px;}
+/* Tombol buka/tutup deskripsi */
+.btn-desc-toggle{
+  width:100%;margin-top:14px;padding:11px;border-radius:10px;
+  background:var(--g50);color:var(--navy);border:2px solid var(--g200);
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:13.5px;font-weight:700;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s;
+}
+.btn-desc-toggle:hover{background:var(--cream);border-color:var(--cream2);}
+.btn-desc-toggle .chevron{transition:transform .2s;}
+.btn-desc-toggle.open .chevron{transform:rotate(180deg);}
+.badge-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.badge{display:inline-flex;align-items:center;gap:4px;background:var(--green-bg);color:var(--green);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;}
+
+/* VARIASI */
+.variasi-card{background:var(--white);border-radius:16px;padding:20px;margin-bottom:14px;border:1px solid var(--cream2);}
+/* Flash highlight saat pembeli klik beli tanpa pilih variasi */
+@keyframes flashVariasi{0%,100%{box-shadow:0 0 0 0 rgba(224,123,42,0);}30%{box-shadow:0 0 0 3px rgba(224,123,42,.55);}}
+.variasi-card.flash{animation:flashVariasi 1s ease;}
+.variasi-title{font-size:13px;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;display:flex;align-items:center;gap:6px;}
+.variasi-title::before{content:'';width:3px;height:14px;background:var(--orange);border-radius:2px;display:inline-block;}
+.variasi-group{margin-bottom:16px;}
+.variasi-group:last-child{margin-bottom:0;}
+.variasi-label{font-size:13px;font-weight:700;color:var(--g700);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.variasi-selected{font-size:12px;font-weight:600;color:var(--orange);background:rgba(224,123,42,.1);padding:2px 8px;border-radius:5px;}
+.variasi-opts{display:flex;flex-wrap:wrap;gap:8px;}
+.variasi-opt{
+  padding:8px 14px;border-radius:8px;
+  border:2px solid var(--g200);background:var(--g50);
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:600;color:var(--g700);
+  cursor:pointer;transition:all .15s;
+}
+.variasi-opt:hover{border-color:var(--orange);color:var(--orange);}
+.variasi-opt.selected{border-color:var(--navy);background:var(--navy);color:#fff;}
+.variasi-opt.habis{opacity:.5;cursor:not-allowed;text-decoration:line-through;background:var(--g100);}
+.variasi-opt.habis:hover{border-color:var(--g200);color:var(--g700);}
+.badge-habis{display:inline-block;font-size:9px;font-weight:800;color:#DC2626;margin-left:4px;}
+
+/* CONTOH */
+.contoh-card{background:var(--white);border-radius:16px;padding:20px;margin-bottom:14px;border:1px solid var(--cream2);}
+.btn-contoh{
+  width:100%;padding:12px;border-radius:10px;
+  background:var(--g100);color:var(--navy);
+  border:2px solid var(--g200);
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:all .15s;
+}
+.btn-contoh:hover{background:var(--cream);border-color:var(--cream2);}
+.preview-wrap{display:none;margin-top:14px;}
+.preview-wrap.open{display:block;}
+.preview-frame{width:100%;height:420px;border:none;border-radius:10px;background:var(--g100);}
+.preview-fallback{margin-top:10px;padding:12px;background:var(--g50);border-radius:8px;border:1px solid var(--g200);font-size:13px;color:var(--g500);text-align:center;}
+.preview-fallback a{color:var(--orange);font-weight:700;text-decoration:none;}
+.preview-fallback a:hover{text-decoration:underline;}
+
+/* AKSI BAWAH — sticky */
+.aksi-bottom{
+  position:fixed;bottom:0;left:0;right:0;
+  background:var(--white);border-top:1px solid var(--cream2);
+  padding:12px 16px;
+  z-index:50;
+  box-shadow:0 -4px 20px rgba(0,0,0,.08);
+}
+.aksi-bottom-inner{
+  max-width:640px;margin:0 auto;
+  display:flex;gap:10px;
+}
+.btn-cart{
+  flex:1;padding:13px;border-radius:12px;
+  background:var(--navy);color:#fff;
+  border:none;font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:14px;font-weight:700;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  transition:background .15s,transform .1s;
+}
+.btn-cart:hover{background:var(--navy2);}
+.btn-cart:active{transform:scale(.98);}
+.btn-beli{
+  flex:1;padding:13px;border-radius:12px;
+  background:var(--orange);color:#fff;
+  border:none;font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:14px;font-weight:700;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  transition:background .15s,transform .1s;
+  box-shadow:0 2px 10px rgba(224,123,42,.35);
+}
+.btn-beli:hover{background:#C96E1F;}
+.btn-beli:active{transform:scale(.98);}
+
+/* TOAST */
+#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;font-size:13px;font-weight:700;padding:10px 20px;border-radius:10px;white-space:nowrap;opacity:0;transition:opacity .25s;z-index:999;pointer-events:none;}
+#toast.show{opacity:1;}
+
+/* LOADING */
+.skeleton{background:linear-gradient(90deg,var(--cream2) 25%,var(--cream) 50%,var(--cream2) 75%);background-size:200% 100%;animation:skel 1.2s ease-in-out infinite;border-radius:10px;}
+@keyframes skel{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* MODAL VARIASI WARNING */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:var(--white);border-radius:16px;padding:28px 24px;max-width:320px;width:100%;text-align:center;}
+.modal-box h3{font-size:17px;font-weight:800;color:var(--navy);margin-bottom:8px;}
+.modal-box p{font-size:14px;color:var(--g500);margin-bottom:20px;line-height:1.6;}
+.btn-modal-ok{width:100%;padding:12px;background:var(--orange);color:#fff;border:none;border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;}
+</style>
+</head>
+<body>
+
+<header>
+  <button onclick="goBackOrHome()" style="width:34px;height:34px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+  </button>
+  <a href="index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;margin-left:6px;">
+    <div class="logo-box">
+      <img src="GANTI_DENGAN_URL_LOGO_ANDA" alt="Hanun Store" style="width:100%;height:100%;object-fit:cover;">
+    </div>
+    <div><span class="brand-name">Hanun Store</span><span class="brand-sub">PERANGKAT AJAR DIGITAL</span></div>
+  </a>
+  <div class="hspacer"></div>
+  <a href="cart.html" class="cart-btn" id="cart-link">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+    <span class="cart-badge" id="cart-badge">0</span>
+  </a>
+</header>
+
+<div class="breadcrumb">
+  <a href="index.html">Beranda</a>
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+  <span id="bc-nama">Detail Produk</span>
+</div>
+
+<div class="main">
+  <!-- FOTO -->
+  <div class="foto-container">
+    <div class="foto-wrap" id="foto-wrap">
+      <div class="foto-placeholder skeleton" style="width:100%;height:100%;"></div>
+    </div>
+    <button class="btn-share-float" onclick="bukaShareModal()" title="Bagikan produk" aria-label="Bagikan produk">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.5" x2="15.4" y2="6.5"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/></svg>
+    </button>
+  </div>
+
+  <!-- INFO -->
+  <div class="info-card" id="info-card">
+    <div class="skeleton" style="height:28px;border-radius:6px;margin-bottom:10px;"></div>
+    <div class="skeleton" style="height:20px;width:40%;border-radius:6px;margin-bottom:12px;"></div>
+    <div class="skeleton" style="height:60px;border-radius:6px;"></div>
+  </div>
+
+  <!-- VARIASI (hidden until loaded) -->
+  <div class="variasi-card" id="variasi-card" style="display:none;"></div>
+
+  <!-- CONTOH (hidden until loaded) -->
+  <div class="contoh-card" id="contoh-card" style="display:none;">
+    <button class="btn-contoh" onclick="togglePreview()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      <span id="btn-contoh-txt">Lihat Contoh Isi Produk</span>
+    </button>
+    <div class="preview-wrap" id="preview-wrap">
+      <iframe id="preview-frame" class="preview-frame" allowfullscreen></iframe>
+      <div class="preview-fallback">
+        Preview tidak muncul? 
+        <a href="#" id="preview-link" target="_blank" rel="noopener">Klik di sini untuk buka langsung di Google Drive</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AKSI BAWAH -->
+<div class="aksi-bottom">
+  <div class="aksi-bottom-inner">
+    <button class="btn-cart" onclick="tambahKeranjang()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      Keranjang
+    </button>
+    <button class="btn-beli" onclick="beliSekarang()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      Beli Sekarang
+    </button>
+  </div>
+</div>
+
+<!-- MODAL SHARE -->
+<div class="modal-overlay" id="modal-share" onclick="if(event.target===this) tutupShareModal()">
+  <div class="modal-box">
+    <h3>Bagikan Produk</h3>
+    <div class="share-opts">
+      <button class="share-opt" onclick="shareVia('whatsapp')">
+        <span class="icon-circle" style="background:#25D366;">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.6-.8-1.8-.9-.2-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.2.2-.3.2-.5.1-.3-.1-1.2-.4-2.3-1.4-.8-.7-1.4-1.6-1.6-1.9-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.2-.4.1-.2 0-.3 0-.4-.1-.1-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.3-.8.8-.8 1.9s.8 2.2.9 2.4c.1.2 1.6 2.5 4 3.5.6.2 1 .4 1.3.5.6.2 1.1.1 1.5.1.5-.1 1.6-.6 1.8-1.3.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.5-.3z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.6 1.4 5.1L2 22l5-1.3c1.4.8 3.1 1.2 4.9 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18.1c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3C4 14.9 3.7 13.5 3.7 12c0-4.6 3.7-8.3 8.3-8.3s8.3 3.7 8.3 8.3-3.7 8.3-8.3 8.3z"/></svg>
+        </span>
+        WhatsApp
+      </button>
+      <button class="share-opt" onclick="shareVia('facebook')">
+        <span class="icon-circle" style="background:#1877F2;">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-7.6h2.6l.4-3h-3v-1.9c0-.9.2-1.5 1.5-1.5h1.6V4.3c-.3 0-1.2-.1-2.2-.1-2.2 0-3.8 1.4-3.8 3.9v2.2H8v3h2.6V21h2.9z"/></svg>
+        </span>
+        Facebook
+      </button>
+      <button class="share-opt" onclick="shareVia('telegram')">
+        <span class="icon-circle" style="background:#26A5E4;">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.5 4.5L18.9 19c-.2 1-.8 1.2-1.6.8l-4.4-3.3-2.1 2c-.2.2-.4.4-.9.4l.3-4.5 8.2-7.4c.4-.3-.1-.5-.5-.2L7.1 13 2.7 11.6c-.9-.3-.9-.9.2-1.4L20.3 3.4c.8-.3 1.5.2 1.2 1.1z"/></svg>
+        </span>
+        Telegram
+      </button>
+      <button class="share-opt" onclick="shareVia('twitter')">
+        <span class="icon-circle" style="background:#000;">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.6 10.6L20 3h-1.9l-5.6 6.6L8 3H3l6.7 9.7L3 21h1.9l5.9-6.9L15.9 21H21l-7.4-10.4zm-2.1 2.5l-.7-1L5.4 4.4h2.2l4.4 6.3.7 1 5.7 8.2h-2.2l-4.7-6.7z"/></svg>
+        </span>
+        X
+      </button>
+    </div>
+    <button class="btn-modal-ok" onclick="salinLink()" style="margin-top:6px;display:flex;align-items:center;justify-content:center;gap:8px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+      Salin Link
+    </button>
+    <button class="btn-modal-ok" onclick="tutupShareModal()" style="margin-top:8px;background:var(--g100);color:var(--g700);">Tutup</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const API = 'https://GANTI-URL-BACKEND-ANDA.vercel.app/api/public';
+const ADMIN_WA = 'GANTI_NOMOR_WA_ADMIN';
+
+let produk = null;
+let variasiTerpilih = {}; // { "Mapel": "Matematika", "Kelas": "7" }
+let previewOpen = false;
+
+// ── Ambil ID dari URL ────────────────────────────────────────────
+const params  = new URLSearchParams(location.search);
+const produkId = params.get('id');
+
+if (!produkId) {
+  location.href = 'index.html';
+}
+
+// ── Load Produk ──────────────────────────────────────────────────
+async function loadProduk() {
+  try {
+    const r = await fetch(`${API}/katalog/${produkId}`);
+    const d = await r.json();
+    if (d.status !== 'ok') {
+      tampilError(`Produk tidak ditemukan. (${d.message || d.status})`);
+      return;
+    }
+    produk = d.data;
+    renderProduk(produk);
+  } catch(e) {
+    // Cek apakah benar-benar tidak bisa connect atau error lain
+    tampilError(`Gagal memuat produk: ${e.message}. Coba refresh halaman.`);
+    console.error('loadProduk error:', e);
+  }
+}
+
+function tampilError(msg) {
+  document.getElementById('foto-wrap').innerHTML = `
+    <div class="foto-placeholder">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+      <span style="font-size:13px;color:var(--g500);text-align:center;padding:0 20px;">${msg}</span>
+    </div>`;
+  document.getElementById('info-card').innerHTML = `
+    <div style="text-align:center;padding:10px 0;">
+      <a href="index.html" style="display:inline-flex;align-items:center;gap:6px;padding:10px 20px;background:var(--orange);color:#fff;border-radius:10px;text-decoration:none;font-weight:700;font-size:14px;">
+        ← Kembali ke Beranda
+      </a>
+    </div>`;
+  document.getElementById('variasi-card').style.display = 'none';
+  document.getElementById('contoh-card').style.display  = 'none';
+  document.querySelector('.aksi-bottom').style.display  = 'none';
+}
+
+function renderProduk(p) {
+  document.title = `${p.nama} — Hanun Store`;
+  document.getElementById('bc-nama').textContent = p.nama;
+
+  // Foto
+  const fotoWrap = document.getElementById('foto-wrap');
+  if (p.foto_url) {
+    fotoWrap.innerHTML = `<img src="${toImgUrl(esc(p.foto_url))}" alt="${esc(p.nama)}" onerror="this.parentNode.innerHTML='<div class=foto-placeholder><svg viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'1.5\\'><rect x=\\'3\\' y=\\'3\\' width=\\'18\\' height=\\'18\\' rx=\\'2\\'/></svg><span>Foto tidak tersedia</span></div>'">`;
+  } else {
+    fotoWrap.innerHTML = `<div class="foto-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/></svg><span>Foto tidak tersedia</span></div>`;
+  }
+
+  // Info
+  const harga = (p.harga !== null && p.harga !== undefined) ? `Rp ${parseInt(p.harga).toLocaleString('id-ID')}` : 'Hubungi Admin';
+  document.getElementById('info-card').innerHTML = `
+    <div class="badge-row">
+      <span class="badge">✅ Produk Digital</span>
+      <span class="badge">📁 Format Word & PPT</span>
+    </div>
+    <div class="produk-nama">${esc(p.nama)}</div>
+    <div class="produk-harga">${harga} <span>/ paket</span></div>
+    ${p.deskripsi ? `
+      <button class="btn-desc-toggle" id="btn-desc-toggle" onclick="toggleDeskripsi()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+        <span id="btn-desc-txt">Baca Deskripsi Produk</span>
+        <svg class="chevron" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="produk-desc" id="produk-desc" style="display:none;">${esc(p.deskripsi).replace(/\n/g,'<br>')}</div>
+    ` : ''}
+  `;
+
+  // Variasi
+  const varCard  = document.getElementById('variasi-card');
+  const varConf  = typeof p.variasi_config === 'string' ? JSON.parse(p.variasi_config||'[]') : (p.variasi_config||[]);
+  const stokHabis = typeof p.stok_habis === 'string' ? JSON.parse(p.stok_habis||'[]') : (p.stok_habis||[]);
+
+  if (varConf.length > 0) {
+    varCard.style.display = 'block';
+    varCard.innerHTML = `<div class="variasi-title">Pilih Variasi</div>` +
+      varConf.map((dim, di) => `
+        <div class="variasi-group">
+          <div class="variasi-label">
+            ${esc(dim.nama)}
+            <span class="variasi-selected" id="sel-${di}">Belum dipilih</span>
+          </div>
+          <div class="variasi-opts">
+            ${(dim.opsi||[]).map(opt => {
+              // Cek apakah kombinasi tunggal ini ada di daftar habis (untuk dimensi tunggal)
+              const habisSendiri = stokHabis.includes(opt);
+              return `
+              <button class="variasi-opt ${habisSendiri ? 'habis' : ''}" ${habisSendiri ? 'disabled' : ''}
+                onclick="pilihVariasi(${di},'${escA(dim.nama)}','${escA(opt)}')" data-dim="${di}" data-opt="${escA(opt)}">
+                ${esc(opt)} ${habisSendiri ? '<span class="badge-habis">Habis</span>' : ''}
+              </button>`;
+            }).join('')}
+          </div>
+        </div>
+      `).join('');
+  }
+
+  // Contoh
+  if (p.link_contoh) {
+    document.getElementById('contoh-card').style.display = 'block';
+    // Set iframe src nanti saat diklik
+    document.getElementById('preview-link').href = p.link_contoh;
+  }
+
+  updateCartBadge();
+}
+
+// ── Pilih Variasi ────────────────────────────────────────────────
+function pilihVariasi(dimIdx, dimNama, opsi) {
+  variasiTerpilih[dimNama] = opsi;
+
+  // Update UI tombol
+  document.querySelectorAll(`[data-dim="${dimIdx}"]`).forEach(btn => {
+    btn.classList.toggle('selected', btn.dataset.opt === opsi);
+  });
+  const selEl = document.getElementById(`sel-${dimIdx}`);
+  if (selEl) selEl.textContent = opsi;
+
+  cekKombinasiStok();
+}
+
+// ── Ambil variasi_config produk, selalu berupa array ──────────────
+function getVarConf() {
+  return typeof produk.variasi_config === 'string' ? JSON.parse(produk.variasi_config||'[]') : (produk.variasi_config||[]);
+}
+
+// ── Ambil nilai variasi terpilih, diurutkan sesuai variasi_config ─
+// (bukan Object.values, yang urutannya mengikuti urutan klik pembeli)
+function getVariasiUrut() {
+  return getVarConf().map(d => variasiTerpilih[d.nama]);
+}
+
+// ── Cek apakah kombinasi variasi yang dipilih sedang habis ────────
+function cekKombinasiStok() {
+  const stokHabis = typeof produk.stok_habis === 'string' ? JSON.parse(produk.stok_habis||'[]') : (produk.stok_habis||[]);
+  const varConf   = getVarConf();
+
+  if (!varConf.length || Object.keys(variasiTerpilih).length < varConf.length) {
+    hapusPesanStokHabis();
+    return true; // belum lengkap dipilih, belum perlu cek
+  }
+
+  const kombinasi = getVariasiUrut().join('-');
+  const habis = stokHabis.includes(kombinasi);
+
+  if (habis) {
+    tampilkanPesanStokHabis();
+    return false;
+  } else {
+    hapusPesanStokHabis();
+    return true;
+  }
+}
+
+function tampilkanPesanStokHabis() {
+  let el = document.getElementById('pesan-stok-habis');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'pesan-stok-habis';
+    el.style.cssText = 'background:#FEE2E2;border:1px solid #FECACA;color:#DC2626;border-radius:8px;padding:10px 14px;font-size:13px;font-weight:600;margin-top:12px;text-align:center;';
+    document.getElementById('variasi-card').appendChild(el);
+  }
+  el.textContent = '⚠️ Maaf, kombinasi variasi ini sedang habis. Silakan pilih variasi lain.';
+  document.querySelector('.btn-cart').disabled = true;
+  document.querySelector('.btn-beli').disabled = true;
+  document.querySelector('.btn-cart').style.opacity = '0.5';
+  document.querySelector('.btn-beli').style.opacity = '0.5';
+}
+
+function hapusPesanStokHabis() {
+  const el = document.getElementById('pesan-stok-habis');
+  if (el) el.remove();
+  document.querySelector('.btn-cart').disabled = false;
+  document.querySelector('.btn-beli').disabled = false;
+  document.querySelector('.btn-cart').style.opacity = '1';
+  document.querySelector('.btn-beli').style.opacity = '1';
+}
+
+// Dipisah koma (bukan " - ") karena string ini yang dikirim apa adanya
+// ke backend sebagai item.variasi, dan bedahDanCariLink() di backend
+// mem-parsing dengan format "KATEGORI MAPEL,KELAS" (pisah koma), bukan
+// dash. Contoh hasil: "PAG B Indonesia, 7".
+function getVariasiLabel() {
+  return getVariasiUrut().join(', ');
+}
+
+function validasiVariasi() {
+  const varConf = getVarConf();
+  if (!varConf.length) return true;
+  const belumDipilih = varConf.filter(d => !variasiTerpilih[d.nama]);
+  if (belumDipilih.length) {
+    // Alih-alih modal, gulir langsung ke menu variasi supaya pembeli
+    // melihat & memilih variasinya. Beri flash highlight + toast.
+    scrollKeVariasi();
+    toast(`⚠️ Pilih dulu: ${belumDipilih.map(d=>d.nama).join(', ')}`, true);
+    return false;
+  }
+  return true;
+}
+
+// Gulir sampai kartu variasi terlihat penuh (offset untuk header sticky),
+// lalu flash highlight agar perhatian pembeli tertuju ke sana.
+function scrollKeVariasi() {
+  const varCard = document.getElementById('variasi-card');
+  if (!varCard || varCard.style.display === 'none') return;
+  const y = varCard.getBoundingClientRect().top + window.pageYOffset - 76;
+  window.scrollTo({ top: y, behavior: 'smooth' });
+  varCard.classList.remove('flash');
+  void varCard.offsetWidth; // paksa reflow supaya animasi bisa retrigger
+  varCard.classList.add('flash');
+}
+
+// Buka/tutup deskripsi produk (default tersembunyi).
+function toggleDeskripsi() {
+  const desc = document.getElementById('produk-desc');
+  const btn  = document.getElementById('btn-desc-toggle');
+  const txt  = document.getElementById('btn-desc-txt');
+  if (!desc) return;
+  const buka = desc.style.display === 'none';
+  desc.style.display = buka ? 'block' : 'none';
+  btn.classList.toggle('open', buka);
+  txt.textContent = buka ? 'Tutup Deskripsi Produk' : 'Baca Deskripsi Produk';
+}
+
+// ── Preview Contoh ───────────────────────────────────────────────
+function togglePreview() {
+  const wrap = document.getElementById('preview-wrap');
+  previewOpen = !previewOpen;
+  wrap.classList.toggle('open', previewOpen);
+  document.getElementById('btn-contoh-txt').textContent = previewOpen ? 'Tutup Preview' : 'Lihat Contoh Isi Produk';
+
+  if (previewOpen && produk?.link_contoh) {
+    // Konversi ke embed URL
+    const frame = document.getElementById('preview-frame');
+    const embedUrl = toDriveEmbed(produk.link_contoh);
+    frame.src = embedUrl;
+  }
+}
+
+function toDriveEmbed(url) {
+  if (!url) return '';
+  // Format: https://drive.google.com/file/d/FILE_ID/view
+  const m = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  if (m) return `https://drive.google.com/file/d/${m[1]}/preview`;
+  // Format: docs.google.com/document/d/...
+  if (url.includes('docs.google.com')) {
+    return url.replace('/edit','/preview').replace('/view','/preview');
+  }
+  return url;
+}
+
+// ── Keranjang ────────────────────────────────────────────────────
+function getCart() {
+  try { return JSON.parse(localStorage.getItem('pd_cart') || '[]'); } catch { return []; }
+}
+function saveCart(cart) {
+  localStorage.setItem('pd_cart', JSON.stringify(cart));
+  updateCartBadge();
+}
+function updateCartBadge() {
+  const cart   = getCart();
+  const total  = cart.reduce((s,i) => s + (i.qty||1), 0);
+  const badge  = document.getElementById('cart-badge');
+  if (badge) { badge.textContent = total; badge.style.display = total > 0 ? 'flex' : 'none'; }
+}
+
+function tambahKeranjang() {
+  if (!produk) return;
+  if (!validasiVariasi()) return;
+  if (!cekKombinasiStok()) { toast('⚠️ Variasi ini sedang stok habis.', true); return; }
+
+  const varLabel = getVariasiLabel();
+  const cart     = getCart();
+
+  // Cek apakah sudah ada item yang sama
+  const key      = `${produk.id}-${varLabel}`;
+  const existing = cart.find(i => i.key === key);
+  if (existing) {
+    existing.qty = (existing.qty || 1) + 1;
+  } else {
+    cart.push({
+      key,
+      produk_id: produk.id,
+      nama:      produk.nama,
+      variasi:   varLabel,
+      harga:     parseInt(produk.harga) || 0,
+      foto_url:  produk.foto_url,
+      qty:       1
+    });
+  }
+  saveCart(cart);
+  toast('✅ Ditambahkan ke keranjang!');
+}
+
+async function beliSekarang() {
+  if (!produk) return;
+  if (!validasiVariasi()) return;
+  try {
+    const r = await fetch(`${API}/maintenance`);
+    const d = await r.json();
+    if (d.beli) { location.href = 'maintenance.html?fitur=beli'; return; }
+  } catch { /* kalau gagal cek, anggap normal -- jangan blokir pembeli gara-gara error jaringan */ }
+  tambahKeranjang();
+  setTimeout(() => { location.href = 'cart.html'; }, 400);
+}
+
+// ── Share ────────────────────────────────────────────────────────
+function getShareUrl() {
+  // Arahkan ke endpoint backend yang render og:image (thumbnail produk)
+  // untuk preview WhatsApp/Facebook/Telegram, lalu redirect ke halaman ini.
+  // Link langsung ke produk.html tidak punya og:image per-produk karena
+  // datanya baru diisi lewat JS setelah fetch API (crawler tidak jalankan JS).
+  return `${API}/share/${produk.id}`;
+}
+function getShareText() {
+  return `${produk.nama} - Hanun Store`;
+}
+function bukaShareModal() {
+  if (!produk) return;
+  if (navigator.share && /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)) {
+    navigator.share({ title: produk.nama, text: getShareText(), url: getShareUrl() }).catch(() => {});
+    return;
+  }
+  document.getElementById('modal-share').classList.add('open');
+}
+function tutupShareModal() {
+  document.getElementById('modal-share').classList.remove('open');
+}
+function shareVia(platform) {
+  const url  = encodeURIComponent(getShareUrl());
+  const text = encodeURIComponent(getShareText());
+  const links = {
+    whatsapp: `https://wa.me/?text=${text}%20${url}`,
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+    telegram: `https://t.me/share/url?url=${url}&text=${text}`,
+    twitter:  `https://twitter.com/intent/tweet?text=${text}&url=${url}`
+  };
+  window.open(links[platform], '_blank', 'noopener,noreferrer,width=600,height=520');
+  tutupShareModal();
+}
+async function salinLink() {
+  const url = getShareUrl();
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(url);
+    } else {
+      const ta = document.createElement('textarea');
+      ta.value = url;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+    }
+    toast('🔗 Link produk disalin!');
+  } catch (e) {
+    toast('Gagal menyalin link', true);
+  }
+  tutupShareModal();
+}
+
+// ── Utils ────────────────────────────────────────────────────────
+function toImgUrl(url) {
+  if (!url) return url;
+  if (url.includes('uc?export=view') || url.includes('uc&export=view')) return url;
+  const m = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  if (m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
+  return url;
+}
+function toast(msg, err=false) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.background = err ? '#DC2626' : '#1B3A6B';
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function escA(s){ return String(s||'').replace(/'/g,"\\'"); }
+
+function goBackOrHome() {
+  if (document.referrer && document.referrer.includes(location.host)) {
+    history.back();
+  } else {
+    location.href = 'index.html';
+  }
+}
+
+loadProduk();
+</script>
+</body>
+</html>

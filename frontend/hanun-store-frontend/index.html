@@ -1,0 +1,1371 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<title>Hanun Store — Admin</title>
+<meta name="theme-color" content="#0a0f1e">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Hanun Store">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<link rel="icon" type="image/png" href="/icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:14px;-webkit-text-size-adjust:100%}
+body{font-family:'Inter',sans-serif;background:#060c1a;color:#cbd5e1;min-height:100vh;overscroll-behavior:none}
+::-webkit-scrollbar{width:3px;height:3px}
+::-webkit-scrollbar-track{background:#060c1a}
+::-webkit-scrollbar-thumb{background:#1e293b;border-radius:4px}
+
+/* ── BRAND COLORS ──
+   Navy  #0d2044  (logo dark blue)
+   Orange #e07b20  (logo orange)
+   Cream  #f5ede0  (logo bg)
+*/
+
+/* ── LAYOUT ── */
+#app{display:flex;height:100dvh;overflow:hidden}
+#sidebar{width:210px;min-width:210px;background:#080e1d;border-right:1px solid #0f1a2e;display:flex;flex-direction:column;height:100dvh;flex-shrink:0}
+#main{flex:1;display:flex;flex-direction:column;height:100dvh;overflow:hidden;min-width:0}
+#topbar{padding:11px 16px;border-bottom:1px solid #0f1a2e;background:#080e1d;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;gap:8px}
+#content{flex:1;overflow-y:auto;overflow-x:hidden;padding:14px;padding-bottom:80px}
+
+/* ── SIDEBAR BRAND HEADER ── */
+.brand-header{padding:16px 14px;border-bottom:1px solid #0f1a2e;display:flex;align-items:center;gap:10px}
+.brand-logo{width:36px;height:36px;background:#0d2044;border:2px solid #e07b20;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.brand-name{font-weight:800;color:#f1f5f9;font-size:15px;letter-spacing:-.3px}
+.brand-sub{font-size:10px;color:#334155;margin-top:1px}
+
+/* ── NAV ITEMS ── */
+.nav-item{display:flex;align-items:center;gap:9px;padding:9px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;color:#475569;transition:.15s;margin:1px 8px;-webkit-tap-highlight-color:transparent}
+.nav-item:hover{background:#0f1a2e;color:#cbd5e1}
+.nav-item.active{background:linear-gradient(135deg,#0d1f3c,#0a1628);color:#e07b20;border-left:3px solid #e07b20;padding-left:11px}
+.nav-item svg{width:15px;height:15px;flex-shrink:0}
+
+/* ── BOTTOM NAV ── */
+#botnav{display:none;position:fixed;bottom:0;left:0;right:0;background:#080e1d;border-top:1px solid #0f1a2e;padding:6px 0 max(6px,env(safe-area-inset-bottom));z-index:40}
+#botnav-inner{display:flex;justify-content:space-around}
+.bni{display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 12px;cursor:pointer;color:#334155;font-size:10px;font-weight:500;border-radius:8px;transition:.15s;min-width:52px;-webkit-tap-highlight-color:transparent}
+.bni.active{color:#e07b20}
+.bni svg{width:20px;height:20px}
+.bni.active svg{stroke:#e07b20}
+
+/* ── PANELS ── */
+.panel{display:none}.panel.active{display:block}
+
+/* ── CARDS ── */
+.card{background:#080e1d;border:1px solid #0f1a2e;border-radius:12px;padding:16px}
+.card-sm{background:#080e1d;border:1px solid #0f1a2e;border-radius:10px;padding:12px}
+.card-accent{background:linear-gradient(135deg,#0d1f3c 0%,#080e1d 100%);border:1px solid #162040;border-radius:12px;padding:16px}
+
+/* ── STATS ── */
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
+.stat-card{background:#080e1d;border:1px solid #0f1a2e;border-radius:10px;padding:14px;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#e07b20,#0d2044)}
+.stat-val{font-size:22px;font-weight:700;color:#f1f5f9;font-family:'JetBrains Mono',monospace;line-height:1.1}
+.stat-val.sm{font-size:15px}
+.stat-label{font-size:11px;color:#475569;margin-top:4px}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 14px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;transition:.15s;border:none;white-space:nowrap;-webkit-tap-highlight-color:transparent}
+.btn svg{width:14px;height:14px;flex-shrink:0}
+.btn-brand{background:linear-gradient(135deg,#e07b20,#c96b10);color:#fff;box-shadow:0 2px 8px rgba(224,123,32,.3)}.btn-brand:active{background:#c96b10}
+.btn-primary{background:#1d4ed8;color:#fff}.btn-primary:active{background:#1e40af}
+.btn-success{background:#16a34a;color:#fff}.btn-success:active{background:#15803d}
+.btn-danger{background:#dc2626;color:#fff}.btn-danger:active{background:#b91c1c}
+.btn-ghost{background:transparent;color:#64748b;border:1px solid #1e293b}.btn-ghost:active{background:#1e293b;color:#cbd5e1}
+.btn-sm{padding:6px 10px;font-size:12px}
+.btn-xs{padding:4px 8px;font-size:11px}
+.btn-block{width:100%}
+
+/* ── FORM ── */
+input,select,textarea{background:#060c1a;border:1px solid #1a2740;border-radius:8px;color:#cbd5e1;padding:10px 12px;font-size:14px;width:100%;outline:none;font-family:'Inter',sans-serif;-webkit-appearance:none;appearance:none}
+input:focus,select:focus,textarea:focus{border-color:#e07b20;box-shadow:0 0 0 2px rgba(224,123,32,.15)}
+label{font-size:12px;font-weight:500;color:#475569;margin-bottom:5px;display:block}
+.form-row{margin-bottom:12px}
+
+/* ── TABLE ── */
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:10px}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:520px}
+th{text-align:left;padding:9px 12px;color:#334155;font-weight:600;font-size:10px;text-transform:uppercase;border-bottom:1px solid #0f1a2e;white-space:nowrap;background:#060c1a}
+td{padding:9px 12px;border-bottom:1px solid #080e1d;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#0a1120}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;white-space:nowrap}
+.bg{background:#052e16;color:#4ade80}
+.by{background:#422006;color:#fbbf24}
+.br{background:#450a0a;color:#f87171}
+.bb{background:#0c2340;color:#60a5fa}
+.bgr{background:#1e293b;color:#94a3b8}
+
+/* ── CHIPS ── */
+.chip{padding:5px 11px;border-radius:20px;font-size:11px;font-weight:500;cursor:pointer;border:1px solid #1a2740;background:transparent;color:#475569;transition:.15s;white-space:nowrap;-webkit-tap-highlight-color:transparent}
+.chip.active,.chip:active{background:#1a1000;color:#e07b20;border-color:#e07b20}
+
+/* ── MODAL ── */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:50;display:none;align-items:flex-end;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:#080e1d;border:1px solid #0f1a2e;border-top:2px solid #e07b20;border-radius:16px 16px 0 0;padding:20px;width:100%;max-height:92dvh;overflow-y:auto;padding-bottom:max(20px,env(safe-area-inset-bottom))}
+.modal-handle{width:36px;height:4px;background:#1e293b;border-radius:4px;margin:0 auto 16px}
+
+/* ── ORDER CARD ── */
+.order-card{background:#080e1d;border:1px solid #0f1a2e;border-radius:10px;padding:12px;margin-bottom:8px;border-left:3px solid transparent;transition:.15s}
+.order-card:hover{border-left-color:#e07b20}
+.order-no{font-family:'JetBrains Mono',monospace;font-size:11px;color:#e07b20}
+.order-buyer{font-size:13px;font-weight:600;color:#f1f5f9;margin:3px 0}
+.order-produk{font-size:11px;color:#475569;line-height:1.4}
+
+/* ── LINK ROW ── */
+.link-row{background:#060c1a;border:1px solid #1a2740;border-radius:8px;padding:10px;margin-bottom:8px}
+.link-lbl{font-size:11px;color:#64748b;font-weight:600;margin-bottom:6px}
+.lsok{color:#4ade80;font-size:16px;flex-shrink:0}
+.lserr{color:#f87171;font-size:16px;flex-shrink:0}
+
+/* ── RANK BAR ── */
+.rank-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.rank-no{width:18px;text-align:right;font-size:10px;color:#334155;font-weight:700;flex-shrink:0}
+.rank-label{flex:1;font-size:12px;color:#94a3b8;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rank-bar-wrap{width:70px;background:#0f1a2e;border-radius:4px;height:5px;flex-shrink:0}
+.rank-bar{height:5px;border-radius:4px;background:linear-gradient(90deg,#e07b20,#f59e0b)}
+.rank-count{width:24px;text-align:right;font-size:11px;color:#e07b20;font-weight:700;flex-shrink:0}
+
+/* ── PENDING ITEM ── */
+.pending-item{background:#060c1a;border:1px solid #1a2740;border-radius:8px;padding:10px;cursor:pointer;margin-bottom:6px;-webkit-tap-highlight-color:transparent;transition:.15s}
+.pending-item:active{background:#1a1000;border-color:#e07b20}
+
+/* ── EKSPOR OPT ── */
+.ekspor-opt{display:flex;align-items:center;gap:10px;padding:12px;background:#060c1a;border:1px solid #1a2740;border-radius:8px;cursor:pointer;transition:.15s;-webkit-tap-highlight-color:transparent}
+.ekspor-opt:active{background:#1a1000;border-color:#e07b20}
+.ekspor-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* ── SECTION TITLE ── */
+.sec-title{font-size:13px;font-weight:600;color:#f1f5f9;margin-bottom:10px}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:84px;left:50%;transform:translateX(-50%);z-index:100;padding:10px 16px;border-radius:10px;font-size:13px;font-weight:500;display:none;align-items:center;gap:8px;white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.toast.show{display:flex}
+.tok{background:#052e16;color:#4ade80;border:1px solid #166534}
+.ter{background:#450a0a;color:#f87171;border:1px solid #991b1b}
+
+/* ── INSTALL BANNER ── */
+#install-banner{display:none;position:fixed;bottom:76px;left:12px;right:12px;background:linear-gradient(135deg,#0d1f3c,#1a1000);border:1px solid #e07b20;border-radius:12px;padding:12px 14px;z-index:200;align-items:center;gap:10px;box-shadow:0 4px 20px rgba(224,123,32,.2)}
+
+/* ── RESPONSIVE ── */
+@media(min-width:640px){
+  #sidebar{display:flex}
+  #botnav{display:none!important}
+  #content{padding:20px;padding-bottom:20px}
+  .stats-grid{grid-template-columns:repeat(4,1fr)}
+  .stat-val{font-size:26px}
+  .modal-bg{align-items:center}
+  .modal{border-radius:16px;max-width:560px;padding-bottom:20px}
+  .toast{bottom:24px}
+  #install-banner{bottom:24px}
+  .order-mobile-cards{display:none!important}
+  .table-show{display:table!important}
+}
+@media(max-width:639px){
+  #sidebar{display:none}
+  #botnav{display:block}
+  .order-mobile-cards{display:block}
+  .table-show{display:none!important}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- ══ SIDEBAR ══ -->
+<div id="sidebar">
+  <div class="brand-header">
+    <div class="brand-logo">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <rect x="3" y="3" width="18" height="18" rx="4" stroke="#e07b20" stroke-width="2"/>
+        <path d="M12 6 L15 10 L12 19 L9 10 Z" fill="#0d2044" stroke="#0d2044" stroke-width=".5"/>
+        <path d="M9 10 L12 6 L15 10" fill="none" stroke="#e07b20" stroke-width="1.5"/>
+        <circle cx="12" cy="14" r="1.2" fill="#e07b20"/>
+      </svg>
+    </div>
+    <div>
+      <div class="brand-name">Hanun Store</div>
+      <div class="brand-sub">Dashboard Admin</div>
+    </div>
+  </div>
+  <nav style="flex:1;padding:6px 0;overflow-y:auto">
+    <div class="nav-item active" onclick="nav('pesanan','Pesanan')"><i data-lucide="shopping-bag"></i>Pesanan</div>
+    <div class="nav-item" onclick="nav('website','Pesanan Web')"><i data-lucide="globe"></i>Pesanan Web</div>
+    <div class="nav-item" onclick="nav('kirim','Kirim Email')"><i data-lucide="send"></i>Kirim Email</div>
+    <div class="nav-item" onclick="nav('produk','Produk & Link')"><i data-lucide="package"></i>Produk & Link</div>
+    <div class="nav-item" onclick="nav('keuangan','Keuangan')"><i data-lucide="bar-chart-2"></i>Keuangan</div>
+    <div class="nav-item" onclick="nav('terlaris','Terlaris')"><i data-lucide="trending-up"></i>Terlaris</div>
+  </nav>
+  <div style="padding:10px 14px;border-top:1px solid #0f1a2e">
+    <div id="conn-s" style="font-size:10px;color:#334155">⬤ Menghubungkan...</div>
+  </div>
+</div>
+
+<!-- ══ MAIN ══ -->
+<div id="main">
+  <div id="topbar">
+    <div style="display:flex;align-items:center;gap:10px">
+      <!-- Mobile logo -->
+      <div class="brand-logo" style="width:28px;height:28px;display:none" id="mob-logo">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <rect x="3" y="3" width="18" height="18" rx="4" stroke="#e07b20" stroke-width="2"/>
+          <path d="M12 6 L15 10 L12 19 L9 10 Z" fill="#0d2044"/>
+          <path d="M9 10 L12 6 L15 10" fill="none" stroke="#e07b20" stroke-width="1.5"/>
+          <circle cx="12" cy="14" r="1.2" fill="#e07b20"/>
+        </svg>
+      </div>
+      <div style="font-weight:600;color:#f1f5f9;font-size:14px" id="page-title">Pesanan</div>
+    </div>
+    <div style="display:flex;gap:6px;align-items:center">
+      <div style="font-size:10px;color:#334155" id="last-upd"></div>
+      <button class="btn btn-ghost btn-xs" onclick="gantiSecret()" title="Ganti Admin Secret"><i data-lucide="log-out" style="width:12px;height:12px"></i></button>
+      <button class="btn btn-ghost btn-xs" onclick="loadAll()"><i data-lucide="refresh-cw" style="width:12px;height:12px"></i></button>
+    </div>
+  </div>
+
+  <div id="content">
+
+    <!-- ════ PESANAN ════ -->
+    <div class="panel active" id="panel-pesanan">
+      <div style="overflow-x:auto;padding-bottom:6px;margin-bottom:10px">
+        <div style="display:flex;gap:6px;flex-wrap:nowrap;min-width:max-content">
+          <button class="chip active" onclick="setPeriod('hari',this)">Hari Ini</button>
+          <button class="chip" onclick="setPeriod('minggu',this)">7 Hari</button>
+          <button class="chip" onclick="setPeriod('bulan',this)">Bulan Ini</button>
+          <button class="chip" onclick="setPeriod('tahun',this)">Tahun Ini</button>
+          <button class="chip" onclick="setPeriod('semua',this)">Semua</button>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap">
+        <input type="date" id="fd" style="flex:1;min-width:130px;font-size:12px" onchange="setDateFilter(this.value)">
+        <input type="month" id="fm" style="flex:1;min-width:120px;font-size:12px" onchange="setMonthFilter(this.value)">
+      </div>
+      <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
+        <input type="search" id="q" placeholder="Cari nomor / pembeli..." style="flex:1;min-width:140px;font-size:13px" oninput="pageOrders=1;renderOrders()">
+        <select id="fs" style="flex:1;min-width:130px;font-size:13px" onchange="pageOrders=1;renderOrders()">
+          <option value="">Semua Status</option>
+          <option value="PEMBAYARAN_VALID">Belum Dikirim</option>
+          <option value="SELESAI">Terkirim</option>
+          <option value="DIBATALKAN">Dibatalkan</option>
+          <option value="PENGEMBALIAN">Pengembalian</option>
+        </select>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-val" id="s0">-</div><div class="stat-label">Total</div></div>
+        <div class="stat-card"><div class="stat-val" id="s1">-</div><div class="stat-label">Belum Kirim</div></div>
+        <div class="stat-card"><div class="stat-val" id="s2">-</div><div class="stat-label">Terkirim</div></div>
+        <div class="stat-card"><div class="stat-val sm" id="s3">-</div><div class="stat-label">Omzet</div></div>
+      </div>
+      <div class="order-mobile-cards" id="orders-cards"></div>
+      <div class="card table-show" style="padding:0;display:none">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>No. Pesanan</th><th>Pembeli</th><th>Produk</th><th>Nominal</th><th>Waktu</th><th>Status</th><th></th></tr></thead>
+            <tbody id="orders-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div id="orders-pag"></div>
+    </div>
+
+    <!-- ════ PESANAN WEB ════ -->
+    <div class="panel" id="panel-website">
+      <div style="display:flex;gap:8px;margin-bottom:10px">
+        <button class="btn btn-ghost btn-sm" style="flex:1" onclick="eksporWeb('csv')"><i data-lucide="file-text"></i>Ekspor CSV</button>
+        <button class="btn btn-ghost btn-sm" style="flex:1" onclick="eksporWeb('pdf')"><i data-lucide="file"></i>Ekspor PDF</button>
+      </div>
+      <div style="overflow-x:auto;padding-bottom:6px;margin-bottom:10px">
+        <div style="display:flex;gap:6px;flex-wrap:nowrap;min-width:max-content">
+          <button class="chip active" onclick="setPeriodWeb('hari',this)">Hari Ini</button>
+          <button class="chip" onclick="setPeriodWeb('minggu',this)">7 Hari</button>
+          <button class="chip" onclick="setPeriodWeb('bulan',this)">Bulan Ini</button>
+          <button class="chip" onclick="setPeriodWeb('tahun',this)">Tahun Ini</button>
+          <button class="chip" onclick="setPeriodWeb('semua',this)">Semua</button>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
+        <input type="search" id="wq" placeholder="Cari order id / nama / email..." style="flex:1;min-width:140px;font-size:13px" oninput="pageWeb=1;renderWebOrders()">
+        <select id="wfs" style="flex:1;min-width:130px;font-size:13px" onchange="pageWeb=1;renderWebOrders()">
+          <option value="">Semua Status</option>
+          <option value="paid">Lunas</option>
+          <option value="pending">Pending</option>
+          <option value="cancel">Dibatalkan</option>
+          <option value="expire">Kedaluwarsa</option>
+          <option value="deny">Ditolak</option>
+        </select>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-val" id="w0">-</div><div class="stat-label">Total</div></div>
+        <div class="stat-card"><div class="stat-val" id="w1">-</div><div class="stat-label">Lunas</div></div>
+        <div class="stat-card"><div class="stat-val" id="w2">-</div><div class="stat-label">Pending</div></div>
+        <div class="stat-card"><div class="stat-val sm" id="w3">-</div><div class="stat-label">Omzet</div></div>
+      </div>
+      <div class="order-mobile-cards" id="web-cards"></div>
+      <div class="card table-show" style="padding:0;display:none">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Order ID</th><th>Pembeli</th><th>Produk</th><th>Total</th><th>Waktu</th><th>Status</th><th></th></tr></thead>
+            <tbody id="web-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div id="web-pag"></div>
+    </div>
+
+    <!-- ════ KIRIM EMAIL ════ -->
+    <div class="panel" id="panel-kirim">
+      <div class="sec-title">Pesanan Belum Dikirim Hari Ini</div>
+      <div id="pending-list" style="margin-bottom:16px"></div>
+      <div class="card">
+        <div class="sec-title">Kirim ke Pembeli</div>
+        <div class="form-row">
+          <label>No. Pesanan</label>
+          <div style="display:flex;gap:6px">
+            <input id="k-no" placeholder="260620JAPWVC53" style="flex:1;text-transform:uppercase">
+            <button class="btn btn-brand btn-sm" onclick="cariPesanan()"><i data-lucide="search"></i></button>
+          </div>
+        </div>
+        <div id="k-info" style="display:none">
+          <div class="card-sm" style="margin-bottom:12px;border-left:3px solid #e07b20">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div><div style="font-size:11px;color:#475569">Pembeli</div><div id="k-pembeli" style="font-weight:600;color:#f1f5f9;font-size:14px"></div></div>
+              <div id="k-status"></div>
+            </div>
+          </div>
+          <div class="form-row"><label>Email Pembeli *</label><input id="k-email" type="email" placeholder="guru@gmail.com"></div>
+          <div class="form-row"><label>WhatsApp (opsional)</label><input id="k-wa" type="tel" placeholder="08xxxxxxxxxx"></div>
+          <div id="k-links-wrap" style="margin-bottom:12px"></div>
+          <button class="btn btn-success btn-block" onclick="eksekusiKirim()"><i data-lucide="send"></i>Kirim Email & WA</button>
+          <div id="k-result" style="margin-top:8px;font-size:12px;text-align:center"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ PRODUK & LINK ════ -->
+    <div class="panel" id="panel-produk">
+      <div class="card" id="cek-link-card" style="margin-bottom:14px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <div class="sec-title" style="margin:0">🔗 Cek Kelengkapan Link</div>
+          <button class="btn btn-ghost btn-xs" onclick="renderCekLink()"><i data-lucide="refresh-cw" style="width:11px;height:11px"></i></button>
+        </div>
+        <div id="cek-link-body"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div class="sec-title" style="margin:0">Master Produk</div>
+        <button class="btn btn-brand btn-sm" onclick="openModalProduk()"><i data-lucide="plus"></i>Tambah</button>
+      </div>
+      <div id="produk-list"></div>
+    </div>
+
+    <!-- ════ KEUANGAN ════ -->
+    <div class="panel" id="panel-keuangan">
+      <div style="display:flex;gap:8px;margin-bottom:14px">
+        <button class="btn btn-brand btn-sm" style="flex:1" onclick="openEkspor()"><i data-lucide="download"></i>Ekspor Data (Shopee)</button>
+      </div>
+      <div class="card-accent" style="margin-bottom:14px">
+        <div style="font-size:11px;color:#94a3b8;margin-bottom:4px">Total Omzet Gabungan (Shopee + Web)</div>
+        <div class="stat-val" id="kg-total" style="font-size:24px">-</div>
+        <div style="display:flex;gap:16px;margin-top:10px">
+          <div><div style="font-size:10px;color:#475569">Shopee</div><div id="kg-shopee" style="font-size:14px;font-weight:700;color:#f1f5f9;font-family:'JetBrains Mono',monospace">-</div></div>
+          <div><div style="font-size:10px;color:#475569">Web</div><div id="kg-web" style="font-size:14px;font-weight:700;color:#f1f5f9;font-family:'JetBrains Mono',monospace">-</div></div>
+        </div>
+      </div>
+      <div class="sec-title">Rincian Shopee</div>
+      <div class="stats-grid" style="grid-template-columns:repeat(2,1fr)">
+        <div class="stat-card"><div class="stat-val sm" id="k0">-</div><div class="stat-label">Hari Ini</div></div>
+        <div class="stat-card"><div class="stat-val sm" id="k1">-</div><div class="stat-label">7 Hari</div></div>
+        <div class="stat-card"><div class="stat-val sm" id="k2">-</div><div class="stat-label">Bulan Ini</div></div>
+        <div class="stat-card"><div class="stat-val sm" id="k3">-</div><div class="stat-label">Tahun Ini</div></div>
+        <div class="stat-card"><div class="stat-val sm" id="k4">-</div><div class="stat-label">Total Omzet</div></div>
+        <div class="stat-card"><div class="stat-val" id="k5">-</div><div class="stat-label">Pesanan Selesai</div></div>
+      </div>
+      <div class="sec-title" style="margin-top:14px">Rincian Web (Midtrans)</div>
+      <div class="stats-grid" style="grid-template-columns:repeat(2,1fr)">
+        <div class="stat-card"><div class="stat-val sm" id="kw0">-</div><div class="stat-label">Hari Ini</div></div>
+        <div class="stat-card"><div class="stat-val sm" id="kw1">-</div><div class="stat-label">7 Hari</div></div>
+        <div class="stat-card"><div class="stat-val sm" id="kw2">-</div><div class="stat-label">Bulan Ini</div></div>
+        <div class="stat-card"><div class="stat-val sm" id="kw3">-</div><div class="stat-label">Tahun Ini</div></div>
+        <div class="stat-card"><div class="stat-val sm" id="kw4">-</div><div class="stat-label">Total Omzet</div></div>
+        <div class="stat-card"><div class="stat-val" id="kw5">-</div><div class="stat-label">Pesanan Lunas</div></div>
+      </div>
+      <div class="card" style="padding:0">
+        <div style="padding:14px;border-bottom:1px solid #0f1a2e;font-size:13px;font-weight:600;color:#f1f5f9">Rekap per Bulan</div>
+        <div class="table-wrap">
+          <table style="min-width:300px">
+            <thead><tr><th>Bulan</th><th>Pesanan</th><th>Omzet</th><th>Rata-rata</th></tr></thead>
+            <tbody id="k-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ TERLARIS ════ -->
+    <div class="panel" id="panel-terlaris">
+      <div class="card" style="margin-bottom:12px">
+        <div class="sec-title">🏆 Mapel Terlaris</div>
+        <div id="t-mapel"></div>
+      </div>
+      <div class="card" style="margin-bottom:12px">
+        <div class="sec-title">📚 Kelas Terlaris</div>
+        <div id="t-kelas"></div>
+      </div>
+      <div class="card" style="padding:0">
+        <div style="padding:14px;border-bottom:1px solid #0f1a2e;font-size:13px;font-weight:600;color:#f1f5f9">📦 Kombinasi Terlaris</div>
+        <div class="table-wrap">
+          <table style="min-width:280px">
+            <thead><tr><th>Produk</th><th>Terjual</th><th style="width:80px">Bar</th></tr></thead>
+            <tbody id="t-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- Bottom Nav -->
+<div id="botnav">
+  <div id="botnav-inner">
+    <div class="bni active" onclick="nav('pesanan','Pesanan')" id="bn-pesanan"><i data-lucide="shopping-bag"></i><span>Pesanan</span></div>
+    <div class="bni" onclick="nav('website','Pesanan Web')" id="bn-website"><i data-lucide="globe"></i><span>Web</span></div>
+    <div class="bni" onclick="nav('kirim','Kirim Email')" id="bn-kirim"><i data-lucide="send"></i><span>Kirim</span></div>
+    <div class="bni" onclick="nav('produk','Produk & Link')" id="bn-produk"><i data-lucide="package"></i><span>Produk</span></div>
+    <div class="bni" onclick="nav('keuangan','Keuangan')" id="bn-keuangan"><i data-lucide="bar-chart-2"></i><span>Keuangan</span></div>
+    <div class="bni" onclick="nav('terlaris','Terlaris')" id="bn-terlaris"><i data-lucide="trending-up"></i><span>Terlaris</span></div>
+  </div>
+</div>
+
+<!-- Modal: Ekspor -->
+<div class="modal-bg" id="m-ekspor">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-handle"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div style="font-weight:600;color:#f1f5f9">Ekspor Data Penjualan</div>
+      <button class="btn btn-ghost btn-xs" onclick="closeM('m-ekspor')">✕</button>
+    </div>
+    <div style="margin-bottom:16px">
+      <label style="margin-bottom:8px">Rentang Tanggal</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+        <div><label>Dari</label><input type="date" id="ex-dari"></div>
+        <div><label>Sampai</label><input type="date" id="ex-sampai"></div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="chip" onclick="setEkspor('hari',this)">Hari Ini</button>
+        <button class="chip" onclick="setEkspor('minggu',this)">7 Hari</button>
+        <button class="chip" onclick="setEkspor('bulan',this)">Bulan Ini</button>
+        <button class="chip" onclick="setEkspor('tahun',this)">Tahun Ini</button>
+        <button class="chip" onclick="setEkspor('semua',this)">Semua</button>
+      </div>
+    </div>
+    <div id="ex-preview" style="background:#060c1a;border:1px solid #1a2740;border-radius:8px;padding:10px;margin-bottom:16px;font-size:12px;color:#475569;text-align:center">Pilih rentang tanggal</div>
+    <div style="font-size:12px;font-weight:500;color:#475569;margin-bottom:10px">Format Ekspor</div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div class="ekspor-opt" onclick="doEkspor('csv')">
+        <div class="ekspor-icon" style="background:#052e16"><i data-lucide="file-text" style="width:18px;height:18px;color:#4ade80"></i></div>
+        <div><div style="font-size:13px;font-weight:600;color:#f1f5f9">CSV — Spreadsheet</div><div style="font-size:11px;color:#475569;margin-top:1px">Excel, Google Sheets, Numbers</div></div>
+        <i data-lucide="chevron-right" style="width:16px;height:16px;color:#334155;margin-left:auto;flex-shrink:0"></i>
+      </div>
+      <div class="ekspor-opt" onclick="doEkspor('pdf')">
+        <div class="ekspor-icon" style="background:#3d0a00"><i data-lucide="file" style="width:18px;height:18px;color:#f87171"></i></div>
+        <div><div style="font-size:13px;font-weight:600;color:#f1f5f9">PDF — Laporan Cetak</div><div style="font-size:11px;color:#475569;margin-top:1px">Siap cetak + ringkasan keuangan</div></div>
+        <i data-lucide="chevron-right" style="width:16px;height:16px;color:#334155;margin-left:auto;flex-shrink:0"></i>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Produk -->
+<div class="modal-bg" id="m-produk">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div style="font-weight:600;color:#f1f5f9" id="m-produk-title">Tambah Produk</div>
+      <button class="btn btn-ghost btn-xs" onclick="closeM('m-produk')">✕</button>
+    </div>
+    <div class="form-row"><label>ID Produk</label><input id="p-id" placeholder="prod_modul_ajar_1"></div>
+    <div class="form-row"><label>Nama Produk</label><input id="p-name" placeholder="Modul Ajar 1"></div>
+    <div class="form-row"><label>Accent RGB (opsional)</label><input id="p-accent" placeholder="99 102 241"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="form-row"><label>Label Kolom</label><input id="p-d1t" placeholder="Pelajaran"></div>
+      <div class="form-row"><label>Label Baris</label><input id="p-d2t" placeholder="Kelas"></div>
+    </div>
+    <div class="form-row"><label>Tag Kolom (pisah koma)</label><input id="p-d1g" placeholder="mtk, b indo, ipa"></div>
+    <div class="form-row"><label>Tag Baris (pisah koma)</label><input id="p-d2g" placeholder="KELAS 7, KELAS 8, KELAS 9"></div>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn btn-brand" style="flex:1" onclick="saveProduk()">Simpan</button>
+      <button class="btn btn-ghost" onclick="closeM('m-produk')">Batal</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Cells -->
+<div class="modal-bg" id="m-cells">
+  <div class="modal" style="max-width:640px">
+    <div class="modal-handle"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div style="font-weight:600;color:#f1f5f9;font-size:13px" id="m-cells-title">Edit Link</div>
+      <button class="btn btn-ghost btn-xs" onclick="closeM('m-cells')">✕</button>
+    </div>
+    <div style="font-size:11px;color:#334155;margin-bottom:10px">Key: <code style="color:#e07b20;font-family:'JetBrains Mono',monospace">KELAS 7|||mtk</code></div>
+    <div id="cells-ed" style="max-height:55dvh;overflow-y:auto;display:flex;flex-direction:column;gap:6px"></div>
+    <div style="margin-top:12px;display:flex;gap:8px">
+      <button class="btn btn-brand" style="flex:1" onclick="saveCells()">Simpan Link</button>
+      <button class="btn btn-ghost" onclick="closeM('m-cells')">Batal</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Detail Pesanan Web -->
+<div class="modal-bg" id="m-web">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-handle"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div style="font-weight:600;color:#f1f5f9;font-size:13px" id="w-title">Detail Pesanan</div>
+      <button class="btn btn-ghost btn-xs" onclick="closeM('m-web')">✕</button>
+    </div>
+    <div class="card-sm" style="margin-bottom:12px;border-left:3px solid #e07b20">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div><div style="font-size:11px;color:#475569">Pembeli</div><div id="w-pembeli" style="font-weight:600;color:#f1f5f9;font-size:14px"></div></div>
+        <div id="w-status"></div>
+      </div>
+      <div style="font-size:11px;color:#475569;margin-top:6px" id="w-kontak"></div>
+    </div>
+    <div class="form-row">
+      <label>Ubah Status Pesanan</label>
+      <div style="display:flex;gap:6px">
+        <select id="w-set-status" style="flex:1;font-size:13px">
+          <option value="paid">Lunas</option>
+          <option value="pending">Pending</option>
+          <option value="cancel">Dibatalkan</option>
+          <option value="expire">Kedaluwarsa</option>
+        </select>
+        <button class="btn btn-ghost btn-sm" onclick="ubahStatusWeb()">Simpan</button>
+      </div>
+    </div>
+    <div id="w-links-wrap" style="margin-bottom:12px"></div>
+    <button class="btn btn-success btn-block" onclick="kirimUlangWeb()"><i data-lucide="send"></i>Kirim Ulang Email &amp; WA</button>
+    <div id="w-result" style="margin-top:8px;font-size:12px;text-align:center"></div>
+  </div>
+</div>
+
+<!-- Install Banner -->
+<div id="install-banner">
+  <div style="flex:1">
+    <div style="font-size:13px;font-weight:600;color:#f1f5f9">Install Hanun Store</div>
+    <div style="font-size:11px;color:#64748b;margin-top:2px">Tambahkan ke layar utama</div>
+  </div>
+  <button class="btn btn-brand btn-sm" onclick="installPWA()">Install</button>
+  <button class="btn btn-ghost btn-xs" onclick="document.getElementById('install-banner').style.display='none'">✕</button>
+</div>
+
+<!-- Toast -->
+<div class="toast tok" id="t-ok"><span id="t-ok-m"></span></div>
+<div class="toast ter" id="t-er"><span id="t-er-m"></span></div>
+
+<script>
+const API='https://GANTI-URL-BACKEND-ANDA.vercel.app/api';
+const PAGE_SIZE=100;
+let allOrders=[],allProducts=[],period='hari',editProdId=null,lastLoadAt=0,pageOrders=1,pageWeb=1;
+
+// ── Admin secret ── endpoint dashboard sekarang butuh header x-admin-secret.
+// Diminta sekali lewat prompt(), disimpan di localStorage supaya tidak
+// ditanya ulang tiap buka dashboard.
+let ADMIN_SECRET=localStorage.getItem('pd_admin_secret')||'';
+function ensureSecret(interactive=true){
+  if(!ADMIN_SECRET && interactive){
+    ADMIN_SECRET=(prompt('Masukkan Admin Secret:')||'').trim();
+    if(ADMIN_SECRET) localStorage.setItem('pd_admin_secret',ADMIN_SECRET);
+  }
+  return ADMIN_SECRET;
+}
+// interactive=false dipakai oleh auto-refresh di background supaya tidak
+// mendadak munculin prompt() (dialog blocking) saat admin lagi ngetik/kerja.
+async function apiFetch(path,opts={},interactive=true){
+  opts.headers={...(opts.headers||{}),'x-admin-secret':ensureSecret(interactive)};
+  let r=await fetch(`${API}${path}`,opts);
+  if(r.status===401 && interactive){
+    localStorage.removeItem('pd_admin_secret');ADMIN_SECRET='';
+    toast('er','Admin secret salah/kosong, coba lagi');
+    opts.headers['x-admin-secret']=ensureSecret(true);
+    r=await fetch(`${API}${path}`,opts);
+  }
+  return r;
+}
+function gantiSecret(){
+  if(!confirm('Ganti Admin Secret? Anda akan diminta memasukkan secret baru.')) return;
+  localStorage.removeItem('pd_admin_secret');
+  ADMIN_SECRET='';
+  ensureSecret();
+  loadAll();
+}
+
+// Show mobile logo
+if(window.innerWidth<640) document.getElementById('mob-logo').style.display='flex';
+
+lucide.createIcons();
+loadAll();
+
+// ── Auto refresh ── tiap 1 menit, dan tiap kali ada "interaksi" (ganti
+// panel, atau kembali ke tab/window ini). Ditahan minimal 5 detik antar
+// refresh (refreshIfStale) supaya beberapa pemicu yang nyaris bersamaan
+// tidak numpuk jadi banyak request sekaligus.
+function refreshIfStale(){
+  if(Date.now()-lastLoadAt>5000) loadAll(true);
+}
+setInterval(refreshIfStale,60000);
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') refreshIfStale(); });
+window.addEventListener('focus',refreshIfStale);
+
+async function loadAll(silent){
+  lastLoadAt=Date.now();
+  try{
+    const r=await apiFetch('/exec',{},!silent);
+    const d=await r.json();
+    if(!d.success) throw new Error(d.message||'Error');
+    allOrders=d.orders||[]; allProducts=d.products||[];
+    document.getElementById('conn-s').innerHTML='⬤ <span style="color:#4ade80">Online</span>';
+    document.getElementById('last-upd').textContent=new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+    renderOrders();renderKeuangan();renderTerlaris();renderProdukList();renderPending();
+    await loadWebOrders(silent);
+    if(!silent) toast('ok','Data berhasil dimuat');
+  }catch(e){
+    document.getElementById('conn-s').innerHTML='⬤ <span style="color:#f87171">Offline</span>';
+    toast('er','Gagal: '+e.message);
+  }
+}
+
+function nav(page,title){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item,.bni').forEach(n=>n.classList.remove('active'));
+  document.getElementById('panel-'+page).classList.add('active');
+  const pages=['pesanan','website','kirim','produk','keuangan','terlaris'];
+  const si=document.querySelectorAll('.nav-item');
+  const idx=pages.indexOf(page);
+  if(si[idx]) si[idx].classList.add('active');
+  const bn=document.getElementById('bn-'+page);
+  if(bn) bn.classList.add('active');
+  document.getElementById('page-title').textContent=title||page;
+  if(page==='kirim') renderPending();
+  lucide.createIcons();
+  refreshIfStale();
+}
+
+function setPeriod(p,el){
+  period=p;pageOrders=1;
+  document.querySelectorAll('#panel-pesanan .chip').forEach(c=>c.classList.remove('active'));
+  if(el) el.classList.add('active');
+  document.getElementById('fd').value='';document.getElementById('fm').value='';
+  renderOrders();
+}
+function setDateFilter(v){period='d:'+v;pageOrders=1;document.querySelectorAll('#panel-pesanan .chip').forEach(c=>c.classList.remove('active'));document.getElementById('fm').value='';renderOrders();}
+function setMonthFilter(v){period='m:'+v;pageOrders=1;document.querySelectorAll('#panel-pesanan .chip').forEach(c=>c.classList.remove('active'));document.getElementById('fd').value='';renderOrders();}
+
+function filtered(){
+  const now=new Date();
+  const q=(document.getElementById('q').value||'').toLowerCase();
+  const fs=document.getElementById('fs').value;
+  return allOrders.filter(o=>{
+    const d=new Date(o.waktu); let ok=true;
+    if(period==='hari') ok=d.toDateString()===now.toDateString();
+    else if(period==='minggu'){const x=new Date(now);x.setDate(now.getDate()-6);x.setHours(0,0,0,0);ok=d>=x;}
+    else if(period==='bulan') ok=d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();
+    else if(period==='tahun') ok=d.getFullYear()===now.getFullYear();
+    else if(period.startsWith('d:')) ok=d.toISOString().slice(0,10)===period.slice(2);
+    else if(period.startsWith('m:')){const[y,m]=period.slice(2).split('-').map(Number);ok=d.getFullYear()===y&&(d.getMonth()+1)===m;}
+    return ok&&(!q||(o.no_pesanan||'').toLowerCase().includes(q)||(o.username||'').toLowerCase().includes(q))&&(!fs||o.status_aksi===fs);
+  });
+}
+
+function rp(n){return 'Rp '+Number(n||0).toLocaleString('id-ID');}
+function tgl(s){const d=new Date(s);return d.toLocaleDateString('id-ID',{day:'2-digit',month:'short'})+' '+d.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});}
+function badge(s){
+  const m={'SELESAI':['bg','Terkirim'],'PEMBAYARAN_VALID':['by','Belum Kirim'],'DIBATALKAN':['br','Batal'],'PENGEMBALIAN':['bb','Retur']};
+  const[c,l]=m[s]||['bgr',s||'-'];
+  return `<span class="badge ${c}">${l}</span>`;
+}
+function pc(s){return(s||'').replace(/\s\(https[^)]+\)/g,'');}
+
+// Pagination generik: potong array sesuai halaman aktif, clamp halaman
+// kalau di luar rentang (misal filter berubah dan datanya jadi lebih sedikit).
+function paginate(arr,page){
+  const totalPages=Math.max(1,Math.ceil(arr.length/PAGE_SIZE));
+  const p=Math.min(Math.max(1,page),totalPages);
+  return {pageData:arr.slice((p-1)*PAGE_SIZE,p*PAGE_SIZE),page:p,totalPages};
+}
+function pagHtml(page,totalPages,total,prevFn,nextFn){
+  if(totalPages<=1) return '';
+  return `<div style="display:flex;align-items:center;justify-content:center;gap:10px;padding:14px 0">
+    <button class="btn btn-ghost btn-sm" style="opacity:${page<=1?'.4':'1'}" ${page<=1?'disabled':''} onclick="${prevFn}()"><i data-lucide="chevron-left" style="width:14px;height:14px"></i></button>
+    <span style="font-size:12px;color:#475569">Halaman ${page} / ${totalPages} <span style="color:#334155">(${total} data)</span></span>
+    <button class="btn btn-ghost btn-sm" style="opacity:${page>=totalPages?'.4':'1'}" ${page>=totalPages?'disabled':''} onclick="${nextFn}()"><i data-lucide="chevron-right" style="width:14px;height:14px"></i></button>
+  </div>`;
+}
+
+function renderOrders(){
+  const orders=filtered();
+  const belum=orders.filter(o=>o.status_aksi==='PEMBAYARAN_VALID').length;
+  const selesai=orders.filter(o=>o.status_aksi==='SELESAI').length;
+  const omzet=orders.filter(o=>o.status_aksi==='SELESAI').reduce((a,o)=>a+(o.nominal||0),0);
+  document.getElementById('s0').textContent=orders.length;
+  document.getElementById('s1').textContent=belum;
+  document.getElementById('s2').textContent=selesai;
+  document.getElementById('s3').textContent=rp(omzet);
+  const {pageData,page,totalPages}=paginate(orders,pageOrders);
+  pageOrders=page;
+  document.getElementById('orders-pag').innerHTML=pagHtml(page,totalPages,orders.length,'prevPageOrders','nextPageOrders');
+  const empty='<div style="text-align:center;color:#334155;padding:32px;font-size:13px">Tidak ada pesanan</div>';
+  document.getElementById('orders-cards').innerHTML=!pageData.length?empty:pageData.map(o=>`
+    <div class="order-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+        <div><div class="order-no">${o.no_pesanan}</div><div class="order-buyer">${o.username||'-'}</div></div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+          ${badge(o.status_aksi)}
+          <button class="btn btn-ghost btn-xs" onclick="quickKirim('${o.no_pesanan}')"><i data-lucide="send" style="width:11px;height:11px"></i>Kirim</button>
+        </div>
+      </div>
+      <div class="order-produk">${pc(o.produk||'').slice(0,80)}${(pc(o.produk||'')).length>80?'…':''}</div>
+      <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:11px;color:#334155">
+        <span>${tgl(o.waktu)}</span>
+        <span style="font-family:'JetBrains Mono',monospace;color:#e07b20">${rp(o.nominal)}</span>
+      </div>
+      <div style="display:flex;gap:6px;margin-top:8px;align-items:center">
+        ${statusSelect(o.no_pesanan,o.status_aksi)}
+        <button class="btn btn-danger btn-xs" onclick="hapusOrder('${o.no_pesanan}')"><i data-lucide="trash-2" style="width:11px;height:11px"></i></button>
+      </div>
+    </div>`).join('');
+  document.getElementById('orders-tbody').innerHTML=!pageData.length?`<tr><td colspan="7" style="text-align:center;color:#334155;padding:32px">Tidak ada pesanan</td></tr>`:pageData.map(o=>`
+    <tr>
+      <td><code style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#e07b20">${o.no_pesanan}</code></td>
+      <td style="font-weight:500;color:#f1f5f9">${o.username||'-'}</td>
+      <td style="max-width:180px;font-size:11px;color:#475569" title="${pc(o.produk||'')}">${pc(o.produk||'').slice(0,55)}…</td>
+      <td style="font-family:'JetBrains Mono',monospace;font-size:11px;white-space:nowrap;color:#e07b20">${rp(o.nominal)}</td>
+      <td style="font-size:11px;color:#334155;white-space:nowrap">${tgl(o.waktu)}</td>
+      <td>${statusSelect(o.no_pesanan,o.status_aksi)}</td>
+      <td><div style="display:flex;gap:4px;align-items:center">
+        <button class="btn btn-ghost btn-xs" onclick="quickKirim('${o.no_pesanan}')" title="Kirim"><i data-lucide="send" style="width:11px;height:11px"></i></button>
+        <button class="btn btn-danger btn-xs" onclick="hapusOrder('${o.no_pesanan}')" title="Hapus"><i data-lucide="trash-2" style="width:11px;height:11px"></i></button>
+      </div></td>
+    </tr>`).join('');
+  lucide.createIcons();
+}
+function prevPageOrders(){ if(pageOrders>1){pageOrders--;renderOrders();} }
+function nextPageOrders(){ pageOrders++;renderOrders(); }
+
+// ── Ubah status & hapus pesanan Shopee ──
+const STATUS_OPTS=[['PEMBAYARAN_VALID','Belum Kirim'],['SELESAI','Terkirim'],['DIBATALKAN','Batal'],['PENGEMBALIAN','Retur']];
+function statusSelect(no,cur){
+  return `<select onchange="ubahStatusOrder('${no}',this.value)" style="font-size:11px;padding:4px 6px;width:auto;min-width:100px">`+
+    STATUS_OPTS.map(([v,l])=>`<option value="${v}"${v===cur?' selected':''}>${l}</option>`).join('')+
+    `</select>`;
+}
+async function ubahStatusOrder(no,status){
+  try{
+    const r=await apiFetch(`/orders/${encodeURIComponent(no)}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status_aksi:status})});
+    const d=await r.json();
+    if(!d.success) throw new Error(d.message||'Gagal');
+    const idx=allOrders.findIndex(o=>o.no_pesanan===no);
+    if(idx>=0) allOrders[idx].status_aksi=status;
+    toast('ok','Status diperbarui');
+    renderOrders();renderKeuangan();renderTerlaris();renderPending();
+  }catch(e){toast('er','Gagal ubah status: '+e.message);renderOrders();}
+}
+async function hapusOrder(no){
+  if(!confirm(`Hapus pesanan ${no}? Tindakan ini permanen.`)) return;
+  try{
+    const r=await apiFetch(`/orders/${encodeURIComponent(no)}`,{method:'DELETE'});
+    const d=await r.json();
+    if(!d.success) throw new Error(d.message||'Gagal');
+    allOrders=allOrders.filter(o=>o.no_pesanan!==no);
+    toast('ok','Pesanan dihapus');
+    renderOrders();renderKeuangan();renderTerlaris();renderPending();
+  }catch(e){toast('er','Gagal hapus: '+e.message);}
+}
+
+function renderPending(){
+  const now=new Date();
+  const list=allOrders.filter(o=>o.status_aksi==='PEMBAYARAN_VALID'&&new Date(o.waktu).toDateString()===now.toDateString());
+  document.getElementById('pending-list').innerHTML=!list.length?
+    '<div style="font-size:12px;color:#334155;text-align:center;padding:10px">Semua pesanan hari ini sudah dikirim 🎉</div>':
+    list.map(o=>`
+      <div class="pending-item" onclick="quickKirim('${o.no_pesanan}')">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#e07b20">${o.no_pesanan}</div>
+        <div style="font-size:12px;color:#94a3b8;margin-top:2px">${o.username} · ${pc(o.produk||'').slice(0,50)}</div>
+      </div>`).join('');
+}
+
+// ── PESANAN WEB (Midtrans) ──
+let allWebOrders=[],periodWeb='hari',curWebOrder=null;
+
+async function loadWebOrders(silent){
+  try{
+    const r=await apiFetch('/public/midtrans/orders?limit=200',{},!silent);
+    const d=await r.json();
+    if(d.status!=='ok') throw new Error(d.message||'Gagal memuat pesanan web');
+    allWebOrders=d.data||[];
+    renderWebOrders();
+  }catch(e){toast('er','Gagal memuat pesanan web: '+e.message);}
+}
+
+function setPeriodWeb(p,el){
+  periodWeb=p;pageWeb=1;
+  document.querySelectorAll('#panel-website .chip').forEach(c=>c.classList.remove('active'));
+  if(el) el.classList.add('active');
+  renderWebOrders();
+}
+
+function filteredWeb(){
+  const now=new Date();
+  const q=(document.getElementById('wq').value||'').toLowerCase();
+  const fs=document.getElementById('wfs').value;
+  return allWebOrders.filter(o=>{
+    const d=new Date(o.created_at); let ok=true;
+    if(periodWeb==='hari') ok=d.toDateString()===now.toDateString();
+    else if(periodWeb==='minggu'){const x=new Date(now);x.setDate(now.getDate()-6);x.setHours(0,0,0,0);ok=d>=x;}
+    else if(periodWeb==='bulan') ok=d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();
+    else if(periodWeb==='tahun') ok=d.getFullYear()===now.getFullYear();
+    const teks=(o.id+' '+(o.customer_name||'')+' '+(o.customer_email||'')).toLowerCase();
+    return ok&&(!q||teks.includes(q))&&(!fs||o.status===fs);
+  });
+}
+
+function badgeWeb(s){
+  const m={'paid':['bg','Lunas'],'settlement':['bg','Lunas'],'capture':['bg','Lunas'],'pending':['by','Pending'],'cancel':['br','Batal'],'deny':['br','Ditolak'],'expire':['bgr','Kedaluwarsa'],'fraud':['br','Fraud']};
+  const[c,l]=m[s]||['bgr',s||'-'];
+  return `<span class="badge ${c}">${l}</span>`;
+}
+// Dipakai sebagai fallback kalau backend belum kirim field o.produk
+// (mis. data lama di cache). Format persis yang dibaca bedahDanCariLink
+// di backend: variasi saja (bukan nama marketing), gabung "|" antar item.
+function itemsLabel(items){
+  return (items||[]).map(i=>i.variasi||i.nama).join(' | ');
+}
+function produkLabel(o){
+  return o.produk!==undefined ? o.produk : itemsLabel(o.items);
+}
+
+function renderWebOrders(){
+  const orders=filteredWeb();
+  const lunas=orders.filter(o=>['paid','settlement','capture'].includes(o.status));
+  const pending=orders.filter(o=>o.status==='pending');
+  const omzet=lunas.reduce((a,o)=>a+(o.total||0),0);
+  document.getElementById('w0').textContent=orders.length;
+  document.getElementById('w1').textContent=lunas.length;
+  document.getElementById('w2').textContent=pending.length;
+  document.getElementById('w3').textContent=rp(omzet);
+  const {pageData,page,totalPages}=paginate(orders,pageWeb);
+  pageWeb=page;
+  document.getElementById('web-pag').innerHTML=pagHtml(page,totalPages,orders.length,'prevPageWeb','nextPageWeb');
+  const empty='<div style="text-align:center;color:#334155;padding:32px;font-size:13px">Tidak ada pesanan</div>';
+  document.getElementById('web-cards').innerHTML=!pageData.length?empty:pageData.map(o=>`
+    <div class="order-card" onclick="openWebDetail('${o.id}')">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+        <div><div class="order-no">${o.id}</div><div class="order-buyer">${o.customer_name||'-'}</div></div>
+        ${badgeWeb(o.status)}
+      </div>
+      <div class="order-produk">${produkLabel(o).slice(0,80)}</div>
+      <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:11px;color:#334155">
+        <span>${tgl(o.created_at)}</span>
+        <span style="font-family:'JetBrains Mono',monospace;color:#e07b20">${rp(o.total)}</span>
+      </div>
+    </div>`).join('');
+  document.getElementById('web-tbody').innerHTML=!pageData.length?`<tr><td colspan="7" style="text-align:center;color:#334155;padding:32px">Tidak ada pesanan</td></tr>`:pageData.map(o=>`
+    <tr style="cursor:pointer" onclick="openWebDetail('${o.id}')">
+      <td><code style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#e07b20">${o.id}</code></td>
+      <td style="font-weight:500;color:#f1f5f9">${o.customer_name||'-'}</td>
+      <td style="max-width:180px;font-size:11px;color:#475569">${produkLabel(o).slice(0,55)}</td>
+      <td style="font-family:'JetBrains Mono',monospace;font-size:11px;white-space:nowrap;color:#e07b20">${rp(o.total)}</td>
+      <td style="font-size:11px;color:#334155;white-space:nowrap">${tgl(o.created_at)}</td>
+      <td>${badgeWeb(o.status)}</td>
+      <td><button class="btn btn-ghost btn-xs" onclick="event.stopPropagation();openWebDetail('${o.id}')"><i data-lucide="eye" style="width:11px;height:11px"></i></button></td>
+    </tr>`).join('');
+  lucide.createIcons();
+}
+function prevPageWeb(){ if(pageWeb>1){pageWeb--;renderWebOrders();} }
+function nextPageWeb(){ pageWeb++;renderWebOrders(); }
+
+function renderWebLinks(link){
+  window._wl=link;
+  document.getElementById('w-links-wrap').innerHTML=link.length?
+    `<div class="sec-title" style="margin-bottom:8px">Link Produk <span style="font-size:10px;color:#334155;font-weight:400">(bisa diedit)</span></div>`+
+    link.map((item,i)=>`
+      <div class="link-row">
+        <div class="link-lbl">${i+1}. ${item.label}</div>
+        <div style="display:flex;gap:6px;align-items:center">
+          <input id="wl-${i}" value="${item.url||''}" placeholder="https://drive.google.com/..." style="flex:1;font-size:12px">
+          <span class="${item.url?'lsok':'lserr'}">${item.url?'✓':'!'}</span>
+        </div>
+      </div>`).join(''):
+    '<div style="font-size:12px;color:#334155;margin-bottom:10px">Tidak ada produk</div>';
+  lucide.createIcons();
+}
+
+async function openWebDetail(id){
+  const o=allWebOrders.find(x=>x.id===id);if(!o)return;
+  curWebOrder=o;
+  document.getElementById('w-title').textContent='Pesanan '+o.id;
+  document.getElementById('w-pembeli').textContent=o.customer_name||'-';
+  document.getElementById('w-status').innerHTML=badgeWeb(o.status);
+  document.getElementById('w-kontak').textContent=`${o.customer_email||'-'} · ${o.customer_wa||'-'}`;
+  // Select status: map status DB (paid/settlement/capture -> paid) ke opsi yg tersedia
+  const stSel={'paid':'paid','settlement':'paid','capture':'paid','pending':'pending','cancel':'cancel','deny':'cancel','expire':'expire'}[o.status]||'pending';
+  document.getElementById('w-set-status').value=stSel;
+  document.getElementById('w-result').innerHTML='';
+  document.getElementById('m-web').classList.add('open');
+
+  // Kalau link_produk sudah ada (pesanan lunas -> link ke-generate webhook),
+  // pakai itu. Kalau belum (mis. masih pending), tampilkan dulu daftar
+  // variasi tanpa link, lalu auto-cari link lewat /cari-link (bedahDanCariLink)
+  // -- sama seperti panel Kirim Email Shopee, supaya admin tidak isi manual.
+  if(o.link_produk&&o.link_produk.length){
+    renderWebLinks(o.link_produk);
+  }else{
+    renderWebLinks((o.items||[]).map(i=>({label:i.variasi||i.nama,url:null})));
+    const detail=(o.items||[]).map(i=>i.variasi||i.nama).join(' | ');
+    try{
+      const r=await apiFetch('/cari-link',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({detail_produk:detail})});
+      const d=await r.json();
+      if(curWebOrder&&curWebOrder.id===o.id&&d.produkList&&d.produkList.length) renderWebLinks(d.produkList);
+    }catch(e){/* biarkan input kosong kalau gagal, admin bisa isi manual */}
+  }
+}
+
+async function kirimUlangWeb(){
+  if(!curWebOrder) return;
+  const link_produk=(window._wl||[]).map((item,i)=>({label:item.label,url:(document.getElementById('wl-'+i)?.value||'').trim()||null}));
+  if(!link_produk.some(l=>l.url)) return toast('er','Isi minimal satu link');
+  document.getElementById('w-result').innerHTML='<span style="color:#fbbf24">Mengirim...</span>';
+  try{
+    const r=await apiFetch('/public/midtrans/kirim-link',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({order_id:curWebOrder.id,link_produk})});
+    const d=await r.json();
+    if(d.status!=='ok') throw new Error(d.message||'Gagal kirim');
+    toast('ok','Link terkirim ke '+curWebOrder.customer_email);
+    document.getElementById('w-result').innerHTML=`<span style="color:#4ade80">✓ Terkirim</span>`;
+    const idx=allWebOrders.findIndex(o=>o.id===curWebOrder.id);
+    if(idx>=0) allWebOrders[idx].link_produk=link_produk;
+  }catch(e){
+    toast('er','Gagal: '+e.message);
+    document.getElementById('w-result').innerHTML=`<span style="color:#f87171">✗ ${e.message}</span>`;
+  }
+}
+
+async function ubahStatusWeb(){
+  if(!curWebOrder) return;
+  const status=document.getElementById('w-set-status').value;
+  try{
+    const r=await apiFetch(`/public/midtrans/order/${curWebOrder.id}/status`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status})});
+    const d=await r.json();
+    if(d.status!=='ok') throw new Error(d.message||'Gagal');
+    const idx=allWebOrders.findIndex(o=>o.id===curWebOrder.id);
+    if(idx>=0) allWebOrders[idx].status=status;
+    curWebOrder.status=status;
+    document.getElementById('w-status').innerHTML=badgeWeb(status);
+    toast('ok','Status pesanan diperbarui');
+    renderWebOrders();renderKeuangan();
+  }catch(e){toast('er','Gagal ubah status: '+e.message);}
+}
+
+async function quickKirim(no){
+  nav('kirim','Kirim Email');
+  document.getElementById('k-no').value=no;
+  await cariPesanan();
+}
+
+async function cariPesanan(){
+  const no=document.getElementById('k-no').value.trim().toUpperCase();
+  if(!no) return toast('er','Isi nomor pesanan');
+  const order=allOrders.find(o=>o.no_pesanan===no);
+  if(!order) return toast('er','Pesanan tidak ditemukan');
+  document.getElementById('k-pembeli').textContent=order.username||'-';
+  document.getElementById('k-status').innerHTML=badge(order.status_aksi);
+  document.getElementById('k-info').style.display='block';
+  toast('ok','Mencari link otomatis...');
+  try{
+    const r=await apiFetch('/cari-link',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({detail_produk:pc(order.produk||'')})});
+    const d=await r.json();
+    renderLinkEd(d.produkList||[]);
+  }catch(e){toast('er','Gagal cari link');renderLinkEd([]);}
+  lucide.createIcons();
+}
+
+function renderLinkEd(list){
+  window._pl=list;
+  document.getElementById('k-links-wrap').innerHTML=list.length?
+    `<div class="sec-title" style="margin-bottom:8px">Link Produk <span style="font-size:10px;color:#334155;font-weight:400">(bisa diedit)</span></div>`+
+    list.map((item,i)=>`
+      <div class="link-row">
+        <div class="link-lbl">${i+1}. ${item.label}</div>
+        <div style="display:flex;gap:6px;align-items:center">
+          <input id="li-${i}" value="${item.url||''}" placeholder="https://drive.google.com/..." style="flex:1;font-size:12px">
+          <span class="${item.url?'lsok':'lserr'}">${item.url?'✓':'!'}</span>
+        </div>
+      </div>`).join(''):
+    '<div style="font-size:12px;color:#334155;margin-bottom:10px">Tidak ada produk PAG/PPT</div>';
+}
+
+async function eksekusiKirim(){
+  const no=document.getElementById('k-no').value.trim().toUpperCase();
+  const email=document.getElementById('k-email').value.trim();
+  const wa=document.getElementById('k-wa').value.trim();
+  const order=allOrders.find(o=>o.no_pesanan===no);
+  if(!email) return toast('er','Email wajib diisi');
+  const produkList=(window._pl||[]).map((item,i)=>({label:item.label,url:(document.getElementById('li-'+i)?.value||'').trim()||null}));
+  document.getElementById('k-result').innerHTML='<span style="color:#fbbf24">Mengirim...</span>';
+  try{
+    const r=await apiFetch('/kirim-email',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({no_pesanan:no,email,wa,produkList,pembeli:order?.username||'Bapak/Ibu Guru'})});
+    const d=await r.json();
+    if(!d.success) throw new Error(d.message);
+    toast('ok','Email terkirim ke '+email);
+    document.getElementById('k-result').innerHTML=`<span style="color:#4ade80">✓ Terkirim ke ${email}</span>`;
+    const idx=allOrders.findIndex(o=>o.no_pesanan===no);
+    if(idx>=0) allOrders[idx].status_aksi='SELESAI';
+    renderPending();
+  }catch(e){
+    toast('er','Gagal: '+e.message);
+    document.getElementById('k-result').innerHTML=`<span style="color:#f87171">✗ ${e.message}</span>`;
+  }
+}
+
+function renderProdukList(){
+  const el=document.getElementById('produk-list');
+  if(!allProducts.length){el.innerHTML='<div class="card" style="text-align:center;color:#334155;font-size:13px;padding:24px">Belum ada produk</div>';return;}
+  el.innerHTML=allProducts.map(p=>{
+    const cnt=Object.keys(p.cells||{}).length;
+    const acc=p.accent||'224 123 32';
+    const d1=(p.dim1?.tags||[]).slice(0,5).join(', ')+(p.dim1?.tags?.length>5?'…':'');
+    return `<div class="card" style="margin-bottom:10px;border-left:3px solid rgb(${acc})">
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:600;color:#f1f5f9;font-size:13px">${p.name}</div>
+          <div style="font-size:10px;color:#334155;font-family:'JetBrains Mono',monospace;margin-top:1px">${p.id}</div>
+          <div style="font-size:11px;color:#475569;margin-top:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${d1}</div>
+        </div>
+        <div style="flex-shrink:0;display:flex;flex-direction:column;gap:5px;align-items:flex-end">
+          <span class="badge bb">${cnt} link</span>
+          <button class="btn btn-ghost btn-xs" onclick="openModalCells('${p.id}')"><i data-lucide="link" style="width:11px;height:11px"></i>Link</button>
+          <button class="btn btn-ghost btn-xs" onclick="editProduk('${p.id}')"><i data-lucide="edit" style="width:11px;height:11px"></i>Edit</button>
+          <button class="btn btn-danger btn-xs" onclick="delProduk('${p.id}')"><i data-lucide="trash-2" style="width:11px;height:11px"></i></button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  lucide.createIcons();
+  renderCekLink();
+}
+
+// ── Cek Kelengkapan Link ── deteksi kombinasi variasi (dim2 x dim1)
+// yang belum punya link Drive valid di cells. Key cells = "dim2|||dim1".
+function renderCekLink(){
+  const el=document.getElementById('cek-link-body');
+  if(!el) return;
+  const hasil=[];
+  allProducts.forEach(p=>{
+    const dim1=p.dim1?.tags||[],dim2=p.dim2?.tags||[],cells=p.cells||{};
+    if(!dim1.length||!dim2.length) return;
+    const kosong=[];
+    dim2.forEach(row=>dim1.forEach(col=>{
+      const url=cells[`${row}|||${col}`]||'';
+      if(!String(url).startsWith('http')) kosong.push(`${row} · ${col}`);
+    }));
+    if(kosong.length) hasil.push({id:p.id,name:p.name,total:dim1.length*dim2.length,kosong});
+  });
+  if(!hasil.length){
+    el.innerHTML='<div style="font-size:12px;color:#4ade80;padding:4px 0">✓ Semua kombinasi produk sudah punya link.</div>';
+    return;
+  }
+  el.innerHTML=hasil.map(h=>`
+    <div style="border:1px solid #1a2740;border-radius:8px;padding:10px;margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px">
+        <div style="font-size:13px;font-weight:600;color:#f1f5f9;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${h.name}</div>
+        <span class="badge br" style="flex-shrink:0">${h.kosong.length}/${h.total} kosong</span>
+      </div>
+      <div style="font-size:11px;color:#475569;line-height:1.6;margin-bottom:8px">${h.kosong.slice(0,12).map(k=>`<span style="background:#1a1000;color:#fbbf24;padding:1px 6px;border-radius:4px;margin:0 3px 3px 0;display:inline-block">${k}</span>`).join('')}${h.kosong.length>12?`<span style="color:#334155"> +${h.kosong.length-12} lagi</span>`:''}</div>
+      <button class="btn btn-ghost btn-xs" onclick="openModalCells('${h.id}')"><i data-lucide="link" style="width:11px;height:11px"></i>Lengkapi Link</button>
+    </div>`).join('');
+  lucide.createIcons();
+}
+
+function openModalProduk(){
+  editProdId=null;
+  document.getElementById('m-produk-title').textContent='Tambah Produk';
+  ['p-id','p-name','p-accent','p-d1t','p-d2t','p-d1g','p-d2g'].forEach(id=>{document.getElementById(id).value='';});
+  document.getElementById('p-id').disabled=false;
+  document.getElementById('m-produk').classList.add('open');
+}
+
+function editProduk(id){
+  const p=allProducts.find(x=>x.id===id);if(!p)return;
+  editProdId=id;
+  document.getElementById('m-produk-title').textContent='Edit Produk';
+  document.getElementById('p-id').value=p.id;document.getElementById('p-id').disabled=true;
+  document.getElementById('p-name').value=p.name;
+  document.getElementById('p-accent').value=p.accent||'';
+  document.getElementById('p-d1t').value=p.dim1?.title||'';
+  document.getElementById('p-d2t').value=p.dim2?.title||'';
+  document.getElementById('p-d1g').value=(p.dim1?.tags||[]).join(', ');
+  document.getElementById('p-d2g').value=(p.dim2?.tags||[]).join(', ');
+  document.getElementById('m-produk').classList.add('open');
+}
+
+async function saveProduk(){
+  const id=document.getElementById('p-id').value.trim();
+  const name=document.getElementById('p-name').value.trim();
+  const accent=document.getElementById('p-accent').value.trim()||'224 123 32';
+  const d1tags=document.getElementById('p-d1g').value.split(',').map(s=>s.trim()).filter(Boolean);
+  const d2tags=document.getElementById('p-d2g').value.split(',').map(s=>s.trim()).filter(Boolean);
+  const body={name,accent,dim1:{title:document.getElementById('p-d1t').value.trim(),tags:d1tags},dim2:{title:document.getElementById('p-d2t').value.trim(),tags:d2tags}};
+  if(!name) return toast('er','Nama wajib diisi');
+  try{
+    let r;
+    if(editProdId) r=await apiFetch(`/products/${editProdId}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    else{if(!id) return toast('er','ID wajib diisi');r=await apiFetch('/products',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,...body,cells:{}})});}
+    const d=await r.json();if(!d.success) throw new Error(d.message);
+    toast('ok',editProdId?'Produk diperbarui':'Produk ditambahkan');
+    closeM('m-produk');await loadAll();
+  }catch(e){toast('er',e.message);}
+}
+
+async function delProduk(id){
+  if(!confirm('Hapus produk ini?')) return;
+  try{
+    const r=await apiFetch(`/products/${id}`,{method:'DELETE'});const d=await r.json();
+    if(!d.success) throw new Error(d.message);
+    toast('ok','Dihapus');await loadAll();
+  }catch(e){toast('er',e.message);}
+}
+
+function openModalCells(id){
+  const p=allProducts.find(x=>x.id===id);if(!p)return;
+  editProdId=id;
+  document.getElementById('m-cells-title').textContent='Edit Link — '+p.name;
+  const dim1=p.dim1?.tags||[],dim2=p.dim2?.tags||[],cells=p.cells||{};
+  const rows=[];
+  dim2.forEach(row=>{dim1.forEach(col=>{const key=`${row}|||${col}`,url=cells[key]||'';rows.push(`
+    <div style="display:flex;gap:6px;align-items:center">
+      <div style="flex:0 0 160px;font-size:10px;color:#334155;font-family:'JetBrains Mono',monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${key}</div>
+      <input data-key="${key}" value="${url}" placeholder="https://drive.google.com/..." style="flex:1;font-size:11px" class="ci">
+    </div>`);});});
+  document.getElementById('cells-ed').innerHTML=rows.join('');
+  document.getElementById('m-cells').classList.add('open');
+}
+
+async function saveCells(){
+  const p=allProducts.find(x=>x.id===editProdId);if(!p)return;
+  const newCells={...(p.cells||{})};
+  document.querySelectorAll('.ci').forEach(inp=>{const k=inp.dataset.key,v=inp.value.trim().split('?')[0];if(v)newCells[k]=v;else delete newCells[k];});
+  try{
+    const r=await apiFetch(`/products/${editProdId}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({...p,cells:newCells})});
+    const d=await r.json();if(!d.success) throw new Error(d.message);
+    toast('ok','Link disimpan');closeM('m-cells');await loadAll();
+  }catch(e){toast('er',e.message);}
+}
+
+function renderKeuangan(){
+  const now=new Date();
+  const selesai=allOrders.filter(o=>o.status_aksi==='SELESAI');
+  const sum=fn=>selesai.filter(o=>fn(new Date(o.waktu))).reduce((a,o)=>a+(o.nominal||0),0);
+  const x=new Date(now);x.setDate(now.getDate()-6);x.setHours(0,0,0,0);
+  document.getElementById('k0').textContent=rp(sum(d=>d.toDateString()===now.toDateString()));
+  document.getElementById('k1').textContent=rp(sum(d=>d>=x));
+  document.getElementById('k2').textContent=rp(sum(d=>d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear()));
+  document.getElementById('k3').textContent=rp(sum(d=>d.getFullYear()===now.getFullYear()));
+  const totShopee=selesai.reduce((a,o)=>a+(o.nominal||0),0);
+  document.getElementById('k4').textContent=rp(totShopee);
+  document.getElementById('k5').textContent=selesai.length;
+
+  // ── Rincian Web (Midtrans, status lunas) ──
+  const lunasWeb=allWebOrders.filter(o=>['paid','settlement','capture'].includes(o.status));
+  const sumW=fn=>lunasWeb.filter(o=>fn(new Date(o.created_at))).reduce((a,o)=>a+(o.total||0),0);
+  const totWeb=lunasWeb.reduce((a,o)=>a+(o.total||0),0);
+  document.getElementById('kw0').textContent=rp(sumW(d=>d.toDateString()===now.toDateString()));
+  document.getElementById('kw1').textContent=rp(sumW(d=>d>=x));
+  document.getElementById('kw2').textContent=rp(sumW(d=>d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear()));
+  document.getElementById('kw3').textContent=rp(sumW(d=>d.getFullYear()===now.getFullYear()));
+  document.getElementById('kw4').textContent=rp(totWeb);
+  document.getElementById('kw5').textContent=lunasWeb.length;
+
+  // ── Gabungan ──
+  document.getElementById('kg-total').textContent=rp(totShopee+totWeb);
+  document.getElementById('kg-shopee').textContent=rp(totShopee);
+  document.getElementById('kg-web').textContent=rp(totWeb);
+
+  const pB={};
+  selesai.forEach(o=>{const d=new Date(o.waktu),k=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;if(!pB[k])pB[k]={c:0,t:0};pB[k].c++;pB[k].t+=(o.nominal||0);});
+  const sorted=Object.entries(pB).sort((a,b)=>b[0].localeCompare(a[0]));
+  document.getElementById('k-body').innerHTML=sorted.map(([k,v])=>{
+    const[y,m]=k.split('-');const nama=new Date(y,m-1).toLocaleDateString('id-ID',{month:'short',year:'numeric'});
+    return `<tr><td style="color:#f1f5f9;font-weight:500">${nama}</td><td style="font-family:'JetBrains Mono',monospace">${v.c}</td><td style="font-family:'JetBrains Mono',monospace;color:#e07b20">${rp(v.t)}</td><td style="font-size:11px;color:#475569">${rp(Math.round(v.t/v.c))}</td></tr>`;
+  }).join('')||'<tr><td colspan="4" style="text-align:center;color:#334155;padding:20px;font-size:12px">Belum ada data</td></tr>';
+}
+
+function renderTerlaris(){
+  const selesai=allOrders.filter(o=>o.status_aksi==='SELESAI');
+  const mc={},kc={},cc={};
+  selesai.forEach(o=>{const produk=pc(o.produk||'');produk.split(/\s*\|\s*/).filter(Boolean).forEach(item=>{
+    const u=item.toUpperCase().trim();if(!u.startsWith('PAG')&&!u.startsWith('PPT'))return;
+    cc[item.trim()]=(cc[item.trim()]||0)+1;
+    const tanpa=u.replace(/^(PAG|PPT)\s+/,'');
+    const mK=tanpa.match(/[,\s][Kk]elas\s*(\d+)/)||tanpa.match(/,\s*(\d+)/);
+    if(mK){const kls='Kelas '+mK[1];kc[kls]=(kc[kls]||0)+1;}
+    const mM=tanpa.match(/^(.+?)[,\s]/);if(mM)mc[mM[1].trim()]=(mc[mM[1].trim()]||0)+1;
+  });});
+  function renderRank(obj,elId,lim=8){
+    const s=Object.entries(obj).sort((a,b)=>b[1]-a[1]).slice(0,lim),mx=s[0]?.[1]||1;
+    document.getElementById(elId).innerHTML=s.map(([k,v],i)=>`
+      <div class="rank-row">
+        <div class="rank-no">${i+1}</div>
+        <div class="rank-label" title="${k}">${k}</div>
+        <div class="rank-bar-wrap"><div class="rank-bar" style="width:${Math.round(v/mx*100)}%"></div></div>
+        <div class="rank-count">${v}</div>
+      </div>`).join('')||'<div style="color:#334155;font-size:12px">Belum ada data</div>';
+  }
+  renderRank(mc,'t-mapel');renderRank(kc,'t-kelas');
+  const sc=Object.entries(cc).sort((a,b)=>b[1]-a[1]).slice(0,15),mx2=sc[0]?.[1]||1;
+  document.getElementById('t-body').innerHTML=sc.map(([k,v])=>`
+    <tr>
+      <td style="font-size:11px;color:#94a3b8;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${k}</td>
+      <td style="font-family:'JetBrains Mono',monospace;font-weight:600;color:#e07b20;font-size:11px">${v}</td>
+      <td><div style="background:#0f1a2e;border-radius:3px;height:5px"><div style="width:${Math.round(v/mx2*100)}%;background:linear-gradient(90deg,#e07b20,#f59e0b);height:5px;border-radius:3px"></div></div></td>
+    </tr>`).join('')||'<tr><td colspan="3" style="text-align:center;color:#334155;padding:20px;font-size:12px">Belum ada data</td></tr>';
+}
+
+// ── EKSPOR ──
+function openEkspor(){
+  const now=new Date(),y=now.getFullYear(),m=String(now.getMonth()+1).padStart(2,'0');
+  const last=new Date(y,now.getMonth()+1,0).getDate();
+  document.getElementById('ex-dari').value=`${y}-${m}-01`;
+  document.getElementById('ex-sampai').value=`${y}-${m}-${String(last).padStart(2,'0')}`;
+  document.querySelectorAll('#m-ekspor .chip').forEach(c=>c.classList.remove('active'));
+  document.querySelectorAll('#m-ekspor .chip')[2].classList.add('active');
+  updateExPreview();
+  document.getElementById('m-ekspor').classList.add('open');
+  lucide.createIcons();
+}
+function setEkspor(type,el){
+  document.querySelectorAll('#m-ekspor .chip').forEach(c=>c.classList.remove('active'));
+  if(el)el.classList.add('active');
+  const now=new Date(),fmt=d=>d.toISOString().slice(0,10);
+  let dari,sampai=fmt(now);
+  if(type==='hari'){dari=fmt(now);}
+  else if(type==='minggu'){const x=new Date(now);x.setDate(now.getDate()-6);dari=fmt(x);}
+  else if(type==='bulan'){const y=now.getFullYear(),mo=now.getMonth();dari=`${y}-${String(mo+1).padStart(2,'0')}-01`;sampai=fmt(new Date(y,mo+1,0));}
+  else if(type==='tahun'){dari=`${now.getFullYear()}-01-01`;sampai=`${now.getFullYear()}-12-31`;}
+  else{const dates=allOrders.map(o=>new Date(o.waktu)).filter(Boolean);if(dates.length){dari=fmt(new Date(Math.min(...dates)));sampai=fmt(new Date(Math.max(...dates)));}else{dari=fmt(now);sampai=fmt(now);}}
+  document.getElementById('ex-dari').value=dari;
+  document.getElementById('ex-sampai').value=sampai;
+  updateExPreview();
+}
+function getExData(){
+  const dari=new Date(document.getElementById('ex-dari').value+'T00:00:00');
+  const sampai=new Date(document.getElementById('ex-sampai').value+'T23:59:59');
+  if(isNaN(dari)||isNaN(sampai))return[];
+  return allOrders.filter(o=>{const d=new Date(o.waktu);return d>=dari&&d<=sampai;});
+}
+function updateExPreview(){
+  const data=getExData(),selesai=data.filter(o=>o.status_aksi==='SELESAI');
+  const omzet=selesai.reduce((a,o)=>a+(o.nominal||0),0);
+  const dari=document.getElementById('ex-dari').value,sampai=document.getElementById('ex-sampai').value;
+  if(!dari||!sampai){document.getElementById('ex-preview').textContent='Pilih rentang tanggal';return;}
+  document.getElementById('ex-preview').innerHTML=`<span style="color:#f1f5f9;font-weight:600">${data.length} pesanan</span> · <span style="color:#e07b20;font-weight:600">${rp(omzet)}</span> omzet · ${dari===sampai?dari:dari+' s/d '+sampai}`;
+}
+document.getElementById('ex-dari').addEventListener('change',updateExPreview);
+document.getElementById('ex-sampai').addEventListener('change',updateExPreview);
+function doEkspor(fmt){
+  const data=getExData();
+  if(!data.length){toast('er','Tidak ada data');return;}
+  const dari=document.getElementById('ex-dari').value,sampai=document.getElementById('ex-sampai').value;
+  const label=dari===sampai?dari:dari+'_sd_'+sampai;
+  if(fmt==='csv')eksporCSV(data,label);else eksporPDF(data,label,dari,sampai);
+  closeM('m-ekspor');
+}
+// Escape 1 sel CSV dengan benar: bungkus tanda kutip ganda kalau isinya
+// mengandung koma/kutip/baris baru, dan tanda kutip di dalamnya di-double
+// (bukan diganti kutip tunggal seperti bug sebelumnya).
+function csvCell(v){
+  const s=String(v??'');
+  return /[",\n\r]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s;
+}
+function eksporCSV(data,label){
+  const sMap={'SELESAI':'Terkirim','PEMBAYARAN_VALID':'Belum Dikirim','DIBATALKAN':'Dibatalkan','PENGEMBALIAN':'Pengembalian'};
+  const HEADER=['No','No. Pesanan','Pembeli','Produk','Nominal','Status','Waktu'];
+  const rows=data.map((o,i)=>[i+1,o.no_pesanan,o.username||'-',pc(o.produk||''),o.nominal||0,sMap[o.status_aksi]||o.status_aksi,new Date(o.waktu).toLocaleString('id-ID')]);
+  const selesai=data.filter(o=>o.status_aksi==='SELESAI'),omzet=selesai.reduce((a,o)=>a+(o.nominal||0),0);
+  rows.push(
+    [],[],
+    ['','','','RINGKASAN','','',''],
+    ['','','','Total Pesanan',data.length,'',''],
+    ['','','','Pesanan Terkirim',selesai.length,'',''],
+    ['','','','Total Omzet',omzet,'','']
+  );
+  // "sep=,\r\n" setelah BOM memaksa Excel pakai koma sebagai pemisah kolom
+  // walau locale regional-nya (mis. Indonesia) defaultnya titik koma --
+  // ini penyebab utama kenapa hasil ekspor sebelumnya numpuk jadi 1 kolom.
+  const csv='\uFEFF'+'sep=,\r\n'+[HEADER,...rows].map(r=>r.map(csvCell).join(',')).join('\r\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download=`penjualan_${label}.csv`;a.click();
+  toast('ok','CSV berhasil diunduh');
+}
+function eksporPDF(data,label,dari,sampai){
+  const selesai=data.filter(o=>o.status_aksi==='SELESAI'),belum=data.filter(o=>o.status_aksi==='PEMBAYARAN_VALID');
+  const omzet=selesai.reduce((a,o)=>a+(o.nominal||0),0);
+  const sMap={'SELESAI':'Terkirim','PEMBAYARAN_VALID':'Belum Dikirim','DIBATALKAN':'Dibatalkan','PENGEMBALIAN':'Pengembalian'};
+  const tglR=dari===sampai?dari:dari+' s/d '+sampai;
+  const rows=data.map((o,i)=>`<tr><td>${i+1}</td><td style="font-family:monospace;font-size:10px">${o.no_pesanan}</td><td>${o.username||'-'}</td><td style="font-size:10px;color:#555">${pc(o.produk||'').slice(0,55)}</td><td style="text-align:right">Rp ${Number(o.nominal||0).toLocaleString('id-ID')}</td><td><span style="padding:2px 6px;border-radius:10px;font-size:9px;font-weight:600;background:${o.status_aksi==='SELESAI'?'#d1fae5;color:#065f46':o.status_aksi==='DIBATALKAN'?'#fee2e2;color:#991b1b':'#fef3c7;color:#92400e'}">${sMap[o.status_aksi]||o.status_aksi}</span></td><td style="font-size:10px;color:#666">${new Date(o.waktu).toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'})}</td></tr>`).join('');
+  const html=`<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><title>Laporan ${tglR}</title><style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;font-size:12px;color:#1a1a1a;padding:24px}.hdr{border-bottom:3px solid #0d2044;padding-bottom:12px;margin-bottom:20px;display:flex;align-items:center;gap:12px}.hdr-logo{width:44px;height:44px;background:#0d2044;border:2px solid #e07b20;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px}.hdr h1{font-size:18px;color:#0d2044;margin-bottom:3px}.hdr .meta{font-size:11px;color:#666}.sum{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}.sc{border:1px solid #e5e7eb;border-radius:8px;padding:12px;text-align:center;border-top:3px solid #e07b20}.sv{font-size:20px;font-weight:700;color:#0d2044;margin-bottom:2px}.sl{font-size:10px;color:#666}table{width:100%;border-collapse:collapse;font-size:11px}th{background:#0d2044;color:#fff;padding:7px 8px;text-align:left;font-size:10px}td{padding:6px 8px;border-bottom:1px solid #f3f4f6;vertical-align:middle}tr:nth-child(even) td{background:#f9fafb}.footer{margin-top:20px;padding-top:10px;border-top:1px solid #e5e7eb;font-size:10px;color:#9ca3af;display:flex;justify-content:space-between}@media print{body{padding:12px}}</style></head><body><div class="hdr"><div class="hdr-logo">✒️</div><div><h1>Hanun Store — Laporan Penjualan</h1><div class="meta">Periode: <b>${tglR}</b> · Dicetak: ${new Date().toLocaleString('id-ID')}</div></div></div><div class="sum"><div class="sc"><div class="sv">${data.length}</div><div class="sl">Total Pesanan</div></div><div class="sc"><div class="sv">${selesai.length}</div><div class="sl">Terkirim</div></div><div class="sc"><div class="sv">${belum.length}</div><div class="sl">Belum Dikirim</div></div><div class="sc"><div class="sv" style="font-size:14px">Rp ${Number(omzet).toLocaleString('id-ID')}</div><div class="sl">Omzet Terkirim</div></div></div><table><thead><tr><th>#</th><th>No. Pesanan</th><th>Pembeli</th><th>Produk</th><th>Nominal</th><th>Status</th><th>Tanggal</th></tr></thead><tbody>${rows}</tbody></table><div class="footer"><span>Hanun Store — Dashboard Admin</span><span>${data.length} transaksi · Omzet Rp ${Number(omzet).toLocaleString('id-ID')}</span></div><script>window.onload=()=>window.print()<\/script></body></html>`;
+  const win=window.open(URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'})),'_blank');
+  if(!win){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));a.download=`laporan_${label}.html`;a.click();}
+  toast('ok','PDF siap dicetak');
+}
+
+// ── Ekspor Pesanan Web (Midtrans) ── ekspor data yang sedang ter-filter
+const WEB_SMAP={'paid':'Lunas','settlement':'Lunas','capture':'Lunas','pending':'Pending','cancel':'Dibatalkan','deny':'Ditolak','expire':'Kedaluwarsa','fraud':'Fraud'};
+function eksporWeb(fmt){
+  const data=filteredWeb();
+  if(!data.length){toast('er','Tidak ada data untuk diekspor');return;}
+  const label=new Date().toISOString().slice(0,10);
+  if(fmt==='csv') eksporWebCSV(data,label); else eksporWebPDF(data,label);
+}
+function eksporWebCSV(data,label){
+  const HEADER=['No','Order ID','Pembeli','Email','WhatsApp','Produk','Total','Status','Waktu'];
+  const rows=data.map((o,i)=>[i+1,o.id,o.customer_name||'-',o.customer_email||'-',o.customer_wa||'-',produkLabel(o),o.total||0,WEB_SMAP[o.status]||o.status,new Date(o.created_at).toLocaleString('id-ID')]);
+  const lunas=data.filter(o=>['paid','settlement','capture'].includes(o.status)),omzet=lunas.reduce((a,o)=>a+(o.total||0),0);
+  rows.push([],[],['','','','','','RINGKASAN','','',''],['','','','','','Total Pesanan',data.length,'',''],['','','','','','Pesanan Lunas',lunas.length,'',''],['','','','','','Total Omzet',omzet,'','']);
+  const csv='﻿'+'sep=,\r\n'+[HEADER,...rows].map(r=>r.map(csvCell).join(',')).join('\r\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download=`pesanan_web_${label}.csv`;a.click();
+  toast('ok','CSV berhasil diunduh');
+}
+function eksporWebPDF(data,label){
+  const lunas=data.filter(o=>['paid','settlement','capture'].includes(o.status)),omzet=lunas.reduce((a,o)=>a+(o.total||0),0);
+  const rows=data.map((o,i)=>`<tr><td>${i+1}</td><td style="font-family:monospace;font-size:10px">${o.id}</td><td>${o.customer_name||'-'}</td><td style="font-size:10px;color:#555">${pc(produkLabel(o)).slice(0,55)}</td><td style="text-align:right">Rp ${Number(o.total||0).toLocaleString('id-ID')}</td><td><span style="padding:2px 6px;border-radius:10px;font-size:9px;font-weight:600;background:${['paid','settlement','capture'].includes(o.status)?'#d1fae5;color:#065f46':['cancel','deny','expire'].includes(o.status)?'#fee2e2;color:#991b1b':'#fef3c7;color:#92400e'}">${WEB_SMAP[o.status]||o.status}</span></td><td style="font-size:10px;color:#666">${new Date(o.created_at).toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'})}</td></tr>`).join('');
+  const html=`<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><title>Laporan Pesanan Web</title><style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;font-size:12px;color:#1a1a1a;padding:24px}.hdr{border-bottom:3px solid #0d2044;padding-bottom:12px;margin-bottom:20px;display:flex;align-items:center;gap:12px}.hdr-logo{width:44px;height:44px;background:#0d2044;border:2px solid #e07b20;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px}.hdr h1{font-size:18px;color:#0d2044;margin-bottom:3px}.hdr .meta{font-size:11px;color:#666}.sum{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}.sc{border:1px solid #e5e7eb;border-radius:8px;padding:12px;text-align:center;border-top:3px solid #e07b20}.sv{font-size:20px;font-weight:700;color:#0d2044;margin-bottom:2px}.sl{font-size:10px;color:#666}table{width:100%;border-collapse:collapse;font-size:11px}th{background:#0d2044;color:#fff;padding:7px 8px;text-align:left;font-size:10px}td{padding:6px 8px;border-bottom:1px solid #f3f4f6;vertical-align:middle}tr:nth-child(even) td{background:#f9fafb}.footer{margin-top:20px;padding-top:10px;border-top:1px solid #e5e7eb;font-size:10px;color:#9ca3af;display:flex;justify-content:space-between}@media print{body{padding:12px}}</style></head><body><div class="hdr"><div class="hdr-logo">✒️</div><div><h1>Hanun Store — Laporan Pesanan Web</h1><div class="meta">Dicetak: ${new Date().toLocaleString('id-ID')}</div></div></div><div class="sum"><div class="sc"><div class="sv">${data.length}</div><div class="sl">Total Pesanan</div></div><div class="sc"><div class="sv">${lunas.length}</div><div class="sl">Lunas</div></div><div class="sc"><div class="sv" style="font-size:14px">Rp ${Number(omzet).toLocaleString('id-ID')}</div><div class="sl">Omzet Lunas</div></div></div><table><thead><tr><th>#</th><th>Order ID</th><th>Pembeli</th><th>Produk</th><th>Total</th><th>Status</th><th>Tanggal</th></tr></thead><tbody>${rows}</tbody></table><div class="footer"><span>Hanun Store — Dashboard Admin</span><span>${data.length} transaksi · Omzet Rp ${Number(omzet).toLocaleString('id-ID')}</span></div><script>window.onload=()=>window.print()<\/script></body></html>`;
+  const win=window.open(URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'})),'_blank');
+  if(!win){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));a.download=`laporan_web_${label}.html`;a.click();}
+  toast('ok','PDF siap dicetak');
+}
+
+function closeM(id){document.getElementById(id).classList.remove('open');}
+function toast(type,msg){
+  const el=document.getElementById('t-'+type);
+  document.getElementById('t-'+type+'-m').textContent=msg;
+  el.classList.add('show');setTimeout(()=>el.classList.remove('show'),3000);
+}
+document.querySelectorAll('.modal-bg').forEach(bg=>bg.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');}));
+
+// ── PWA ──
+if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));
+let _dp=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();_dp=e;document.getElementById('install-banner').style.display='flex';});
+async function installPWA(){if(!_dp)return;_dp.prompt();const r=await _dp.userChoice;_dp=null;document.getElementById('install-banner').style.display='none';if(r.outcome==='accepted')toast('ok','Aplikasi berhasil diinstall! 🎉');}
+window.addEventListener('appinstalled',()=>{document.getElementById('install-banner').style.display='none';});
+</script>
+</body>
+</html>

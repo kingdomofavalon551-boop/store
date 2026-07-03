@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Product {
+  id          String        @id @unique
+  name        String
+  accent      String?
+  dim1        Json? // Menyimpan objek {"title": "Pelajaran", "tags": [...]}
+  dim2        Json? // Menyimpan objek {"title": "Kelas", "tags": [...]}
+  cells       Json? // Menyimpan objek matriks link Drive {"KELAS 1|||mtk": "https...", ...}
+  ProductCell ProductCell[]
+
+  @@map("products") // Pastikan ini sesuai dengan nama tabel di Supabase (misal: "products")
+}
+
+// (Pastikan model ShopeeOrder yang sudah kita buat sebelumnya tetap ada di bawahnya)
+
+// Tabel Sel Matriks (Menyimpan URL Drive)
+model ProductCell {
+  id         Int    @id @default(autoincrement())
+  product_id String @db.VarChar(50)
+  row_tag    String @db.VarChar(100)
+  col_tag    String @db.VarChar(100)
+  url        String
+
+  product Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  @@unique([product_id, row_tag, col_tag]) // Mencegah duplikasi sel matriks
+  @@map("product_cells")
+}
+
+// Tabel Riwayat Pesanan Shopee
+model ShopeeOrder {
+  id_transaksi     String   @default("Menunggu Info")
+  waktu            DateTime @default(now())
+  no_pesanan       String   @id @unique
+  username_pembeli String
+  status_aksi      String // Tempat menampung BARU_DITERIMA, TERKIRIM, DIBATALKAN, dll.
+  nominal          Int      @default(0)
+  detail_produk    String   @db.Text // Menggunakan @db.Text agar muat menampung rekap link Drive yang panjang
+  subjek_email     String? // Dibuat opsional dengan tanda tanya (?) karena GAS tidak wajib mengirim ini lagi
+
+  @@map("shopee_orders") // Memastikan nama tabel di Supabase adalah shopee_orders
+}
+
+// Tabel Log Sistem
+model SystemLog {
+  id        Int       @id @default(autoincrement())
+  timestamp DateTime? @default(now()) @db.Timestamp(6)
+  level     String?   @db.VarChar(20)
+  message   String?
+
+  @@map("system_logs")
+}
+
+// ═════════════════════════════════════════════════════════════════
+// Model di bawah ini sebelumnya HANYA dipakai lewat prisma.$queryRaw
+// di src/routes/publicRoutes.js dan tidak terdaftar di schema ini,
+// jadi tidak terlihat oleh `prisma migrate`/`prisma studio` dan rawan
+// schema drift. Kolom di sini disusun dari cara kolom itu dipakai di
+// kode (bukan hasil introspeksi DB asli) - jalankan `npx prisma db
+// pull` untuk verifikasi lawan database sungguhan sebelum menjalankan
+// migrate/db push apa pun terhadap database produksi.
+// ═════════════════════════════════════════════════════════════════
+
+model CatalogProduct {
+  id             Int      @id @default(autoincrement())
+  nama           String
+  foto_url       String
+  link_co        String?
+  harga          Int?
+  deskripsi      String?
+  variasi_config Json?
+  link_contoh    String?
+  urutan         Int      @default(0)
+  aktif          Boolean  @default(true)
+  stok_habis     Json?
+
+  @@map("catalog_products")
+}
+
+model MidtransOrder {
+  id             String    @id // format "PD-<timestamp>-<random>"
+  customer_name  String
+  customer_email String
+  customer_wa    String
+  items          Json
+  total          Int
+  status         String // pending | paid | settlement | capture | cancel | deny | expire | fraud
+  referral_data  Json?
+  snap_token     String?
+  link_produk    Json?
+  midtrans_data  Json?
+  created_at     DateTime  @default(now())
+  updated_at     DateTime?
+
+  @@map("midtrans_orders")
+}
+
+model ReferralCode {
+  id              Int      @id @default(autoincrement())
+  kode            String   @unique
+  tipe_diskon     String // "persen" | "nominal"
+  nilai_diskon    Int
+  maks_pemakaian  Int
+  jumlah_terpakai Int      @default(0)
+  aktif           Boolean  @default(true)
+  created_at      DateTime @default(now())
+
+  @@map("referral_codes")
+}
+
+// Setting key-value generik, dipakai pertama kali untuk toggle mode
+// maintenance (key='maintenance', value={"cari":bool,"beli":bool}).
+model AppSetting {
+  key        String   @id
+  value      Json
+  updated_at DateTime @default(now())
+
+  @@map("app_settings")
+}

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pembayaran Berhasil — Hanun Store</title>
+<link rel="icon" type="image/jpeg" href="GANTI_DENGAN_URL_LOGO_ANDA">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#1B3A6B">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1B3A6B;--orange:#E07B2A;--orange2:#F5A040;--cream:#F5EFE6;--cream2:#EDE4D6;--white:#fff;--g50:#F8FAFC;--g100:#F1F5F9;--g200:#E2E8F0;--g500:#64748B;--g700:#334155;--green:#16A34A;--green-bg:#DCFCE7;--red:#DC2626;--red-bg:#FEE2E2;--yellow-bg:#FEFCE8;--yellow:#CA8A04;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream);color:var(--g700);min-height:100vh;}
+header{background:var(--navy);padding:14px 20px;display:flex;align-items:center;gap:10px;box-shadow:0 2px 12px rgba(0,0,0,.2);}
+.logo-box{width:38px;height:38px;background:var(--cream);border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.logo-box svg{width:24px;height:24px;}
+.brand-name{font-size:16px;font-weight:800;color:#fff;}
+.main{max-width:520px;margin:0 auto;padding:28px 16px 60px;}
+
+/* STATUS BANNER */
+.status-banner{border-radius:16px;padding:24px 20px;text-align:center;margin-bottom:20px;}
+.status-banner.sukses{background:var(--green-bg);border:1px solid #BBF7D0;}
+.status-banner.pending{background:var(--yellow-bg);border:1px solid #FEF08A;}
+.status-banner.error{background:var(--red-bg);border:1px solid #FECACA;}
+.status-ikon{font-size:48px;margin-bottom:12px;display:block;}
+.status-judul{font-size:20px;font-weight:800;color:var(--navy);margin-bottom:6px;}
+.status-sub{font-size:14px;color:var(--g500);line-height:1.6;}
+.order-id-box{display:inline-block;background:rgba(27,58,107,.08);color:var(--navy);font-size:13px;font-weight:700;padding:5px 14px;border-radius:8px;margin-top:10px;letter-spacing:.5px;}
+
+/* CARDS */
+.card{background:var(--white);border-radius:14px;border:1px solid var(--cream2);padding:20px;margin-bottom:14px;}
+.card-title{font-size:13px;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;display:flex;align-items:center;gap:6px;}
+.card-title::before{content:'';width:3px;height:14px;background:var(--orange);border-radius:2px;display:inline-block;}
+
+/* LINK PRODUK */
+.link-item{background:var(--g50);border:1px solid var(--g200);border-radius:10px;padding:13px;margin-bottom:10px;}
+.link-item:last-child{margin-bottom:0;}
+.link-label{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.link-url{font-size:11px;color:var(--g500);word-break:break-all;background:var(--cream);padding:7px 10px;border-radius:6px;border:1px solid var(--cream2);margin-bottom:8px;font-family:monospace;line-height:1.5;}
+.btn-salin{width:100%;padding:9px;border-radius:7px;background:var(--navy);color:#fff;border:none;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:background .15s;}
+.btn-salin:hover{background:#2A4F8F;}
+.btn-salin.copied{background:var(--green);}
+
+/* AKSI */
+.btn-aksi{width:100%;padding:13px;border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;text-decoration:none;border:none;transition:opacity .15s,transform .1s;margin-bottom:10px;}
+.btn-aksi:active{transform:scale(.98);}
+.btn-email{background:var(--navy);color:#fff;}
+.btn-wa-share{background:#25D366;color:#fff;}
+.btn-wa-admin{background:#25D366;color:#fff;}
+.btn-home{background:var(--cream);color:var(--navy);border:2px solid var(--cream2);}
+.btn-home:hover{background:var(--cream2);}
+
+/* LINK KOSONG */
+.info-box-red{background:var(--red-bg);border:1px solid #FECACA;border-radius:10px;padding:14px;font-size:13px;color:var(--red);line-height:1.6;margin-bottom:14px;}
+.info-box-yellow{background:var(--yellow-bg);border:1px solid #FEF08A;border-radius:10px;padding:14px;font-size:13px;color:var(--yellow);line-height:1.6;margin-bottom:14px;}
+
+/* LOADING */
+.loading-state{text-align:center;padding:40px 20px;color:var(--g500);}
+.spin-lg{width:40px;height:40px;border:4px solid var(--cream2);border-top-color:var(--orange);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* TOAST */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;font-size:13px;font-weight:700;padding:10px 20px;border-radius:10px;white-space:nowrap;opacity:0;transition:opacity .25s;z-index:999;pointer-events:none;}
+#toast.show{opacity:1;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-box">
+    <img src="GANTI_DENGAN_URL_LOGO_ANDA" alt="Hanun Store" style="width:100%;height:100%;object-fit:cover;">
+  </div>
+  <span class="brand-name">Status Pembayaran</span>
+</header>
+
+<div class="main" id="main">
+  <div class="loading-state">
+    <div class="spin-lg"></div>
+    <div>Memverifikasi pembayaran...</div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const API      = 'https://GANTI-URL-BACKEND-ANDA.vercel.app/api/public';
+const ADMIN_WA = 'GANTI_NOMOR_WA_ADMIN';
+
+const params   = new URLSearchParams(location.search);
+const orderId  = params.get('order_id') || localStorage.getItem('pd_last_order');
+const status   = params.get('status') || 'success';
+const custWA   = localStorage.getItem('pd_customer_wa') || '';
+
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function escA(s){ return String(s||'').replace(/'/g,"\\'"); }
+
+async function loadOrder() {
+  if (!orderId) { renderError('Order ID tidak ditemukan.'); return; }
+
+  // Polling — tunggu webhook Midtrans (maks 10x, setiap 2 detik)
+  let order = null;
+  for (let i = 0; i < 10; i++) {
+    try {
+      const r = await fetch(`${API}/midtrans/order/${orderId}`);
+      const d = await r.json();
+      if (d.status === 'ok') {
+        order = d;
+        if (['paid','settlement','capture'].includes(d.payment_status)) break;
+      }
+    } catch {}
+    await new Promise(r => setTimeout(r, 2000));
+  }
+
+  if (!order) { renderError('Gagal memuat data pesanan.'); return; }
+  renderHasil(order, status);
+}
+
+function renderHasil(order, urlStatus) {
+  const main      = document.getElementById('main');
+  const isPaid    = ['paid','settlement','capture'].includes(order.payment_status);
+  const isPending = order.payment_status === 'pending';
+  const linkList  = order.link_produk || [];
+  const adaKosong = linkList.some(l => !l.url);
+  const semuaAda  = linkList.length > 0 && linkList.every(l => l.url);
+
+  // Template WA admin — hanya produk yang linknya BELUM ada, pakai label
+  // ringkas (variasi), plus no pesanan. Supaya admin tahu persis apa yang
+  // harus dikirim.
+  const waAdminTemplate = buildWAAdminTemplate(order);
+
+  let html = '';
+
+  // ── STATUS BANNER ──────────────────────────────────────────────
+  if (isPaid) {
+    html += `<div class="status-banner sukses">
+      <span class="status-ikon">🎉</span>
+      <div class="status-judul">Pembayaran Berhasil!</div>
+      <div class="status-sub">Terima kasih, <strong>${esc(order.customer_name)}</strong>!<br>Link produk dikirim ke email & WhatsApp Anda.</div>
+      <div class="order-id-box">No. Pesanan: ${esc(order.order_id)}</div>
+    </div>`;
+  } else if (isPending) {
+    html += `<div class="status-banner pending">
+      <span class="status-ikon">⏳</span>
+      <div class="status-judul">Menunggu Pembayaran</div>
+      <div class="status-sub">Selesaikan pembayaran Anda. Link produk akan dikirim otomatis setelah pembayaran dikonfirmasi.</div>
+      <div class="order-id-box">No. Pesanan: ${esc(order.order_id)}</div>
+    </div>`;
+  } else {
+    html += `<div class="status-banner error">
+      <span class="status-ikon">❌</span>
+      <div class="status-judul">Pembayaran Gagal</div>
+      <div class="status-sub">Transaksi tidak berhasil. Silakan coba lagi.</div>
+    </div>`;
+  }
+
+  // ── LINK PRODUK (hanya jika paid) ─────────────────────────────
+  if (isPaid && linkList.length > 0) {
+    if (semuaAda) {
+      // Semua link ada
+      const mailBody = buildMailBody(linkList, order.order_id);
+      const waText   = buildWAText(linkList, order.order_id);
+
+      html += `<div class="card">
+        <div class="card-title">📁 Link File Produk Anda</div>
+        ${linkList.map(l => `
+          <div class="link-item">
+            <div class="link-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              ${esc(l.label)}
+            </div>
+            <div class="link-url">${esc(l.url)}</div>
+            <button class="btn-salin" onclick="salin(this,'${escA(l.url)}')">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+              Salin Link
+            </button>
+          </div>`).join('')}
+
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px;">
+          <a class="btn-aksi btn-email" href="mailto:?subject=${encodeURIComponent('Link Pesanan Hanun Store — '+order.order_id)}&body=${encodeURIComponent(mailBody)}">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7"/></svg>
+            Kirim ke Email Saya
+          </a>
+          <a class="btn-aksi btn-wa-share" href="https://wa.me/?text=${encodeURIComponent(buildWAText(linkList,order.order_id))}" target="_blank" rel="noopener">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            Kirim ke WhatsApp Saya
+          </a>
+        </div>
+      </div>`;
+
+    } else if (adaKosong) {
+      // Ada sebagian link kosong
+      html += `<div class="card">
+        <div class="card-title">📁 Link File Produk Anda</div>
+        ${linkList.map((l,idx) => l.url ? `
+          <div class="link-item">
+            <div class="link-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>${esc(l.label)}</div>
+            <div class="link-url">${esc(l.url)}</div>
+            <button class="btn-salin" onclick="salin(this,'${escA(l.url)}')">Salin Link</button>
+          </div>` : `
+          <div class="link-item" style="border-color:#FECACA;background:#FEF2F2;">
+            <div class="link-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>${esc(cleanLabel(order,idx,l.label))}</div>
+            <div style="font-size:12px;color:#DC2626;">Link akan dikirim manual oleh admin</div>
+          </div>`).join('')}
+        <div class="info-box-red" style="margin-top:14px;">
+          ⚠️ Mohon maaf, sebagian link harus dikirim manual oleh penjual. Hubungi admin di bawah ini.
+        </div>
+        <a class="btn-aksi btn-wa-admin" href="https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(waAdminTemplate)}" target="_blank" rel="noopener">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          Hubungi Admin via WhatsApp
+        </a>
+      </div>`;
+    }
+  }
+
+  // ── Jika paid tapi link_produk BELUM ada sama sekali (webhook belum
+  //    sempat mengisi / gagal). Kasus sebagian/semua kosong TAPI list ada
+  //    sudah ditangani branch adaKosong di atas — jadi di sini khusus
+  //    linkList kosong total, supaya tidak render kartu admin ganda.
+  if (isPaid && linkList.length === 0) {
+    html += `<div class="card">
+      <div class="card-title">📁 Status Link Produk</div>
+      <div class="info-box-red">
+        Mohon maaf, link produk harus dikirim manual oleh penjual. Silakan hubungi admin kami.
+      </div>
+      <a class="btn-aksi btn-wa-admin" href="https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(waAdminTemplate)}" target="_blank" rel="noopener">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        Hubungi Admin via WhatsApp
+      </a>
+    </div>`;
+  }
+
+  // ── TOMBOL KEMBALI ─────────────────────────────────────────────
+  html += `<a class="btn-aksi btn-home" href="index.html">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    Kembali ke Beranda
+  </a>`;
+
+  document.getElementById('main').innerHTML = html;
+}
+
+function renderError(msg) {
+  document.getElementById('main').innerHTML = `
+    <div class="status-banner error">
+      <span class="status-ikon">❌</span>
+      <div class="status-judul">Terjadi Kesalahan</div>
+      <div class="status-sub">${esc(msg)}</div>
+    </div>
+    <a class="btn-aksi btn-home" href="index.html" style="display:flex;align-items:center;justify-content:center;gap:7px;padding:13px;background:var(--cream);color:var(--navy);border:2px solid var(--cream2);border-radius:10px;text-decoration:none;font-weight:700;">Kembali ke Beranda</a>`;
+}
+
+async function salin(btn, url) {
+  try { await navigator.clipboard.writeText(url); } catch {
+    const t=document.createElement('textarea'); t.value=url; t.style.cssText='position:fixed;opacity:0;';
+    document.body.appendChild(t); t.select(); document.execCommand('copy'); document.body.removeChild(t);
+  }
+  const o=btn.innerHTML; btn.classList.add('copied');
+  btn.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Tersalin!';
+  setTimeout(()=>{ btn.classList.remove('copied'); btn.innerHTML=o; },2000);
+}
+
+function buildMailBody(list, orderId) {
+  let b=`Halo,\n\nBerikut link pesanan Hanun Store Anda:\nNo. Pesanan: ${orderId}\n\n`;
+  list.forEach((l,i)=>{ b+=`${i+1}. ${l.label}\n${l.url||'(Link menyusul)'}\n\n`; });
+  b+=`Salam,\nHanun Store | WA: GANTI-NOMOR-WA-ADMIN`;
+  return b;
+}
+
+function buildWAText(list, orderId) {
+  let t=`*Link Pesanan Hanun Store*\nNo: ${orderId}\n\n`;
+  list.forEach((l,i)=>{ t+=`*${i+1}. ${l.label}*\n${l.url||'(Link menyusul)'}\n\n`; });
+  return t;
+}
+
+// Label ringkas produk (pakai variasi, bukan nama marketing panjang).
+// link_produk[idx] sejajar dengan items[idx] (webhook push 1 entri per item).
+function cleanLabel(order, idx, fallback) {
+  const it = (order.items || [])[idx];
+  return (it && (it.variasi || it.nama)) || fallback || 'Produk';
+}
+
+// Daftar produk yang linknya BELUM ada (untuk template hubungi admin).
+function missingLabels(order) {
+  const links = order.link_produk || [];
+  const items = order.items || [];
+  const n = Math.max(links.length, items.length);
+  const out = [];
+  for (let i = 0; i < n; i++) {
+    const l = links[i];
+    if (!l || !l.url) out.push(cleanLabel(order, i, l && l.label));
+  }
+  return out;
+}
+
+function buildWAAdminTemplate(order) {
+  const miss = missingLabels(order);
+  const daftar = miss.length
+    ? miss.map((m, i) => `${i + 1}. ${m}`).join('\n')
+    : (order.items || []).map((it, i) => `${i + 1}. ${it.variasi || it.nama}`).join('\n');
+  // Teks polos tanpa emoji — emoji sempat ter-korupsi jadi karakter
+  // pengganti (U+FFFD) di URL wa.me pada sebagian perangkat.
+  return `Halo Admin Hanun Store,\n\n` +
+    `Saya sudah membayar via website, tapi ada link produk yang belum saya terima.\n\n` +
+    `No. Pesanan: ${order.order_id}\n` +
+    `Produk (link belum ada):\n${daftar}\n\n` +
+    `Mohon dibantu kirim linknya ya. Terima kasih!`;
+}
+
+function toast(msg) {
+  const el=document.getElementById('toast'); el.textContent=msg; el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),2500);
+}
+
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function escA(s){ return String(s||'').replace(/'/g,"\\'"); }
+
+loadOrder();
+</script>
+</body>
+</html>

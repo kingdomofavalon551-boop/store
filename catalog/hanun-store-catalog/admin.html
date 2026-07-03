@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Katalog — Hanun Store</title>
+<link rel="icon" type="image/jpeg" href="GANTI_DENGAN_URL_LOGO_ANDA">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1B3A6B;--navy2:#2A4F8F;--orange:#E07B2A;--orange2:#F5A040;
+  --cream:#F5EFE6;--cream2:#EDE4D6;--white:#fff;
+  --g50:#F8FAFC;--g100:#F1F5F9;--g200:#E2E8F0;--g300:#CBD5E1;
+  --g500:#64748B;--g700:#334155;
+  --green:#16A34A;--green-bg:#DCFCE7;
+  --red:#DC2626;--red-bg:#FEE2E2;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream);color:var(--g700);min-height:100vh;}
+
+/* ── LOGIN ── */
+#login-screen{
+  display:flex;align-items:center;justify-content:center;
+  min-height:100vh;padding:20px;
+}
+.login-box{
+  background:var(--white);border-radius:16px;padding:36px 28px;
+  max-width:340px;width:100%;
+  box-shadow:0 8px 32px rgba(27,58,107,.12);
+  border:1px solid var(--cream2);
+  text-align:center;
+}
+.login-logo{
+  width:56px;height:56px;background:var(--cream);border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 16px;
+}
+.login-logo svg{width:32px;height:32px;}
+.login-title{font-size:20px;font-weight:800;color:var(--navy);margin-bottom:4px;}
+.login-sub{font-size:13px;color:var(--g500);margin-bottom:24px;}
+.field-label{font-size:12px;font-weight:700;color:var(--navy);text-align:left;margin-bottom:6px;display:block;}
+.field-input{
+  width:100%;padding:12px 14px;
+  border:2px solid var(--g200);border-radius:10px;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:14px;color:var(--navy);background:var(--g50);
+  outline:none;transition:border-color .2s,box-shadow .2s;
+}
+.field-input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(224,123,42,.12);}
+.btn-login{
+  width:100%;margin-top:20px;padding:13px;
+  background:var(--orange);color:#fff;
+  border:none;border-radius:10px;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:15px;font-weight:700;cursor:pointer;
+  transition:background .15s;
+}
+.btn-login:hover{background:#C96E1F;}
+#login-err{color:var(--red);font-size:12px;margin-top:8px;display:none;}
+
+/* ── MAIN APP ── */
+#app-screen{display:none;}
+
+header{
+  background:var(--navy);padding:14px 20px;
+  display:flex;align-items:center;gap:10px;
+  position:sticky;top:0;z-index:100;
+  box-shadow:0 2px 12px rgba(0,0,0,.2);
+}
+.logo-box{
+  width:38px;height:38px;background:var(--cream);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.logo-box svg{width:24px;height:24px;}
+.brand-name{font-size:16px;font-weight:800;color:#fff;}
+.brand-badge{
+  font-size:10px;font-weight:700;
+  background:var(--orange);color:#fff;
+  padding:2px 8px;border-radius:5px;margin-left:6px;
+}
+.header-spacer{flex:1;}
+.btn-logout{
+  font-size:11px;font-weight:700;color:rgba(255,255,255,.6);
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);
+  border-radius:6px;padding:5px 10px;cursor:pointer;transition:all .15s;
+}
+.btn-logout:hover{color:#fff;border-color:rgba(255,255,255,.35);}
+.admin-nav{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+/* Mobile: header jadi 2 baris — logo+brand di atas, nav full-width & bisa
+   wrap di bawah, supaya SEMUA tombol nav selalu terjangkau (tidak terpotong). */
+@media(max-width:560px){
+  header{flex-wrap:wrap;row-gap:10px;}
+  .header-spacer{display:none;}
+  .admin-nav{width:100%;flex-wrap:wrap;justify-content:flex-start;}
+}
+
+.main{max-width:600px;margin:0 auto;padding:24px 16px 60px;}
+
+/* ── TAMBAH PRODUK ── */
+.add-card{
+  background:var(--white);border-radius:14px;padding:22px 20px;
+  border:1px solid var(--cream2);
+  box-shadow:0 2px 12px rgba(27,58,107,.06);
+  margin-bottom:24px;
+}
+.card-title{
+  font-size:13px;font-weight:800;color:var(--navy);
+  text-transform:uppercase;letter-spacing:.6px;margin-bottom:18px;
+  display:flex;align-items:center;gap:8px;
+}
+.card-title::before{content:'';width:3px;height:14px;background:var(--orange);border-radius:2px;display:inline-block;}
+
+/* ── MODE MAINTENANCE ── */
+.maint-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--cream2);}
+.maint-row:last-child{border-bottom:none;}
+.maint-label{font-size:14px;font-weight:700;color:var(--navy);}
+.maint-desc{font-size:11px;color:var(--g500);margin-top:2px;}
+.maint-switch{position:relative;width:46px;height:26px;border-radius:20px;background:var(--g300);border:none;cursor:pointer;transition:background .2s;flex-shrink:0;}
+.maint-switch::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.3);}
+.maint-switch.on{background:var(--orange);}
+.maint-switch.on::after{transform:translateX(20px);}
+
+.form-group{margin-bottom:14px;}
+.form-label{font-size:12px;font-weight:700;color:var(--navy);display:block;margin-bottom:6px;}
+.form-input,.form-textarea{
+  width:100%;padding:11px 13px;
+  border:1.5px solid var(--g200);border-radius:9px;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:13px;color:var(--g700);background:var(--g50);
+  outline:none;transition:border-color .2s,box-shadow .2s;
+}
+.form-input:focus,.form-textarea:focus{
+  border-color:var(--orange);box-shadow:0 0 0 3px rgba(224,123,42,.1);
+}
+.form-hint{font-size:11px;color:var(--g500);margin-top:4px;}
+
+/* preview foto */
+.foto-preview{
+  width:80px;height:80px;border-radius:8px;overflow:hidden;
+  border:2px solid var(--g200);background:var(--g100);
+  display:flex;align-items:center;justify-content:center;
+  margin-top:8px;flex-shrink:0;
+}
+.foto-preview img{width:100%;height:100%;object-fit:cover;}
+.foto-preview svg{width:24px;height:24px;color:var(--g300);}
+
+.btn-tambah{
+  width:100%;padding:12px;
+  background:var(--orange);color:#fff;
+  border:none;border-radius:10px;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:14px;font-weight:700;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  transition:background .15s;margin-top:4px;
+}
+.btn-tambah:hover{background:#C96E1F;}
+.btn-tambah:disabled{background:var(--g300);cursor:not-allowed;}
+
+/* ── DAFTAR PRODUK ── */
+.list-header{
+  font-size:13px;font-weight:800;color:var(--navy);
+  text-transform:uppercase;letter-spacing:.6px;
+  margin-bottom:14px;
+  display:flex;align-items:center;gap:8px;
+}
+.list-header::before{content:'';width:3px;height:14px;background:var(--orange);border-radius:2px;display:inline-block;}
+.list-count{
+  font-size:11px;font-weight:700;color:var(--g500);
+  background:var(--g100);padding:2px 8px;border-radius:5px;
+}
+
+.produk-list-item{
+  background:var(--white);border-radius:12px;
+  border:1px solid var(--cream2);
+  padding:14px;margin-bottom:10px;
+  display:flex;align-items:center;gap:12px;
+}
+.item-thumb{
+  width:56px;height:56px;border-radius:8px;
+  overflow:hidden;flex-shrink:0;
+  background:var(--g100);
+  display:flex;align-items:center;justify-content:center;
+}
+.item-thumb img{width:100%;height:100%;object-fit:cover;}
+.item-thumb svg{width:20px;height:20px;color:var(--g300);}
+.item-info{flex:1;min-width:0;}
+.item-nama{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:3px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.item-link{font-size:11px;color:var(--g500);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.item-order{font-size:10px;color:var(--g500);margin-top:2px;}
+.item-badge{
+  display:inline-block;font-size:10px;font-weight:700;
+  padding:2px 7px;border-radius:4px;margin-top:3px;
+}
+.badge-aktif{background:var(--green-bg);color:var(--green);}
+.badge-nonaktif{background:var(--red-bg);color:var(--red);}
+.item-actions{display:flex;gap:6px;flex-shrink:0;}
+.btn-edit,.btn-del,.btn-toggle{
+  width:32px;height:32px;border-radius:7px;
+  border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;
+}
+.btn-edit{background:var(--g100);color:var(--navy);}
+.btn-edit:hover{background:var(--g200);}
+.btn-del{background:var(--red-bg);color:var(--red);}
+.btn-del:hover{background:#FCA5A5;}
+.btn-toggle{background:var(--green-bg);color:var(--green);}
+.btn-toggle.off{background:var(--g100);color:var(--g500);}
+
+/* ── MODAL EDIT ── */
+.modal-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.5);z-index:200;
+  align-items:center;justify-content:center;padding:20px;
+}
+.modal-overlay.open{display:flex;}
+.modal{
+  background:var(--white);border-radius:16px;
+  width:100%;max-width:440px;
+  max-height:90vh;overflow-y:auto;
+  padding:24px 22px;
+}
+.modal-title{font-size:16px;font-weight:800;color:var(--navy);margin-bottom:20px;}
+.modal-btns{display:flex;gap:10px;margin-top:20px;}
+.btn-modal-save{
+  flex:1;padding:12px;background:var(--orange);color:#fff;
+  border:none;border-radius:9px;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:14px;font-weight:700;cursor:pointer;transition:background .15s;
+}
+.btn-modal-save:hover{background:#C96E1F;}
+.btn-modal-cancel{
+  padding:12px 16px;background:var(--g100);color:var(--g700);
+  border:none;border-radius:9px;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:14px;font-weight:700;cursor:pointer;transition:background .15s;
+}
+.btn-modal-cancel:hover{background:var(--g200);}
+
+/* ── TOAST ── */
+#toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  background:var(--navy);color:#fff;
+  font-size:13px;font-weight:700;
+  padding:10px 20px;border-radius:10px;
+  white-space:nowrap;
+  opacity:0;transition:opacity .25s;
+  z-index:999;pointer-events:none;
+}
+#toast.show{opacity:1;}
+
+/* ── EMPTY ── */
+.empty-state{
+  text-align:center;padding:36px 20px;
+  color:var(--g500);font-size:13px;
+}
+
+/* ── SPINNER ── */
+.spin{
+  width:16px;height:16px;
+  border:2.5px solid rgba(255,255,255,.35);
+  border-top-color:#fff;border-radius:50%;
+  animation:spin .6s linear infinite;display:none;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<!-- ══ LOGIN ══ -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <img src="GANTI_DENGAN_URL_LOGO_ANDA" alt="Hanun Store" style="width:100%;height:100%;object-fit:cover;">
+    </div>
+    <div class="login-title">Admin Hanun Store</div>
+    <div class="login-sub">Kelola katalog produk toko</div>
+    <label class="field-label" for="pw-input">Password</label>
+    <input id="pw-input" class="field-input" type="password" placeholder="Masukkan password" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="btn-login" onclick="doLogin()">Masuk</button>
+    <div id="login-err">Password salah. Coba lagi.</div>
+  </div>
+</div>
+
+<!-- ══ APP ══ -->
+<div id="app-screen">
+  <header>
+    <div class="logo-box">
+      <img src="GANTI_DENGAN_URL_LOGO_ANDA" alt="Hanun Store" style="width:100%;height:100%;object-fit:cover;">
+    </div>
+    <span class="brand-name">Hanun Store <span class="brand-badge">ADMIN</span></span>
+    <div class="header-spacer"></div>
+    <nav class="admin-nav">
+      <a href="index.html" class="btn-logout" style="text-decoration:none;display:flex;align-items:center;gap:5px;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Beranda
+      </a>
+      <a href="orders.html" class="btn-logout" style="text-decoration:none;">Pesanan</a>
+      <a href="referral.html" class="btn-logout" style="text-decoration:none;">Referral</a>
+      <button class="btn-logout" onclick="logout()">Keluar</button>
+    </nav>
+  </header>
+
+  <div class="main">
+
+    <!-- MODE MAINTENANCE -->
+    <div class="add-card" id="maint-card">
+      <div class="card-title">Mode Maintenance</div>
+      <div class="form-hint" style="margin-bottom:14px;">Aktifkan sementara saat fitur terkait sedang diperbaiki. Pembeli akan diarahkan ke halaman maintenance dan tidak bisa lanjut.</div>
+      <div class="maint-row">
+        <div>
+          <div class="maint-label">Cek Pesanan (tombol "Cari")</div>
+          <div class="maint-desc">Fitur cek link pesanan Shopee di halaman utama</div>
+        </div>
+        <button class="maint-switch" id="sw-cari" onclick="toggleMaintenance('cari')" title="Toggle maintenance Cek Pesanan"></button>
+      </div>
+      <div class="maint-row">
+        <div>
+          <div class="maint-label">Beli Sekarang / Checkout</div>
+          <div class="maint-desc">Tombol "Beli Sekarang" dan proses pembayaran Midtrans</div>
+        </div>
+        <button class="maint-switch" id="sw-beli" onclick="toggleMaintenance('beli')" title="Toggle maintenance Beli Sekarang"></button>
+      </div>
+    </div>
+
+    <!-- TAMBAH PRODUK -->
+    <div class="add-card">
+      <div class="card-title">Tambah Produk</div>
+
+      <div class="form-group">
+        <label class="form-label">Nama Produk *</label>
+        <input id="f-nama" class="form-input" type="text" placeholder="contoh: PAG Matematika Kelas 7">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">URL Foto Produk *</label>
+        <input id="f-foto" class="form-input" type="url" placeholder="https://res.cloudinary.com/..." oninput="previewFoto('f-foto','prev-foto')">
+        <div class="form-hint">Gunakan URL dari Cloudinary (bukan Google Drive)</div>
+        <div class="foto-preview" id="prev-foto">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9l4-4 4 4 4-4 4 4"/><circle cx="8.5" cy="13.5" r="1.5"/></svg>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Harga (Rp) *</label>
+        <input id="f-harga" class="form-input" type="number" placeholder="contoh: 35000" min="0" style="max-width:200px;">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Deskripsi Produk</label>
+        <textarea id="f-deskripsi" class="form-input" rows="3" placeholder="Jelaskan isi produk, cocok untuk kelas berapa, kurikulum apa, dsb..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Variasi Produk</label>
+        <div class="form-hint" style="margin-bottom:8px;">Contoh: Dimensi 1 = "Mapel" dengan opsi "Matematika, IPA, IPS". Dimensi 2 = "Kelas" dengan opsi "7, 8, 9"</div>
+        <div id="variasi-builder"></div>
+        <button type="button" onclick="tambahDimensi()" style="margin-top:8px;padding:7px 14px;background:var(--g100);color:var(--navy);border:1.5px dashed var(--g300);border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer;">
+          + Tambah Dimensi Variasi
+        </button>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Tandai Stok Habis (Opsional)</label>
+        <div class="form-hint" style="margin-bottom:6px;">
+          Tulis kombinasi yang habis, pisahkan dengan koma. Format: gabungkan opsi dengan tanda "-" sesuai urutan dimensi.<br>
+          Contoh: jika variasi 1 = "IPA" dan variasi 2 = "7" maka tulis <strong>IPA-7</strong>. Untuk lebih dari satu: <strong>IPA-7, Matematika-9</strong>
+        </div>
+        <input id="f-stok-habis" class="form-input" type="text" placeholder="contoh: IPA-7, Matematika-9">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Link Contoh Isi Produk (Opsional)</label>
+        <input id="f-contoh" class="form-input" type="url" placeholder="https://drive.google.com/file/d/... (Word/PPT)">
+        <div class="form-hint">Link Google Drive file Word atau PPT untuk preview pembeli</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Link CO (Shopee / Lynk.id) — Opsional</label>
+        <input id="f-link" class="form-input" type="url" placeholder="https://shopee.co.id/... atau https://lynk.id/...">
+        <div class="form-hint">Link alternatif jika pembeli ingin order via marketplace</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Urutan Tampil</label>
+        <input id="f-urutan" class="form-input" type="number" value="0" min="0" style="max-width:120px;">
+        <div class="form-hint">Angka lebih kecil = tampil lebih dulu</div>
+      </div>
+
+      <button class="btn-tambah" id="btn-tambah" onclick="tambahProduk()">
+        <div class="spin" id="spin-tambah"></div>
+        <svg id="icon-tambah" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Tambah Produk
+      </button>
+    </div>
+
+    <!-- DAFTAR PRODUK -->
+    <div class="list-header">
+      Daftar Produk
+      <span class="list-count" id="list-count">0 produk</span>
+    </div>
+    <div id="produk-list"><div class="empty-state">Memuat...</div></div>
+
+  </div>
+</div>
+
+<!-- ══ MODAL EDIT ══ -->
+<div class="modal-overlay" id="modal-edit">
+  <div class="modal">
+    <div class="modal-title">Edit Produk</div>
+    <input type="hidden" id="e-id">
+    <div class="form-group">
+      <label class="form-label">Nama Produk *</label>
+      <input id="e-nama" class="form-input" type="text">
+    </div>
+    <div class="form-group">
+      <label class="form-label">URL Foto Produk *</label>
+      <input id="e-foto" class="form-input" type="url" oninput="previewFoto('e-foto','e-prev-foto')">
+      <div class="foto-preview" id="e-prev-foto">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9l4-4 4 4 4-4 4 4"/><circle cx="8.5" cy="13.5" r="1.5"/></svg>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Harga (Rp) *</label>
+      <input id="e-harga" class="form-input" type="number" min="0" style="max-width:200px;">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Deskripsi Produk</label>
+      <textarea id="e-deskripsi" class="form-input" rows="3"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Variasi Produk</label>
+      <div class="form-hint" style="margin-bottom:8px;">Contoh: Dimensi 1 = "Mapel" dengan opsi "Matematika, IPA, IPS". Dimensi 2 = "Kelas" dengan opsi "7, 8, 9"</div>
+      <div id="e-variasi-builder"></div>
+      <button type="button" onclick="tambahDimensiEdit()" style="margin-top:8px;padding:7px 14px;background:var(--g100);color:var(--navy);border:1.5px dashed var(--g300);border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer;">
+        + Tambah Dimensi Variasi
+      </button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Tandai Stok Habis (Opsional)</label>
+      <div class="form-hint" style="margin-bottom:6px;">
+        Tulis kombinasi yang habis, pisahkan dengan koma. Format: gabungkan opsi dengan tanda "-".<br>
+        Contoh: <strong>IPA-7, Matematika-9</strong>
+      </div>
+      <input id="e-stok-habis" class="form-input" type="text" placeholder="contoh: IPA-7, Matematika-9">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Link Contoh Isi Produk (Opsional)</label>
+      <input id="e-contoh" class="form-input" type="url" placeholder="https://drive.google.com/file/d/... (Word/PPT)">
+      <div class="form-hint">Link Google Drive file Word atau PPT untuk preview pembeli</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Link CO (Shopee / Lynk.id) — Opsional</label>
+      <input id="e-link" class="form-input" type="url">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Urutan</label>
+      <input id="e-urutan" class="form-input" type="number" min="0" style="max-width:120px;">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Status</label>
+      <select id="e-aktif" class="form-input" style="max-width:160px;">
+        <option value="true">Aktif (tampil)</option>
+        <option value="false">Nonaktif (sembunyi)</option>
+      </select>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-modal-cancel" onclick="tutupModal()">Batal</button>
+      <button class="btn-modal-save" onclick="simpanEdit()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ════════════════════════════════════════
+// KONFIGURASI
+// ════════════════════════════════════════
+const API = 'https://GANTI-URL-BACKEND-ANDA.vercel.app/api/public';
+const LOCAL_KEY = 'pd_admin_secret';
+
+// ════════════════════════════════════════
+// AUTH
+// ════════════════════════════════════════
+let SECRET = '';
+
+function doLogin() {
+  const pw = document.getElementById('pw-input').value.trim();
+  if (!pw) return;
+  // Test koneksi dengan secret ini
+  SECRET = pw;
+  fetch(`${API}/katalog/all`, { headers: { 'x-admin-secret': pw } })
+    .then(r => {
+      if (r.status === 401) throw new Error('unauthorized');
+      return r.json();
+    })
+    .then(d => {
+      if (d.status === 'ok') {
+        sessionStorage.setItem(LOCAL_KEY, pw);
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('app-screen').style.display = 'block';
+        renderList(d.data || []);
+        loadMaintenance();
+      } else { throw new Error('failed'); }
+    })
+    .catch(() => {
+      SECRET = '';
+      document.getElementById('login-err').style.display = 'block';
+    });
+}
+
+function logout() {
+  sessionStorage.removeItem(LOCAL_KEY);
+  SECRET = '';
+  document.getElementById('app-screen').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('pw-input').value = '';
+}
+
+// Auto-login jika session masih ada
+window.addEventListener('load', () => {
+  const saved = sessionStorage.getItem(LOCAL_KEY);
+  if (saved) {
+    SECRET = saved;
+    loadList();
+  }
+});
+
+// ════════════════════════════════════════
+// LOAD LIST
+// ════════════════════════════════════════
+async function loadList() {
+  try {
+    const r = await fetch(`${API}/katalog/all`, { headers: { 'x-admin-secret': SECRET } });
+    if (r.status === 401) { logout(); return; }
+    const d = await r.json();
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app-screen').style.display = 'block';
+    renderList(d.data || []);
+    loadMaintenance();
+  } catch {
+    toast('Gagal memuat data. Coba refresh.', true);
+  }
+}
+
+// ════════════════════════════════════════
+// MODE MAINTENANCE
+// ════════════════════════════════════════
+let maintState = { cari:false, beli:false };
+async function loadMaintenance() {
+  try {
+    const r = await fetch(`${API}/maintenance`);
+    const d = await r.json();
+    if (d.status === 'ok') { maintState = { cari: !!d.cari, beli: !!d.beli }; renderMaintenance(); }
+  } catch { /* biarkan switch di posisi terakhir kalau gagal load */ }
+}
+function renderMaintenance() {
+  document.getElementById('sw-cari').classList.toggle('on', maintState.cari);
+  document.getElementById('sw-beli').classList.toggle('on', maintState.beli);
+}
+async function toggleMaintenance(kunci) {
+  const next = { ...maintState, [kunci]: !maintState[kunci] };
+  try {
+    const r = await fetch(`${API}/maintenance`, {
+      method:  'PUT',
+      headers: { 'Content-Type': 'application/json', 'x-admin-secret': SECRET },
+      body: JSON.stringify(next)
+    });
+    if (r.status === 401) { logout(); return; }
+    const d = await r.json();
+    if (d.status !== 'ok') throw new Error(d.message || 'Gagal update');
+    maintState = { cari: !!d.cari, beli: !!d.beli };
+    renderMaintenance();
+    toast(maintState[kunci] ? 'Mode maintenance diaktifkan' : 'Mode maintenance dimatikan');
+  } catch (e) { toast('Gagal ubah status: ' + e.message, true); }
+}
+
+function renderList(items) {
+  document.getElementById('list-count').textContent = `${items.length} produk`;
+  const el = document.getElementById('produk-list');
+  if (!items.length) { el.innerHTML = '<div class="empty-state">Belum ada produk. Tambahkan di atas.</div>'; return; }
+
+  el.innerHTML = items.map(p => `
+    <div class="produk-list-item" id="item-${p.id}">
+      <div class="item-thumb">
+        ${p.foto_url
+          ? `<img src="${toImgUrl(esc(p.foto_url))}" alt="${esc(p.nama)}" onerror="this.parentNode.innerHTML='<svg viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'1.5\\'><rect x=\\'3\\' y=\\'3\\' width=\\'18\\' height=\\'18\\' rx=\\'2\\'/></svg>'">`
+          : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>`
+        }
+      </div>
+      <div class="item-info">
+        <div class="item-nama">${esc(p.nama)}</div>
+        <div class="item-link">${esc(p.link_co)}</div>
+        <div class="item-order">Urutan: ${p.urutan}</div>
+        <span class="item-badge ${p.aktif ? 'badge-aktif' : 'badge-nonaktif'}">${p.aktif ? 'Aktif' : 'Nonaktif'}</span>
+      </div>
+      <div class="item-actions">
+        <button class="btn-toggle ${p.aktif ? '' : 'off'}" title="${p.aktif ? 'Nonaktifkan' : 'Aktifkan'}" onclick="toggleAktif(${p.id}, ${p.aktif}, ${JSON.stringify(p).replace(/"/g,'&quot;')})">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="${p.aktif ? 'M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z' : 'M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24'}"/>${p.aktif ? '<circle cx="12" cy="12" r="3"/>' : '<line x1="1" y1="1" x2="23" y2="23"/>'}</svg>
+        </button>
+        <button class="btn-edit" title="Edit" onclick="bukaEdit(${JSON.stringify(p).replace(/"/g,'&quot;')})">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+        <button class="btn-del" title="Hapus" onclick="hapusProduk(${p.id}, '${escA(p.nama)}')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── Variasi builder ───────────────────────────────────────────────
+let variasiDims = [];
+
+function tambahDimensi() {
+  variasiDims.push({ nama: '', opsi: [] });
+  renderVariasiBuilder();
+}
+
+function hapusDimensi(idx) {
+  variasiDims.splice(idx, 1);
+  renderVariasiBuilder();
+}
+
+function renderVariasiBuilder() {
+  const container = document.getElementById('variasi-builder');
+  if (!container) return;
+  container.innerHTML = variasiDims.map((dim, i) => `
+    <div style="background:var(--g50);border:1.5px solid var(--g200);border-radius:10px;padding:12px;margin-bottom:8px;">
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
+        <input class="form-input" style="flex:1;" type="text" placeholder="Nama dimensi (contoh: Mapel)"
+          value="${esc(dim.nama)}" oninput="variasiDims[${i}].nama=this.value">
+        <button type="button" onclick="hapusDimensi(${i})" style="padding:6px 10px;background:var(--red-bg);color:var(--red);border:none;border-radius:7px;cursor:pointer;font-weight:700;font-size:12px;">✕</button>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:var(--g500);margin-bottom:6px;">OPSI (pisahkan dengan koma):</div>
+      <input class="form-input" type="text" placeholder="contoh: Matematika, IPA, IPS, B. Indonesia"
+        value="${esc((dim.opsi||[]).join(', '))}"
+        oninput="variasiDims[${i}].opsi=this.value.split(',').map(s=>s.trim()).filter(Boolean)">
+    </div>
+  `).join('');
+}
+
+function getVariasiConfig() {
+  return variasiDims.filter(d => d.nama).map(d => ({ nama: d.nama, opsi: d.opsi }));
+}
+
+function resetVariasiBuilder() {
+  variasiDims = [];
+  renderVariasiBuilder();
+}
+
+// ════════════════════════════════════════
+// TAMBAH
+// ════════════════════════════════════════
+async function tambahProduk() {
+  const nama    = document.getElementById('f-nama').value.trim();
+  const foto    = document.getElementById('f-foto').value.trim();
+  const harga   = parseInt(document.getElementById('f-harga').value) || 0;
+  const deskripsi = document.getElementById('f-deskripsi').value.trim();
+  const link    = document.getElementById('f-link').value.trim();
+  const contoh  = document.getElementById('f-contoh').value.trim();
+  const urutan  = parseInt(document.getElementById('f-urutan').value) || 0;
+  const varConf = getVariasiConfig();
+  const stokHabisRaw = document.getElementById('f-stok-habis').value.trim();
+  const stokHabis = stokHabisRaw ? stokHabisRaw.split(',').map(s=>s.trim()).filter(Boolean) : [];
+
+  if (!nama || !foto) { toast('Nama dan foto wajib diisi.', true); return; }
+
+  setBtn('btn-tambah','spin-tambah','icon-tambah', true);
+  try {
+    const r = await fetch(`${API}/katalog`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-admin-secret': SECRET },
+      body: JSON.stringify({ nama, foto_url: foto, link_co: link, harga, deskripsi, variasi_config: varConf, link_contoh: contoh, urutan, stok_habis: stokHabis })
+    });
+    const d = await r.json();
+    if (d.status === 'ok') {
+      toast('Produk berhasil ditambahkan!');
+      ['f-nama','f-foto','f-harga','f-deskripsi','f-link','f-contoh','f-stok-habis'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      document.getElementById('f-urutan').value = '0';
+      document.getElementById('prev-foto').innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9l4-4 4 4 4-4 4 4"/><circle cx="8.5" cy="13.5" r="1.5"/></svg>';
+      resetVariasiBuilder();
+      loadList();
+    } else { toast(d.message || 'Gagal.', true); }
+  } catch { toast('Kesalahan jaringan.', true); }
+  finally { setBtn('btn-tambah','spin-tambah','icon-tambah', false); }
+}
+
+// ════════════════════════════════════════
+// EDIT
+// ════════════════════════════════════════
+// ── Variasi builder untuk MODAL EDIT (terpisah dari form tambah) ──
+let editVariasiDims = [];
+
+function tambahDimensiEdit() {
+  editVariasiDims.push({ nama: '', opsi: [] });
+  renderVariasiBuilderEdit();
+}
+
+function hapusDimensiEdit(idx) {
+  editVariasiDims.splice(idx, 1);
+  renderVariasiBuilderEdit();
+}
+
+function renderVariasiBuilderEdit() {
+  const container = document.getElementById('e-variasi-builder');
+  if (!container) return;
+  container.innerHTML = editVariasiDims.map((dim, i) => `
+    <div style="background:var(--g50);border:1.5px solid var(--g200);border-radius:10px;padding:12px;margin-bottom:8px;">
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
+        <input class="form-input" style="flex:1;" type="text" placeholder="Nama dimensi (contoh: Mapel)"
+          value="${esc(dim.nama)}" oninput="editVariasiDims[${i}].nama=this.value">
+        <button type="button" onclick="hapusDimensiEdit(${i})" style="padding:6px 10px;background:var(--red-bg);color:var(--red);border:none;border-radius:7px;cursor:pointer;font-weight:700;font-size:12px;">✕</button>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:var(--g500);margin-bottom:6px;">OPSI (pisahkan dengan koma):</div>
+      <input class="form-input" type="text" placeholder="contoh: Matematika, IPA, IPS, B. Indonesia"
+        value="${esc((dim.opsi||[]).join(', '))}"
+        oninput="editVariasiDims[${i}].opsi=this.value.split(',').map(s=>s.trim()).filter(Boolean)">
+    </div>
+  `).join('');
+}
+
+function getVariasiConfigEdit() {
+  return editVariasiDims.filter(d => d.nama).map(d => ({ nama: d.nama, opsi: d.opsi }));
+}
+
+function bukaEdit(p) {
+  document.getElementById('e-id').value        = p.id;
+  document.getElementById('e-nama').value      = p.nama;
+  document.getElementById('e-foto').value      = p.foto_url;
+  document.getElementById('e-harga').value     = p.harga || 0;
+  document.getElementById('e-deskripsi').value = p.deskripsi || '';
+  document.getElementById('e-contoh').value    = p.link_contoh || '';
+  document.getElementById('e-link').value      = p.link_co || '';
+  document.getElementById('e-urutan').value    = p.urutan;
+  document.getElementById('e-aktif').value     = String(p.aktif);
+
+  // Stok habis
+  let stokHabis = p.stok_habis;
+  if (typeof stokHabis === 'string') { try { stokHabis = JSON.parse(stokHabis); } catch { stokHabis = []; } }
+  if (!Array.isArray(stokHabis)) stokHabis = [];
+  document.getElementById('e-stok-habis').value = stokHabis.join(', ');
+
+  // Load variasi config ke builder
+  let varConf = p.variasi_config;
+  if (typeof varConf === 'string') {
+    try { varConf = JSON.parse(varConf); } catch { varConf = []; }
+  }
+  editVariasiDims = Array.isArray(varConf) ? JSON.parse(JSON.stringify(varConf)) : [];
+  renderVariasiBuilderEdit();
+
+  previewFoto('e-foto','e-prev-foto');
+  document.getElementById('modal-edit').classList.add('open');
+}
+
+function tutupModal() {
+  document.getElementById('modal-edit').classList.remove('open');
+  editVariasiDims = [];
+}
+
+async function simpanEdit() {
+  const id        = parseInt(document.getElementById('e-id').value);
+  const nama      = document.getElementById('e-nama').value.trim();
+  const foto      = document.getElementById('e-foto').value.trim();
+  const harga     = parseInt(document.getElementById('e-harga').value) || 0;
+  const deskripsi = document.getElementById('e-deskripsi').value.trim();
+  const contoh    = document.getElementById('e-contoh').value.trim();
+  const link      = document.getElementById('e-link').value.trim();
+  const urutan    = parseInt(document.getElementById('e-urutan').value) || 0;
+  const aktif     = document.getElementById('e-aktif').value === 'true';
+  const varConf   = getVariasiConfigEdit();
+  const stokHabisRaw = document.getElementById('e-stok-habis').value.trim();
+  const stokHabis = stokHabisRaw ? stokHabisRaw.split(',').map(s=>s.trim()).filter(Boolean) : [];
+
+  if (!nama || !foto) { toast('Nama dan foto wajib diisi.', true); return; }
+
+  try {
+    const r = await fetch(`${API}/katalog/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'x-admin-secret': SECRET },
+      body: JSON.stringify({ nama, foto_url: foto, link_co: link, harga, deskripsi, variasi_config: varConf, link_contoh: contoh, urutan, aktif, stok_habis: stokHabis })
+    });
+    const d = await r.json();
+    if (d.status === 'ok') { toast('Produk diperbarui!'); tutupModal(); loadList(); }
+    else { toast(d.message || 'Gagal.', true); }
+  } catch { toast('Kesalahan jaringan.', true); }
+}
+
+// ════════════════════════════════════════
+// TOGGLE AKTIF
+// ════════════════════════════════════════
+async function toggleAktif(id, aktifSekarang, p) {
+  const newAktif = !aktifSekarang;
+  try {
+    const r = await fetch(`${API}/katalog/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'x-admin-secret': SECRET },
+      body: JSON.stringify({ nama: p.nama, foto_url: p.foto_url, link_co: p.link_co, harga: p.harga, deskripsi: p.deskripsi, variasi_config: p.variasi_config, link_contoh: p.link_contoh, urutan: p.urutan, aktif: newAktif, stok_habis: p.stok_habis })
+    });
+    const d = await r.json();
+    if (d.status === 'ok') { toast(newAktif ? 'Produk diaktifkan.' : 'Produk disembunyikan.'); loadList(); }
+    else { toast(d.message || 'Gagal.', true); }
+  } catch { toast('Kesalahan jaringan.', true); }
+}
+
+// ════════════════════════════════════════
+// HAPUS
+// ════════════════════════════════════════
+async function hapusProduk(id, nama) {
+  if (!confirm(`Hapus produk "${nama}"? Tindakan ini tidak bisa dibatalkan.`)) return;
+  try {
+    const r = await fetch(`${API}/katalog/${id}`, {
+      method: 'DELETE',
+      headers: { 'x-admin-secret': SECRET }
+    });
+    const d = await r.json();
+    if (d.status === 'ok') { toast('Produk dihapus.'); loadList(); }
+    else { toast(d.message || 'Gagal.', true); }
+  } catch { toast('Kesalahan jaringan.', true); }
+}
+
+// ════════════════════════════════════════
+// UTILS
+// ════════════════════════════════════════
+function previewFoto(inputId, previewId) {
+  const url  = document.getElementById(inputId).value.trim();
+  const wrap = document.getElementById(previewId);
+  if (!url) {
+    wrap.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9l4-4 4 4 4-4 4 4"/><circle cx="8.5" cy="13.5" r="1.5"/></svg>';
+    return;
+  }
+  const imgUrl = toImgUrl(url);
+  wrap.innerHTML = `<img src="${esc(imgUrl)}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentNode.innerHTML='<svg viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'1.5\\'><rect x=\\'3\\' y=\\'3\\' width=\\'18\\' height=\\'18\\' rx=\\'2\\'/></svg>'">`;
+}
+
+function toImgUrl(url) {
+  if (!url) return url;
+  const m = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  if (m) return `https://drive.google.com/thumbnail?id=${m[1]}&sz=w400`;
+  const m2 = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if (m2) return `https://drive.google.com/thumbnail?id=${m2[1]}&sz=w400`;
+  return url;
+}
+
+function setBtn(btnId, spinId, iconId, loading) {
+  document.getElementById(btnId).disabled = loading;
+  document.getElementById(spinId).style.display = loading ? 'block' : 'none';
+  document.getElementById(iconId).style.display = loading ? 'none' : 'block';
+}
+
+function toast(msg, err=false) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.background = err ? '#DC2626' : '#1B3A6B';
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2800);
+}
+
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function escA(s){ return String(s||'').replace(/'/g,"\\'"); }
+
+// Tutup modal klik di luar
+document.getElementById('modal-edit').addEventListener('click', function(e) {
+  if (e.target === this) tutupModal();
+});
+</script>
+</body>
+</html>

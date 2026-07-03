@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kode Referral — Hanun Store Admin</title>
+<link rel="icon" type="image/jpeg" href="GANTI_DENGAN_URL_LOGO_ANDA">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1B3A6B;--navy2:#2A4F8F;--orange:#E07B2A;--orange2:#F5A040;--cream:#F5EFE6;--cream2:#EDE4D6;--white:#fff;--g50:#F8FAFC;--g100:#F1F5F9;--g200:#E2E8F0;--g300:#CBD5E1;--g500:#64748B;--g700:#334155;--green:#16A34A;--green-bg:#DCFCE7;--red:#DC2626;--red-bg:#FEE2E2;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--g100);color:var(--g700);min-height:100vh;}
+
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;background:var(--cream);}
+.login-box{background:var(--white);border-radius:16px;padding:36px 28px;max-width:340px;width:100%;box-shadow:0 8px 32px rgba(27,58,107,.12);border:1px solid var(--cream2);text-align:center;}
+.login-logo{width:56px;height:56px;background:var(--cream);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
+.login-logo svg{width:32px;height:32px;}
+.login-title{font-size:20px;font-weight:800;color:var(--navy);margin-bottom:4px;}
+.login-sub{font-size:13px;color:var(--g500);margin-bottom:24px;}
+.field-input{width:100%;padding:12px 14px;border:2px solid var(--g200);border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;color:var(--navy);background:var(--g50);outline:none;}
+.field-input:focus{border-color:var(--orange);}
+.btn-login{width:100%;margin-top:16px;padding:13px;background:var(--orange);color:#fff;border:none;border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;}
+#login-err{color:var(--red);font-size:12px;margin-top:8px;display:none;}
+
+#app-screen{display:none;}
+header{background:var(--navy);padding:14px 20px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.2);}
+.logo-box{width:38px;height:38px;background:var(--cream);border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.logo-box svg{width:24px;height:24px;}
+.brand-name{font-size:16px;font-weight:800;color:#fff;}
+.brand-badge{font-size:10px;font-weight:700;background:var(--orange);color:#fff;padding:2px 8px;border-radius:5px;margin-left:6px;}
+.hspacer{flex:1;}
+.nav-link{font-size:11px;font-weight:700;color:rgba(255,255,255,.6);background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:6px;padding:5px 10px;text-decoration:none;margin-right:6px;transition:all .15s;}
+.nav-link:hover{color:#fff;}
+.btn-logout{font-size:11px;font-weight:700;color:rgba(255,255,255,.6);background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:6px;padding:5px 10px;cursor:pointer;}
+.admin-nav{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+/* Mobile: header 2 baris, nav full-width & wrap agar semua tombol terjangkau */
+@media(max-width:560px){
+  header{flex-wrap:wrap;row-gap:10px;}
+  .hspacer{display:none;}
+  .admin-nav{width:100%;flex-wrap:wrap;justify-content:flex-start;}
+}
+
+.main{max-width:700px;margin:0 auto;padding:24px 16px 60px;}
+
+.add-card{background:var(--white);border-radius:14px;padding:22px 20px;border:1px solid var(--g200);margin-bottom:24px;}
+.card-title{font-size:13px;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:18px;display:flex;align-items:center;gap:8px;}
+.card-title::before{content:'';width:3px;height:14px;background:var(--orange);border-radius:2px;display:inline-block;}
+.form-row{display:flex;gap:12px;flex-wrap:wrap;}
+.form-group{margin-bottom:14px;flex:1;min-width:140px;}
+.form-label{font-size:12px;font-weight:700;color:var(--navy);display:block;margin-bottom:6px;}
+.form-input{width:100%;padding:11px 13px;border:1.5px solid var(--g200);border-radius:9px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;color:var(--g700);background:var(--g50);outline:none;transition:border-color .2s;}
+.form-input:focus{border-color:var(--orange);}
+.btn-tambah{width:100%;padding:12px;background:var(--orange);color:#fff;border:none;border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:4px;}
+.btn-tambah:hover{background:#C96E1F;}
+
+.list-header{font-size:13px;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.list-header::before{content:'';width:3px;height:14px;background:var(--orange);border-radius:2px;display:inline-block;}
+
+.ref-item{background:var(--white);border-radius:12px;border:1px solid var(--g200);padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.ref-kode{font-size:16px;font-weight:800;color:var(--navy);letter-spacing:1px;background:var(--cream);padding:6px 14px;border-radius:8px;border:1.5px dashed var(--orange);}
+.ref-info{flex:1;min-width:160px;}
+.ref-diskon{font-size:13px;font-weight:700;color:var(--orange);}
+.ref-usage{font-size:11px;color:var(--g500);margin-top:2px;}
+.ref-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:5px;}
+.badge-aktif{background:var(--green-bg);color:var(--green);}
+.badge-nonaktif{background:var(--red-bg);color:var(--red);}
+.ref-actions{display:flex;gap:6px;}
+.btn-icon{width:32px;height:32px;border-radius:7px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.btn-toggle{background:var(--green-bg);color:var(--green);}
+.btn-toggle.off{background:var(--g100);color:var(--g500);}
+.btn-del{background:var(--red-bg);color:var(--red);}
+.btn-del:hover{background:#FCA5A5;}
+
+.empty-state{text-align:center;padding:40px 20px;color:var(--g500);font-size:13px;}
+
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;font-size:13px;font-weight:700;padding:10px 20px;border-radius:10px;white-space:nowrap;opacity:0;transition:opacity .25s;z-index:999;pointer-events:none;}
+#toast.show{opacity:1;}
+</style>
+</head>
+<body>
+
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <img src="GANTI_DENGAN_URL_LOGO_ANDA" alt="Hanun Store" style="width:100%;height:100%;object-fit:cover;">
+    </div>
+    <div class="login-title">Kode Referral</div>
+    <div class="login-sub">Kelola kode diskon promosi</div>
+    <input id="pw-input" class="field-input" type="password" placeholder="Masukkan password" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="btn-login" onclick="doLogin()">Masuk</button>
+    <div id="login-err">Password salah.</div>
+  </div>
+</div>
+
+<div id="app-screen">
+  <header>
+    <div class="logo-box"><img src="GANTI_DENGAN_URL_LOGO_ANDA" alt="Hanun Store" style="width:100%;height:100%;object-fit:cover;"></div>
+    <span class="brand-name">Hanun Store <span class="brand-badge">REFERRAL</span></span>
+    <div class="hspacer"></div>
+    <nav class="admin-nav">
+      <a href="admin.html" class="nav-link">Katalog</a>
+      <a href="orders.html" class="nav-link">Pesanan</a>
+      <a href="index.html" class="nav-link">Beranda</a>
+      <button class="btn-logout" onclick="logout()">Keluar</button>
+    </nav>
+  </header>
+
+  <div class="main">
+    <div class="add-card">
+      <div class="card-title">Buat Kode Referral Baru</div>
+      <div class="form-group">
+        <label class="form-label">Kode Referral *</label>
+        <input id="f-kode" class="form-input" type="text" placeholder="contoh: GURU10" style="text-transform:uppercase;letter-spacing:1px;">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Tipe Diskon *</label>
+          <select id="f-tipe" class="form-input">
+            <option value="persen">Persentase (%)</option>
+            <option value="nominal">Nominal (Rp)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" id="f-nilai-label">Nilai Diskon *</label>
+          <input id="f-nilai" class="form-input" type="number" min="1" placeholder="contoh: 10">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Maks. Pemakaian *</label>
+          <input id="f-maks" class="form-input" type="number" min="1" value="50">
+        </div>
+      </div>
+      <button class="btn-tambah" onclick="tambahReferral()">+ Buat Kode Referral</button>
+    </div>
+
+    <div class="list-header">Daftar Kode Referral</div>
+    <div id="ref-list"><div class="empty-state">Memuat...</div></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const API = 'https://GANTI-URL-BACKEND-ANDA.vercel.app/api/public';
+let SECRET = '';
+
+function doLogin() {
+  const pw = document.getElementById('pw-input').value.trim();
+  if (!pw) return;
+  SECRET = pw;
+  fetch(`${API}/referral`, { headers: { 'x-admin-secret': pw } })
+    .then(r => { if (r.status===401) throw new Error('unauth'); return r.json(); })
+    .then(d => {
+      if (d.status === 'ok') {
+        sessionStorage.setItem('pd_admin_secret', pw);
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('app-screen').style.display = 'block';
+        renderList(d.data || []);
+      } else throw new Error('failed');
+    })
+    .catch(() => { SECRET=''; document.getElementById('login-err').style.display='block'; });
+}
+
+function logout() {
+  sessionStorage.removeItem('pd_admin_secret');
+  SECRET = '';
+  document.getElementById('app-screen').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+}
+
+window.addEventListener('load', () => {
+  const saved = sessionStorage.getItem('pd_admin_secret');
+  if (saved) {
+    SECRET = saved;
+    fetch(`${API}/referral`, { headers: { 'x-admin-secret': saved } })
+      .then(r => { if (r.status===401) throw new Error(); return r.json(); })
+      .then(d => {
+        if (d.status === 'ok') {
+          document.getElementById('login-screen').style.display = 'none';
+          document.getElementById('app-screen').style.display = 'block';
+          renderList(d.data || []);
+        }
+      })
+      .catch(() => { SECRET=''; });
+  }
+});
+
+document.getElementById('f-tipe').addEventListener('change', function() {
+  document.getElementById('f-nilai-label').textContent = this.value === 'persen' ? 'Nilai Diskon (%) *' : 'Nilai Diskon (Rp) *';
+  document.getElementById('f-nilai').placeholder = this.value === 'persen' ? 'contoh: 10' : 'contoh: 5000';
+});
+
+async function loadList() {
+  try {
+    const r = await fetch(`${API}/referral`, { headers: { 'x-admin-secret': SECRET } });
+    if (r.status === 401) { logout(); return; }
+    const d = await r.json();
+    renderList(d.data || []);
+  } catch { toast('Gagal memuat data.', true); }
+}
+
+function renderList(items) {
+  const el = document.getElementById('ref-list');
+  if (!items.length) { el.innerHTML = '<div class="empty-state">Belum ada kode referral. Buat di atas.</div>'; return; }
+
+  el.innerHTML = items.map(r => {
+    const diskonText = r.tipe_diskon === 'persen' ? `${r.nilai_diskon}% diskon` : `Rp ${fmt(r.nilai_diskon)} diskon`;
+    return `
+    <div class="ref-item">
+      <div class="ref-kode">${esc(r.kode)}</div>
+      <div class="ref-info">
+        <div class="ref-diskon">${diskonText}</div>
+        <div class="ref-usage">Terpakai ${r.jumlah_terpakai} / ${r.maks_pemakaian} kali</div>
+      </div>
+      <span class="ref-badge ${r.aktif ? 'badge-aktif' : 'badge-nonaktif'}">${r.aktif ? 'Aktif' : 'Nonaktif'}</span>
+      <div class="ref-actions">
+        <button class="btn-icon btn-toggle ${r.aktif?'':'off'}" onclick="toggleReferral(${r.id}, ${r.aktif}, ${JSON.stringify(r).replace(/"/g,'&quot;')})" title="${r.aktif?'Nonaktifkan':'Aktifkan'}">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="${r.aktif ? 'M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z' : 'M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94'}"/>${r.aktif?'<circle cx="12" cy="12" r="3"/>':'<line x1="1" y1="1" x2="23" y2="23"/>'}</svg>
+        </button>
+        <button class="btn-icon btn-del" onclick="hapusReferral(${r.id}, '${escA(r.kode)}')" title="Hapus">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function tambahReferral() {
+  const kode = document.getElementById('f-kode').value.trim().toUpperCase();
+  const tipe = document.getElementById('f-tipe').value;
+  const nilai = parseInt(document.getElementById('f-nilai').value);
+  const maks = parseInt(document.getElementById('f-maks').value);
+
+  if (!kode) { toast('Kode wajib diisi.', true); return; }
+  if (!nilai || nilai <= 0) { toast('Nilai diskon harus lebih dari 0.', true); return; }
+  if (!maks || maks <= 0) { toast('Maks pemakaian harus lebih dari 0.', true); return; }
+  if (tipe === 'persen' && nilai > 100) { toast('Persentase tidak boleh lebih dari 100%.', true); return; }
+
+  try {
+    const r = await fetch(`${API}/referral`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-admin-secret': SECRET },
+      body: JSON.stringify({ kode, tipe_diskon: tipe, nilai_diskon: nilai, maks_pemakaian: maks })
+    });
+    const d = await r.json();
+    if (d.status === 'ok') {
+      toast('Kode referral berhasil dibuat!');
+      document.getElementById('f-kode').value = '';
+      document.getElementById('f-nilai').value = '';
+      document.getElementById('f-maks').value = '50';
+      loadList();
+    } else { toast(d.message || 'Gagal.', true); }
+  } catch { toast('Kesalahan jaringan.', true); }
+}
+
+async function toggleReferral(id, aktifSekarang, r) {
+  try {
+    const res = await fetch(`${API}/referral/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'x-admin-secret': SECRET },
+      body: JSON.stringify({ kode: r.kode, tipe_diskon: r.tipe_diskon, nilai_diskon: r.nilai_diskon, maks_pemakaian: r.maks_pemakaian, aktif: !aktifSekarang })
+    });
+    const d = await res.json();
+    if (d.status === 'ok') { toast(aktifSekarang ? 'Kode dinonaktifkan.' : 'Kode diaktifkan.'); loadList(); }
+    else toast(d.message || 'Gagal.', true);
+  } catch { toast('Kesalahan jaringan.', true); }
+}
+
+async function hapusReferral(id, kode) {
+  if (!confirm(`Hapus kode referral "${kode}"?`)) return;
+  try {
+    const r = await fetch(`${API}/referral/${id}`, { method: 'DELETE', headers: { 'x-admin-secret': SECRET } });
+    const d = await r.json();
+    if (d.status === 'ok') { toast('Kode dihapus.'); loadList(); }
+    else toast(d.message || 'Gagal.', true);
+  } catch { toast('Kesalahan jaringan.', true); }
+}
+
+function fmt(n) { return parseInt(n||0).toLocaleString('id-ID'); }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function escA(s){ return String(s||'').replace(/'/g,"\\'"); }
+function toast(msg, err=false) {
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.style.background=err?'#DC2626':'#1B3A6B';
+  el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),2800);
+}
+</script>
+</body>
+</html>

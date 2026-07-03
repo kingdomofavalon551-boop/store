@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pembayaran Tertunda — Hanun Store</title>
+<link rel="icon" type="image/jpeg" href="GANTI_DENGAN_URL_LOGO_ANDA">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#1B3A6B">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1B3A6B;--navy2:#2A4F8F;--orange:#E07B2A;--orange2:#F5A040;--cream:#F5EFE6;--cream2:#EDE4D6;--white:#fff;--g50:#F8FAFC;--g100:#F1F5F9;--g200:#E2E8F0;--g300:#CBD5E1;--g500:#64748B;--g700:#334155;--green:#16A34A;--green-bg:#DCFCE7;--red:#DC2626;--red-bg:#FEE2E2;--yellow:#CA8A04;--yellow-bg:#FEFCE8;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream);color:var(--g700);min-height:100vh;}
+
+/* HEADER dengan nav back+home */
+header{background:var(--navy);padding:14px 20px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.2);}
+.nav-btn{width:34px;height:34px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;flex-shrink:0;transition:background .15s;}
+.nav-btn:hover{background:rgba(255,255,255,.22);}
+.nav-btn svg{width:16px;height:16px;color:#fff;}
+.brand-name{font-size:15px;font-weight:800;color:#fff;}
+.hspacer{flex:1;}
+
+.main{max-width:560px;margin:0 auto;padding:24px 16px 60px;}
+.hero{text-align:center;margin-bottom:24px;}
+.hero h1{font-size:22px;font-weight:800;color:var(--navy);margin-bottom:6px;}
+.hero p{font-size:13px;color:var(--g500);}
+
+/* CARD INPUT MANUAL */
+.search-card{background:var(--white);border-radius:14px;border:1px solid var(--cream2);padding:20px;margin-bottom:20px;}
+.search-title{font-size:13px;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.search-title::before{content:'';width:3px;height:14px;background:var(--orange);border-radius:2px;display:inline-block;}
+.search-row{display:flex;gap:8px;}
+.search-input{flex:1;padding:11px 14px;border:1.5px solid var(--g200);border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;color:var(--g700);background:var(--g50);outline:none;letter-spacing:.5px;transition:border-color .2s;}
+.search-input:focus{border-color:var(--orange);}
+.btn-search{padding:11px 18px;background:var(--navy);color:#fff;border:none;border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:background .15s;white-space:nowrap;}
+.btn-search:hover{background:var(--navy2);}
+.search-hint{font-size:11px;color:var(--g500);margin-top:6px;}
+
+/* AUTO DETECTED BANNER */
+.auto-banner{background:var(--yellow-bg);border:1px solid #FEF08A;border-radius:12px;padding:14px 16px;margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+.auto-banner svg{width:20px;height:20px;color:var(--yellow);flex-shrink:0;}
+.auto-banner-text{font-size:12px;color:var(--yellow);line-height:1.5;}
+
+/* RESULT CARD */
+.result-card{background:var(--white);border-radius:14px;border:1px solid var(--cream2);overflow:hidden;margin-bottom:14px;}
+.result-header{padding:16px 18px;display:flex;align-items:flex-start;gap:12px;}
+.result-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.result-icon.pending{background:var(--yellow-bg);}
+.result-icon.expired{background:var(--red-bg);}
+.result-info{flex:1;min-width:0;}
+.result-title{font-size:14px;font-weight:800;color:var(--navy);}
+.result-id{font-size:11px;font-weight:700;color:var(--g500);background:var(--g100);display:inline-block;padding:2px 8px;border-radius:5px;margin-top:4px;letter-spacing:.5px;}
+.result-divider{height:1px;background:var(--cream2);}
+.result-body{padding:16px 18px;}
+.item-row{display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:1px solid var(--g100);}
+.item-row:last-child{border-bottom:none;}
+.total-row{display:flex;justify-content:space-between;font-size:15px;font-weight:800;color:var(--navy);padding-top:10px;margin-top:6px;border-top:2px solid var(--cream2);}
+.total-row span:last-child{color:var(--orange);}
+
+.btn-lanjut{width:100%;padding:14px;border-radius:10px;background:var(--orange);color:#fff;border:none;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;margin-top:14px;box-shadow:0 2px 10px rgba(224,123,42,.35);transition:background .15s;}
+.btn-lanjut:hover{background:#C96E1F;}
+.btn-lanjut:disabled{background:var(--g300);cursor:not-allowed;box-shadow:none;}
+
+.btn-batal{width:100%;padding:12px;border-radius:10px;background:var(--g100);color:var(--g700);border:1.5px solid var(--g200);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;transition:background .15s;display:flex;align-items:center;justify-content:center;gap:7px;}
+.btn-batal:hover{background:var(--red-bg);border-color:#FECACA;color:var(--red);}
+.btn-batal:disabled{opacity:.6;cursor:not-allowed;}
+
+/* COUNTDOWN BOX */
+.countdown-box{background:var(--yellow-bg);border:1px solid #FEF08A;border-radius:10px;padding:14px;text-align:center;margin-bottom:14px;}
+.countdown-box.urgent{background:var(--red-bg);border-color:#FECACA;}
+.countdown-label{font-size:12px;font-weight:600;color:var(--yellow);margin-bottom:4px;}
+.countdown-box.urgent .countdown-label{color:var(--red);}
+.countdown-time{font-size:24px;font-weight:800;color:var(--yellow);letter-spacing:1px;font-variant-numeric:tabular-nums;}
+.countdown-box.urgent .countdown-time{color:var(--red);}
+.btn-batal:hover{background:var(--g200);}
+
+.spin{width:16px;height:16px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;display:none;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.empty-state{text-align:center;padding:40px 20px;color:var(--g500);}
+.empty-state svg{width:40px;height:40px;color:var(--g300);margin-bottom:12px;display:block;margin-left:auto;margin-right:auto;}
+.empty-state p{font-size:13px;line-height:1.6;}
+
+.err-box{background:var(--red-bg);border:1px solid #FECACA;color:var(--red);border-radius:10px;padding:14px;font-size:13px;text-align:center;margin-bottom:14px;}
+</style>
+</head>
+<body>
+
+<header>
+  <button class="nav-btn" onclick="goBack()" title="Kembali">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+  </button>
+  <span class="brand-name">Pembayaran Tertunda</span>
+  <div class="hspacer"></div>
+  <a class="nav-btn" href="index.html" title="Beranda">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+  </a>
+</header>
+
+<div class="main">
+  <div class="hero">
+    <h1>Lanjutkan Pembayaran</h1>
+    <p>Cek status pesanan yang belum selesai dibayar</p>
+  </div>
+
+  <!-- AUTO DETECTED -->
+  <div id="auto-detected"></div>
+
+  <!-- SEARCH MANUAL -->
+  <div class="search-card">
+    <div class="search-title">Cek Manual dengan Nomor Pesanan</div>
+    <div class="search-row">
+      <input class="search-input" type="text" id="input-order-id" placeholder="contoh: PD-1234567890-ABCDE" autocomplete="off" spellcheck="false">
+      <button class="btn-search" onclick="cariManual()">Cari</button>
+    </div>
+    <div class="search-hint">Nomor pesanan dikirim ke email Anda saat checkout</div>
+  </div>
+
+  <!-- RESULT -->
+  <div id="result-area"></div>
+</div>
+
+<!-- Midtrans Snap.js -->
+<script src="https://app.midtrans.com/snap/snap.js" data-client-key="GANTI_DENGAN_MIDTRANS_CLIENT_KEY_ANDA"></script>
+
+<script>
+const API = 'https://GANTI-URL-BACKEND-ANDA.vercel.app/api/public';
+
+function goBack() {
+  if (document.referrer && document.referrer.includes(location.host)) {
+    history.back();
+  } else {
+    location.href = 'index.html';
+  }
+}
+
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function fmt(n){ return parseInt(n||0).toLocaleString('id-ID'); }
+
+// ════════════════════════════════════════
+// AUTO DETECT dari localStorage
+// ════════════════════════════════════════
+async function cekAutoDetected() {
+  const lastOrder = localStorage.getItem('pd_last_order');
+  if (!lastOrder) return;
+
+  try {
+    const r = await fetch(`${API}/midtrans/order/${lastOrder}`);
+    const d = await r.json();
+    if (d.status !== 'ok') return;
+
+    // Hanya tampilkan banner kalau masih pending
+    if (d.payment_status === 'pending') {
+      document.getElementById('auto-detected').innerHTML = `
+        <div class="auto-banner">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+          <div class="auto-banner-text">
+            Kami mendeteksi Anda punya pembayaran tertunda dengan nomor <strong>${esc(d.order_id)}</strong>. Detailnya ditampilkan otomatis di bawah.
+          </div>
+        </div>`;
+      tampilkanOrder(d);
+    } else if (['paid','settlement','capture'].includes(d.payment_status)) {
+      // Sudah dibayar, bersihkan localStorage
+      localStorage.removeItem('pd_last_order');
+    }
+  } catch (e) {
+    console.error('Auto detect error:', e);
+  }
+}
+
+// ════════════════════════════════════════
+// CARI MANUAL
+// ════════════════════════════════════════
+async function cariManual() {
+  const orderId = document.getElementById('input-order-id').value.trim().toUpperCase();
+  if (!orderId) return;
+
+  document.getElementById('result-area').innerHTML = '<div class="empty-state"><div class="spin" style="display:block;border-top-color:var(--orange);border-color:var(--cream2);margin:0 auto;"></div></div>';
+
+  try {
+    const r = await fetch(`${API}/midtrans/order/${encodeURIComponent(orderId)}`);
+    const d = await r.json();
+    if (d.status !== 'ok') {
+      tampilkanError('Nomor pesanan tidak ditemukan. Periksa kembali nomor pesanan Anda.');
+      return;
+    }
+    tampilkanOrder(d);
+  } catch (e) {
+    tampilkanError('Gagal terhubung ke server. Coba lagi.');
+  }
+}
+
+// ════════════════════════════════════════
+// TAMPILKAN ORDER
+// ════════════════════════════════════════
+function tampilkanOrder(order) {
+  const area = document.getElementById('result-area');
+
+  if (['paid','settlement','capture'].includes(order.payment_status)) {
+    area.innerHTML = `
+      <div class="result-card">
+        <div class="result-header">
+          <div class="result-icon" style="background:var(--green-bg);">✅</div>
+          <div class="result-info">
+            <div class="result-title">Pesanan Sudah Dibayar</div>
+            <div class="result-id">${esc(order.order_id)}</div>
+          </div>
+        </div>
+        <div class="result-divider"></div>
+        <div class="result-body">
+          <p style="font-size:13px;color:var(--g500);margin-bottom:12px;">Pesanan ini sudah berhasil dibayar. Cek link produk Anda di halaman berikut:</p>
+          <a href="success.html?order_id=${esc(order.order_id)}&status=success" class="btn-lanjut" style="text-decoration:none;display:flex;">
+            Lihat Link Produk
+          </a>
+        </div>
+      </div>`;
+    return;
+  }
+
+  if (['cancel','expire','deny'].includes(order.payment_status)) {
+    area.innerHTML = `
+      <div class="result-card">
+        <div class="result-header">
+          <div class="result-icon expired">❌</div>
+          <div class="result-info">
+            <div class="result-title">Pesanan Dibatalkan / Kedaluwarsa</div>
+            <div class="result-id">${esc(order.order_id)}</div>
+          </div>
+        </div>
+        <div class="result-divider"></div>
+        <div class="result-body">
+          <p style="font-size:13px;color:var(--g500);margin-bottom:12px;">Pesanan ini sudah tidak dapat dibayar. Silakan buat pesanan baru.</p>
+          <a href="index.html" class="btn-lanjut" style="text-decoration:none;display:flex;">Buat Pesanan Baru</a>
+        </div>
+      </div>`;
+    return;
+  }
+
+  // Status pending
+  const items = order.items || [];
+
+  // Hitung sisa waktu (3 jam dari created_at)
+  const createdAt   = new Date(order.created_at).getTime();
+  const expiredAt   = createdAt + (3 * 60 * 60 * 1000); // 3 jam
+  const sisaMs      = expiredAt - Date.now();
+
+  if (sisaMs <= 0) {
+    // Sudah lewat 3 jam, otomatis expired
+    expireOrderOtomatis(order.order_id);
+    area.innerHTML = `
+      <div class="result-card">
+        <div class="result-header">
+          <div class="result-icon expired">⌛</div>
+          <div class="result-info">
+            <div class="result-title">Waktu Pembayaran Habis</div>
+            <div class="result-id">${esc(order.order_id)}</div>
+          </div>
+        </div>
+        <div class="result-divider"></div>
+        <div class="result-body">
+          <p style="font-size:13px;color:var(--g500);margin-bottom:12px;">Pesanan ini sudah melebihi batas waktu 3 jam. Silakan buat pesanan baru.</p>
+          <a href="index.html" class="btn-lanjut" style="text-decoration:none;display:flex;">Buat Pesanan Baru</a>
+        </div>
+      </div>`;
+    return;
+  }
+
+  area.innerHTML = `
+    <div class="result-card">
+      <div class="result-header">
+        <div class="result-icon pending">⏳</div>
+        <div class="result-info">
+          <div class="result-title">Menunggu Pembayaran</div>
+          <div class="result-id">${esc(order.order_id)}</div>
+        </div>
+      </div>
+      <div class="result-divider"></div>
+      <div class="result-body">
+        <div class="countdown-box" id="countdown-box">
+          <div class="countdown-label">⏰ Selesaikan pembayaran dalam:</div>
+          <div class="countdown-time" id="countdown-time">--:--:--</div>
+        </div>
+
+        ${items.map(i => `
+          <div class="item-row">
+            <span>${esc(i.nama)}${i.variasi?' — '+esc(i.variasi):''} ×${i.qty||1}</span>
+            <span style="font-weight:700;">Rp ${fmt((i.harga||0)*(i.qty||1))}</span>
+          </div>`).join('')}
+        <div class="total-row"><span>Total</span><span>Rp ${fmt(order.total)}</span></div>
+
+        <button class="btn-lanjut" id="btn-lanjut" onclick="lanjutkanBayar('${esc(order.order_id)}', '${esc(order.snap_token||'')}')">
+          <div class="spin" id="spin-lanjut"></div>
+          <svg id="icon-lanjut" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          <span id="txt-lanjut">Lanjutkan Pembayaran</span>
+        </button>
+        <button class="btn-batal" id="btn-batal" onclick="batalkanPesanan('${esc(order.order_id)}')">
+          <div class="spin" id="spin-batal" style="border-top-color:var(--g700);"></div>
+          <span id="txt-batal">Batalkan Pesanan</span>
+        </button>
+      </div>
+    </div>`;
+
+  mulaiCountdown(expiredAt, order.order_id);
+}
+
+// ════════════════════════════════════════
+// COUNTDOWN 3 JAM
+// ════════════════════════════════════════
+let countdownInterval = null;
+
+function mulaiCountdown(expiredAt, orderId) {
+  if (countdownInterval) clearInterval(countdownInterval);
+
+  function update() {
+    const sisaMs = expiredAt - Date.now();
+    const el = document.getElementById('countdown-time');
+    if (!el) { clearInterval(countdownInterval); return; }
+
+    if (sisaMs <= 0) {
+      clearInterval(countdownInterval);
+      expireOrderOtomatis(orderId);
+      tampilkanOrder({ order_id: orderId, payment_status: 'expire' });
+      return;
+    }
+
+    const jam   = Math.floor(sisaMs / 3600000);
+    const menit = Math.floor((sisaMs % 3600000) / 60000);
+    const detik = Math.floor((sisaMs % 60000) / 1000);
+    el.textContent = `${String(jam).padStart(2,'0')}:${String(menit).padStart(2,'0')}:${String(detik).padStart(2,'0')}`;
+
+    // Warning kalau sisa < 15 menit
+    const box = document.getElementById('countdown-box');
+    if (box && sisaMs < 15*60000) box.classList.add('urgent');
+  }
+
+  update();
+  countdownInterval = setInterval(update, 1000);
+}
+
+async function expireOrderOtomatis(orderId) {
+  try {
+    await fetch(`${API}/midtrans/order/${orderId}/cancel`, { method: 'POST' });
+  } catch {}
+  localStorage.removeItem('pd_last_order');
+}
+
+// ════════════════════════════════════════
+// BATALKAN PESANAN
+// ════════════════════════════════════════
+async function batalkanPesanan(orderId) {
+  if (!confirm('Yakin ingin membatalkan pesanan ini? Tindakan ini tidak bisa dibatalkan.')) return;
+
+  const btn  = document.getElementById('btn-batal');
+  const spin = document.getElementById('spin-batal');
+  const txt  = document.getElementById('txt-batal');
+
+  if (btn) btn.disabled = true;
+  if (spin) spin.style.display = 'inline-block';
+  if (txt) txt.textContent = 'Membatalkan...';
+
+  try {
+    const r = await fetch(`${API}/midtrans/order/${orderId}/cancel`, { method: 'POST' });
+    const d = await r.json();
+
+    if (d.status === 'ok') {
+      localStorage.removeItem('pd_last_order');
+      if (countdownInterval) clearInterval(countdownInterval);
+      document.getElementById('result-area').innerHTML = `
+        <div class="result-card">
+          <div class="result-header">
+            <div class="result-icon" style="background:var(--g100);">🚫</div>
+            <div class="result-info">
+              <div class="result-title">Pesanan Dibatalkan</div>
+              <div class="result-id">${esc(orderId)}</div>
+            </div>
+          </div>
+          <div class="result-divider"></div>
+          <div class="result-body">
+            <p style="font-size:13px;color:var(--g500);margin-bottom:12px;">Pesanan berhasil dibatalkan. Anda bisa berbelanja kembali kapan saja.</p>
+            <a href="index.html" class="btn-lanjut" style="text-decoration:none;display:flex;">Kembali ke Beranda</a>
+          </div>
+        </div>`;
+      document.getElementById('auto-detected').innerHTML = '';
+    } else {
+      alert(d.message || 'Gagal membatalkan pesanan.');
+      if (btn) btn.disabled = false;
+      if (spin) spin.style.display = 'none';
+      if (txt) txt.textContent = 'Batalkan Pesanan';
+    }
+  } catch (e) {
+    alert('Gagal terhubung ke server.');
+    if (btn) btn.disabled = false;
+    if (spin) spin.style.display = 'none';
+    if (txt) txt.textContent = 'Batalkan Pesanan';
+  }
+}
+
+function tampilkanError(msg) {
+  document.getElementById('result-area').innerHTML = `<div class="err-box">${esc(msg)}</div>`;
+}
+
+// ════════════════════════════════════════
+// LANJUTKAN BAYAR
+// ════════════════════════════════════════
+async function lanjutkanBayar(orderId, existingToken) {
+  const btn  = document.getElementById('btn-lanjut');
+  const spin = document.getElementById('spin-lanjut');
+  const icon = document.getElementById('icon-lanjut');
+  const txt  = document.getElementById('txt-lanjut');
+
+  btn.disabled = true;
+  spin.style.display = 'block';
+  icon.style.display = 'none';
+  txt.textContent = 'Memuat...';
+
+  // Coba pakai token lama dulu (kalau ada dan belum expired biasanya masih jalan)
+  if (existingToken) {
+    bukaSnap(existingToken, orderId, btn, spin, icon, txt);
+    return;
+  }
+
+  // Kalau tidak ada token, generate baru
+  await generateTokenBaru(orderId, btn, spin, icon, txt);
+}
+
+async function generateTokenBaru(orderId, btn, spin, icon, txt) {
+  try {
+    const r = await fetch(`${API}/midtrans/order/${orderId}/regenerate-token`, { method: 'POST' });
+    const d = await r.json();
+    if (d.status !== 'ok') {
+      alert(d.message || 'Gagal membuat ulang link pembayaran.');
+      resetBtn(btn, spin, icon, txt);
+      return;
+    }
+    bukaSnap(d.snap_token, orderId, btn, spin, icon, txt);
+  } catch (e) {
+    alert('Gagal terhubung ke server.');
+    resetBtn(btn, spin, icon, txt);
+  }
+}
+
+function bukaSnap(token, orderId, btn, spin, icon, txt) {
+  window.snap.pay(token, {
+    onSuccess: function() {
+      localStorage.removeItem('pd_cart');
+      localStorage.removeItem('pd_last_order');
+      location.href = `success.html?order_id=${orderId}&status=success`;
+    },
+    onPending: function() {
+      location.href = `success.html?order_id=${orderId}&status=pending`;
+    },
+    onError: async function() {
+      // Token mungkin expired, coba generate ulang sekali
+      await generateTokenBaru(orderId, btn, spin, icon, txt);
+    },
+    onClose: function() {
+      resetBtn(btn, spin, icon, txt);
+    }
+  });
+}
+
+function resetBtn(btn, spin, icon, txt) {
+  if (!btn) return;
+  btn.disabled = false;
+  spin.style.display = 'none';
+  icon.style.display = 'block';
+  txt.textContent = 'Lanjutkan Pembayaran';
+}
+
+// Enter key untuk search
+document.getElementById('input-order-id').addEventListener('keydown', e => {
+  if (e.key === 'Enter') cariManual();
+});
+
+// Init
+cekAutoDetected();
+</script>
+</body>
+</html>

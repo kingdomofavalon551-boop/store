@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hanun Store</title>
+<link rel="icon" type="image/jpeg" href="GANTI_DENGAN_URL_LOGO_ANDA">
+<meta name="description" content="Cek pesanan dan lihat katalog perangkat ajar digital Hanun Store.">
+
+<!-- PWA -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#1B3A6B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Hanun Store">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:    #1B3A6B;
+  --navy2:   #2A4F8F;
+  --orange:  #E07B2A;
+  --orange2: #F5A040;
+  --cream:   #F5EFE6;
+  --cream2:  #EDE4D6;
+  --white:   #FFFFFF;
+  --g100:    #F1F5F9;
+  --g300:    #CBD5E1;
+  --g500:    #64748B;
+  --g700:    #334155;
+  --green:   #16A34A;
+  --red:     #DC2626;
+  --red-bg:  #FEE2E2;
+  --yellow-bg: #FEFCE8;
+  --green-bg:  #DCFCE7;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream);color:var(--g700);min-height:100vh;}
+
+/* ── HEADER ── */
+header{
+  background:var(--navy);
+  padding:14px 20px;
+  display:flex;align-items:center;gap:10px;
+  position:sticky;top:0;z-index:100;
+  box-shadow:0 2px 12px rgba(0,0,0,.2);
+}
+.logo-box{
+  width:38px;height:38px;background:var(--cream);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.logo-box svg{width:24px;height:24px;}
+.brand{display:flex;flex-direction:column;}
+.brand-name{font-size:16px;font-weight:800;color:#fff;letter-spacing:-.3px;line-height:1;}
+.brand-sub{font-size:10px;color:var(--orange2);font-weight:600;letter-spacing:.6px;margin-top:2px;}
+.header-spacer{flex:1;}
+.btn-admin-link{
+  font-size:11px;font-weight:700;color:rgba(255,255,255,.55);
+  text-decoration:none;padding:5px 10px;border-radius:6px;
+  border:1px solid rgba(255,255,255,.15);
+  transition:all .15s;
+}
+.btn-admin-link:hover{color:#fff;border-color:rgba(255,255,255,.4);}
+
+/* ── SECTION: CEK PESANAN ── */
+.section-pesanan{
+  background:var(--navy);
+  padding:28px 20px 32px;
+}
+.pesanan-inner{max-width:500px;margin:0 auto;}
+.pesanan-title{
+  font-size:13px;font-weight:700;color:var(--orange2);
+  letter-spacing:.8px;text-transform:uppercase;margin-bottom:14px;
+  display:flex;align-items:center;gap:6px;
+}
+.pesanan-title::before{content:'';display:inline-block;width:3px;height:14px;background:var(--orange);border-radius:2px;}
+.input-row{display:flex;gap:10px;}
+.input-wrap{position:relative;flex:1;}
+.input-wrap svg{
+  position:absolute;left:12px;top:50%;transform:translateY(-50%);
+  width:16px;height:16px;color:var(--g500);pointer-events:none;
+}
+.pesanan-input{
+  width:100%;padding:13px 13px 13px 38px;
+  background:rgba(255,255,255,.1);
+  border:1.5px solid rgba(255,255,255,.2);
+  border-radius:10px;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:14px;font-weight:600;color:#fff;
+  letter-spacing:.8px;text-transform:uppercase;
+  outline:none;transition:all .2s;
+}
+.pesanan-input::placeholder{text-transform:none;letter-spacing:0;color:rgba(255,255,255,.4);font-weight:400;}
+.pesanan-input:focus{background:rgba(255,255,255,.15);border-color:var(--orange);box-shadow:0 0 0 3px rgba(224,123,42,.25);}
+.btn-cek{
+  padding:13px 20px;
+  background:var(--orange);color:#fff;
+  border:none;border-radius:10px;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:14px;font-weight:700;
+  cursor:pointer;white-space:nowrap;
+  display:flex;align-items:center;gap:6px;
+  transition:background .15s,transform .1s;
+  flex-shrink:0;
+}
+.btn-cek:hover{background:#C96E1F;}
+.btn-cek:active{transform:scale(.97);}
+.btn-cek:disabled{background:rgba(255,255,255,.2);cursor:not-allowed;}
+
+/* ── RESULT BOX ── */
+#result-box{display:none;margin-top:14px;}
+.rbox{
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:12px;overflow:hidden;
+}
+.rbox-header{
+  padding:14px 16px;display:flex;align-items:flex-start;gap:12px;
+}
+.rbox-icon{font-size:20px;line-height:1;flex-shrink:0;margin-top:2px;}
+.rbox-title{font-size:14px;font-weight:800;color:#fff;}
+.rbox-sub{font-size:12px;color:rgba(255,255,255,.6);margin-top:2px;}
+.rbox-no{
+  display:inline-block;background:rgba(255,255,255,.12);
+  color:rgba(255,255,255,.9);font-size:11px;font-weight:700;
+  padding:2px 8px;border-radius:5px;margin-top:4px;letter-spacing:.8px;
+}
+.rbox-divider{height:1px;background:rgba(255,255,255,.1);}
+.rbox-body{padding:14px 16px;}
+
+/* produk item dalam result */
+.produk-item{
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:8px;padding:12px;margin-bottom:8px;
+}
+.produk-item:last-child{margin-bottom:0;}
+.produk-nama{font-size:12px;font-weight:700;color:rgba(255,255,255,.85);margin-bottom:6px;}
+.produk-url{
+  font-size:11px;color:rgba(255,255,255,.45);
+  word-break:break-all;font-family:monospace;
+  background:rgba(0,0,0,.2);padding:6px 8px;border-radius:5px;margin-bottom:8px;line-height:1.5;
+}
+.btn-salin{
+  width:100%;padding:8px;
+  background:var(--navy2);color:#fff;
+  border:none;border-radius:6px;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:12px;font-weight:700;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:5px;
+  transition:background .15s;
+}
+.btn-salin:hover{background:rgba(255,255,255,.2);}
+.btn-salin.copied{background:var(--green);}
+.aksi-btns{display:flex;gap:8px;margin-top:12px;}
+.btn-aksi{
+  flex:1;padding:10px;border-radius:8px;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:12px;font-weight:700;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:5px;
+  text-decoration:none;border:none;transition:opacity .15s;
+}
+.btn-aksi:active{transform:scale(.97);}
+.btn-aksi-email{background:rgba(255,255,255,.9);color:var(--navy);}
+.btn-aksi-wa{background:#25D366;color:#fff;}
+.btn-wa-admin{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  width:100%;padding:11px;margin-top:10px;
+  background:#25D366;color:#fff;
+  border:none;border-radius:8px;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:13px;font-weight:700;cursor:pointer;
+  text-decoration:none;transition:opacity .15s;
+}
+.rbox-msg{font-size:13px;color:rgba(255,255,255,.75);line-height:1.6;}
+
+/* spinner */
+.spin{
+  width:16px;height:16px;border:2.5px solid rgba(255,255,255,.3);
+  border-top-color:#fff;border-radius:50%;
+  animation:spin .6s linear infinite;display:none;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── SECTION: KATALOG ── */
+.section-katalog{padding:28px 16px 48px;}
+.katalog-inner{max-width:600px;margin:0 auto;}
+.katalog-header{
+  display:flex;align-items:center;gap:8px;margin-bottom:20px;
+}
+.katalog-title{
+  font-size:13px;font-weight:700;color:var(--g500);
+  text-transform:uppercase;letter-spacing:.7px;
+}
+.katalog-line{flex:1;height:1px;background:var(--cream2);}
+
+/* grid — 3 kolom di mobile juga, persis mockup */
+.katalog-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+}
+
+.produk-card{
+  display:flex;flex-direction:column;
+  min-width:0;
+  text-decoration:none;
+  cursor:pointer;
+}
+.produk-thumb-wrap{
+  position:relative;
+  aspect-ratio:1/1;
+  background:var(--g300);
+  border-radius:10px;
+  overflow:hidden;
+  margin-bottom:7px;
+}
+.produk-thumb{
+  width:100%;height:100%;object-fit:cover;
+  display:block;
+  transition:transform .25s;
+}
+.produk-card:hover .produk-thumb{transform:scale(1.05);}
+.produk-thumb-placeholder{
+  width:100%;height:100%;
+  background:var(--g300);
+  display:flex;align-items:center;justify-content:center;
+}
+.produk-thumb-placeholder svg{width:28px;height:28px;color:var(--g500);}
+.produk-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(27,58,107,.7) 0%,transparent 50%);
+  opacity:0;transition:opacity .2s;
+  display:flex;align-items:flex-end;padding:8px;
+}
+.produk-card:hover .produk-overlay{opacity:1;}
+.overlay-text{
+  font-size:10px;font-weight:700;color:#fff;
+  display:flex;align-items:center;gap:4px;
+}
+.produk-card-name{
+  font-size:11px;font-weight:700;color:var(--navy);
+  line-height:1.35;text-align:center;
+  overflow-wrap:anywhere;word-break:break-word;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+
+/* loading skeleton */
+.skeleton{
+  background:linear-gradient(90deg,var(--cream2) 25%,var(--cream) 50%,var(--cream2) 75%);
+  background-size:200% 100%;
+  animation:skel 1.2s ease-in-out infinite;
+  border-radius:10px;
+}
+@keyframes skel{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skel-thumb{aspect-ratio:1/1;}
+.skel-name{height:12px;border-radius:4px;margin-top:7px;width:80%;margin-left:auto;margin-right:auto;}
+
+.katalog-empty{
+  text-align:center;padding:40px 20px;color:var(--g500);
+  grid-column:1/-1;font-size:13px;
+}
+
+/* ── FOOTER ── */
+footer{
+  text-align:center;padding:16px 20px;
+  font-size:11px;color:var(--g500);
+  border-top:1px solid var(--cream2);background:var(--white);
+}
+footer a{color:var(--orange);text-decoration:none;font-weight:600;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:360px){
+  .katalog-grid{gap:8px;}
+  .produk-card-name{font-size:10px;}
+}
+@media(min-width:700px){
+  .katalog-inner{max-width:820px;}
+  .katalog-grid{grid-template-columns:repeat(4,minmax(0,1fr));}
+}
+@media(min-width:1000px){
+  .katalog-inner{max-width:1040px;}
+  .katalog-grid{grid-template-columns:repeat(5,minmax(0,1fr));}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo-box">
+    <img src="GANTI_DENGAN_URL_LOGO_ANDA" alt="Hanun Store" style="width:100%;height:100%;object-fit:cover;">
+  </div>
+  <div class="brand">
+    <span class="brand-name">Hanun Store</span>
+    <span class="brand-sub">PERANGKAT AJAR DIGITAL</span>
+  </div>
+  <div class="header-spacer"></div>
+  <a href="cart.html" style="position:relative;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;margin-right:6px;" id="cart-icon-link">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+    <span id="cart-count" style="display:none;position:absolute;top:-6px;right:-6px;background:#E07B2A;color:#fff;font-size:10px;font-weight:800;width:17px;height:17px;border-radius:50%;align-items:center;justify-content:center;"></span>
+  </a>
+  <a href="admin.html" class="btn-admin-link">Admin</a>
+</header>
+
+<!-- ══ CEK PESANAN ══ -->
+<div id="pending-banner"></div>
+
+<section class="section-pesanan">
+  <div class="pesanan-inner">
+    <div class="pesanan-title">Ambil Link Pesanan Anda</div>
+    <div class="input-row">
+      <div class="input-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 9h6M9 12h6M9 15h4"/>
+        </svg>
+        <input
+          id="inp"
+          class="pesanan-input"
+          type="text"
+          placeholder="Masukkan nomor pesanan Shopee"
+          maxlength="25"
+          autocomplete="off"
+          spellcheck="false"
+        >
+      </div>
+      <button class="btn-cek" id="btn-cek" onclick="cekPesanan()">
+        <div class="spin" id="spin"></div>
+        <svg id="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+        </svg>
+        <span id="btn-txt">Cek</span>
+      </button>
+    </div>
+
+    <!-- RESULT -->
+    <div id="result-box"></div>
+  </div>
+</section>
+
+<!-- ══ KATALOG PRODUK ══ -->
+<section class="section-katalog">
+  <div class="katalog-inner">
+    <div class="katalog-header">
+      <div class="katalog-title">Produk Kami</div>
+      <div class="katalog-line"></div>
+    </div>
+    <div class="katalog-grid" id="katalog-grid">
+      <!-- skeleton -->
+      <div><div class="skeleton skel-thumb"></div><div class="skeleton skel-name"></div></div>
+      <div><div class="skeleton skel-thumb"></div><div class="skeleton skel-name"></div></div>
+      <div><div class="skeleton skel-thumb"></div><div class="skeleton skel-name"></div></div>
+      <div><div class="skeleton skel-thumb"></div><div class="skeleton skel-name"></div></div>
+      <div><div class="skeleton skel-thumb"></div><div class="skeleton skel-name"></div></div>
+      <div><div class="skeleton skel-thumb"></div><div class="skeleton skel-name"></div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  &copy; 2025 Hanun Store &nbsp;·&nbsp;
+  Butuh bantuan? <a href="https://wa.me/GANTI_NOMOR_WA_ADMIN" target="_blank" rel="noopener">WhatsApp Admin</a>
+  &nbsp;·&nbsp; <a href="pending.html">Pembayaran Tertunda</a>
+  &nbsp;·&nbsp; <a href="contact.html">Kontak</a>
+  &nbsp;·&nbsp; <a href="tnc.html">Syarat & Ketentuan</a>
+  &nbsp;·&nbsp; <a href="refund.html">Kebijakan Refund</a>
+</footer>
+
+<script>
+// ════════════════════════════════════════
+// KONFIGURASI — ganti setelah deploy
+// ════════════════════════════════════════
+const API = 'https://GANTI-URL-BACKEND-ANDA.vercel.app/api/public';
+const ADMIN_WA = 'GANTI_NOMOR_WA_ADMIN';
+
+// ════════════════════════════════════════
+// KATALOG
+// ════════════════════════════════════════
+async function loadKatalog() {
+  try {
+    const r = await fetch(`${API}/katalog`);
+    const d = await r.json();
+    renderKatalog(d.data || []);
+  } catch {
+    document.getElementById('katalog-grid').innerHTML = '<div class="katalog-empty">Gagal memuat katalog. Coba refresh halaman.</div>';
+  }
+}
+
+function renderKatalog(items) {
+  const grid = document.getElementById('katalog-grid');
+  if (!items.length) {
+    grid.innerHTML = '<div class="katalog-empty">Katalog belum tersedia.</div>';
+    return;
+  }
+  grid.innerHTML = items.map(p => `
+    <a class="produk-card" href="produk.html?id=${p.id}">
+      <div class="produk-thumb-wrap">
+        ${p.foto_url
+          ? `<img class="produk-thumb" src="${toImgUrl(esc(p.foto_url))}" alt="${esc(p.nama)}" loading="lazy" onerror="this.parentNode.innerHTML='<div class=produk-thumb-placeholder><svg viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'1.5\\'><rect x=\\'3\\' y=\\'3\\' width=\\'18\\' height=\\'18\\' rx=\\'2\\'/>\\x3cpath d=\\'M3 9l4-4 4 4 4-4 4 4\\'/>\\x3ccircle cx=\\'8.5\\' cy=\\'13.5\\' r=\\'1.5\\'/></svg></div>'">`
+          : `<div class="produk-thumb-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9l4-4 4 4 4-4 4 4"/><circle cx="8.5" cy="13.5" r="1.5"/></svg></div>`
+        }
+        <div class="produk-overlay"><div class="overlay-text">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Lihat Detail
+        </div></div>
+      </div>
+      <div class="produk-card-name">${esc(p.nama)}</div>
+    </a>
+  `).join('');
+}
+
+// Konversi Google Drive share link ke direct image link
+function toImgUrl(url) {
+  if (!url) return url;
+  // Kalau sudah format uc?export=view, langsung pakai
+  if (url.includes('uc?export=view') || url.includes('uc&export=view')) return url;
+  // Format: https://drive.google.com/file/d/FILE_ID/view
+  const m = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  if (m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
+  // Format: https://drive.google.com/open?id=FILE_ID
+  const m2 = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if (m2) return `https://drive.google.com/uc?export=view&id=${m2[1]}`;
+  return url;
+}
+
+// ════════════════════════════════════════
+// CEK PESANAN
+// ════════════════════════════════════════
+document.getElementById('inp').addEventListener('keydown', e => { if (e.key==='Enter') cekPesanan(); });
+
+async function cekPesanan() {
+  const inp = document.getElementById('inp');
+  const no  = inp.value.trim().toUpperCase().replace(/\s+/g,'');
+  if (!no) { inp.focus(); inp.style.borderColor='var(--orange)'; setTimeout(()=>inp.style.borderColor='',1500); return; }
+
+  currentNoPesanan = no;
+  sudahTandai = false;
+  setLoad(true);
+  document.getElementById('result-box').style.display = 'none';
+
+  try {
+    const r = await fetch(`${API}/pesanan/${encodeURIComponent(no)}`);
+    const d = await r.json();
+    if (d.status === 'maintenance') { location.href = 'maintenance.html?fitur=cari'; return; }
+    renderResult(d);
+  } catch {
+    renderResult({ status:'error', message:'Tidak dapat terhubung ke server. Coba lagi.' });
+  } finally {
+    setLoad(false);
+  }
+}
+
+function renderResult(d) {
+  const box = document.getElementById('result-box');
+  box.style.display = 'block';
+
+  if (d.status === 'found') {
+    const produkHtml = (d.produk_list||[]).map(p => {
+      if (!p.url) return `<div class="produk-item"><div class="produk-nama">${esc(p.label)}</div><div class="rbox-msg" style="font-size:11px;color:rgba(255,255,255,.5);">Link belum tersedia</div></div>`;
+      return `<div class="produk-item">
+        <div class="produk-nama">${esc(p.label)}</div>
+        <div class="produk-url">${esc(p.url)}</div>
+        <button class="btn-salin" onclick="salin(this,'${escA(p.url)}')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          Salin Link
+        </button>
+      </div>`;
+    }).join('');
+
+    const mailBody = buildMail(d.produk_list||[], d.no_pesanan);
+    const waText   = buildWA(d.produk_list||[], d.no_pesanan);
+
+    box.innerHTML = `<div class="rbox">
+      <div class="rbox-header">
+        <div class="rbox-icon">✅</div>
+        <div><div class="rbox-title">Pesanan Ditemukan</div>
+          <div class="rbox-sub">Halo, ${esc(d.nama_pembeli||'Bapak/Ibu')} 👋</div>
+          <div class="rbox-no">${esc(d.no_pesanan)}</div></div>
+      </div>
+      <div class="rbox-divider"></div>
+      <div class="rbox-body">
+        ${produkHtml}
+        <div class="aksi-btns" style="margin-top:12px;">
+          <a class="btn-aksi btn-aksi-email" onclick="tandaiTerkirim()" href="mailto:?subject=${encodeURIComponent('Link Pesanan Hanun Store — '+d.no_pesanan)}&body=${encodeURIComponent(mailBody)}">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7"/></svg> Email
+          </a>
+          <a class="btn-aksi btn-aksi-wa" onclick="tandaiTerkirim()" href="https://wa.me/?text=${encodeURIComponent(waText)}" target="_blank" rel="noopener">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg> WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>`;
+
+  } else if (d.status === 'not_found') {
+    box.innerHTML = `<div class="rbox">
+      <div class="rbox-header">
+        <div class="rbox-icon">⏳</div>
+        <div><div class="rbox-title">Sedang Diproses</div>
+          <div class="rbox-sub">Tunggu ±1 menit, lalu cek kembali</div></div>
+      </div>
+      <div class="rbox-divider"></div>
+      <div class="rbox-body"><div class="rbox-msg">${esc(d.message||'Nomor pesanan belum diproses.')}</div></div>
+    </div>`;
+
+  } else if (d.status === 'no_link') {
+    const produkLabel = (d.produk_list||[]).filter(p=>!p.url).map(p=>p.label).join(', ') || 'produk yang dipesan';
+    const tmpl = `Halo min, saya belum mendapatkan pesanan saya\nno pesanan: ${d.no_pesanan}\nproduk: ${produkLabel}`;
+    box.innerHTML = `<div class="rbox">
+      <div class="rbox-header">
+        <div class="rbox-icon">🔗</div>
+        <div><div class="rbox-title">Link Belum Tersedia</div>
+          <div class="rbox-sub">Halo, ${esc(d.nama_pembeli||'Bapak/Ibu')} 👋</div>
+          <div class="rbox-no">${esc(d.no_pesanan)}</div></div>
+      </div>
+      <div class="rbox-divider"></div>
+      <div class="rbox-body">
+        <div class="rbox-msg">Mohon maaf, link harus dikirim oleh admin. Silakan hubungi admin kami.</div>
+        <a class="btn-wa-admin" href="https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(tmpl)}" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          Hubungi Admin via WhatsApp
+        </a>
+      </div>
+    </div>`;
+
+  } else {
+    box.innerHTML = `<div class="rbox">
+      <div class="rbox-header"><div class="rbox-icon">❌</div>
+        <div><div class="rbox-title">Terjadi Kesalahan</div>
+          <div class="rbox-sub">${esc(d.message||'Coba lagi.')}</div></div>
+      </div>
+    </div>`;
+  }
+}
+
+// ════════════════════════════════════════
+// TANDAI TERKIRIM — dipanggil otomatis
+// ════════════════════════════════════════
+let sudahTandai = false;
+async function tandaiTerkirim() {
+  if (sudahTandai || !currentNoPesanan) return;
+  sudahTandai = true;
+  try {
+    await fetch(`${API}/pesanan/${encodeURIComponent(currentNoPesanan)}/ambil`, {
+      method: 'PATCH'
+    });
+  } catch { /* silent fail — tidak ganggu UX */ }
+}
+
+// ════════════════════════════════════════
+// HELPERS
+// ════════════════════════════════════════
+function setLoad(on) {
+  document.getElementById('btn-cek').disabled = on;
+  document.getElementById('spin').style.display = on ? 'block' : 'none';
+  document.getElementById('btn-icon').style.display = on ? 'none' : 'block';
+  document.getElementById('btn-txt').textContent = on ? '' : 'Cek';
+}
+
+async function salin(btn, url) {
+  try { await navigator.clipboard.writeText(url); } catch {
+    const t=document.createElement('textarea'); t.value=url;
+    t.style.cssText='position:fixed;opacity:0;'; document.body.appendChild(t); t.select();
+    document.execCommand('copy'); document.body.removeChild(t);
+  }
+  tandaiTerkirim(); // ← otomatis tandai terkirim
+  const o=btn.innerHTML; btn.classList.add('copied');
+  btn.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Tersalin!';
+  setTimeout(()=>{ btn.classList.remove('copied'); btn.innerHTML=o; },2000);
+}
+
+function buildMail(list, no) {
+  let b=`Halo,\n\nBerikut link pesanan Hanun Store Anda:\nNo. Pesanan: ${no}\n\n`;
+  list.forEach((p,i)=>{ b+=`${i+1}. ${p.label}\n`; b+=p.url?`   ${p.url}\n\n`:`   (Link belum tersedia)\n\n`; });
+  b+=`Salam,\nHanun Store | WA: GANTI-NOMOR-WA-ADMIN`;
+  return b;
+}
+
+function buildWA(list, no) {
+  let t=`*Link Pesanan Hanun Store*\nNo: ${no}\n\n`;
+  list.forEach((p,i)=>{ t+=`*${i+1}. ${p.label}*\n`; t+=p.url?`${p.url}\n\n`:`(Link belum tersedia)\n\n`; });
+  return t;
+}
+
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function escA(s){ return String(s||'').replace(/'/g,"\\'"); }
+
+// Init
+loadKatalog();
+cekPendingOrder();
+
+// ════════════════════════════════════════
+// CEK PEMBAYARAN TERTUNDA
+// ════════════════════════════════════════
+async function cekPendingOrder() {
+  const lastOrder = localStorage.getItem('pd_last_order');
+  if (!lastOrder) return;
+
+  try {
+    const r = await fetch(`${API}/midtrans/order/${lastOrder}`);
+    const d = await r.json();
+    if (d.status !== 'ok') return;
+
+    if (d.payment_status === 'pending') {
+      // Tampilan sengaja dibuat seperti ALERT transaksi (bukan promo):
+      // ikon peringatan + label tegas + sebut "pembayaran pesanan" supaya
+      // user baru tidak mengira ini banner promo.
+      document.getElementById('pending-banner').innerHTML = `
+        <div style="background:#FEF3C7;border-bottom:2px solid #F59E0B;padding:11px 16px;">
+          <a href="pending.html" style="display:flex;align-items:center;gap:10px;max-width:600px;margin:0 auto;text-decoration:none;color:#92400E;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <span style="flex:1;font-size:13px;font-weight:600;line-height:1.4;">
+              <strong style="font-weight:800;">Transaksi belum selesai</strong> — pembayaran pesanan Anda masih menunggu. Ketuk untuk melanjutkan atau membatalkan.
+            </span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0;"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>`;
+    } else {
+      localStorage.removeItem('pd_last_order');
+    }
+  } catch {}
+}
+
+// Update cart badge
+(function(){
+  try {
+    const cart = JSON.parse(localStorage.getItem('pd_cart')||'[]');
+    const total = cart.reduce((s,i)=>s+(i.qty||1),0);
+    const el = document.getElementById('cart-count');
+    if (el && total > 0) { el.textContent=total; el.style.display='flex'; }
+  } catch {}
+})();
+
+// Register Service Worker (PWA)
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
