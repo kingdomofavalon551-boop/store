@@ -284,6 +284,44 @@ function parseTemplateKirimEmail(textRaw) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
+// NORMALISASI PREFIX KATEGORI — KHUSUS JALUR SHOPEE
+// Variasi dari email Shopee sering datang tanpa tag kategori (mis. "mtk,1"),
+// padahal bedahDanCariLink butuh "<KATEGORI> mapel,kelas" (mis. "PAG mtk,1")
+// untuk tahu produk mana yang dicari.
+// Aturan: kalau token pertama tiap item SUDAH cocok dengan salah satu
+// products.name (tes yang sama dengan matcher di bedahDanCariLink), biarkan;
+// kalau tidak, tempel DEFAULT_KATEGORI_SHOPEE di depan. Jalur Web/Midtrans
+// TIDAK memakai fungsi ini, jadi tidak tersentuh.
+// ═══════════════════════════════════════════════════════════════════════════════
+const DEFAULT_KATEGORI_SHOPEE = 'PAG';
+
+async function tambahPrefixKategoriShopee(detailProdukRaw) {
+    if (!detailProdukRaw) return detailProdukRaw;
+
+    let allProducts;
+    try {
+        allProducts = await prisma.product.findMany();
+    } catch (dbErr) {
+        // DB gagal → jangan paksa prefix (bisa salah untuk item non-default seperti
+        // KBC) → kembalikan apa adanya biar tidak merusak data.
+        console.error('tambahPrefixKategoriShopee: gagal ambil produk:', dbErr.message);
+        return detailProdukRaw;
+    }
+
+    return detailProdukRaw
+        .split(/\s*\|\s*/)
+        .filter(x => x.trim())
+        .map(item => {
+            item = item.trim();
+            const tokenPertama = (item.match(/^([a-zA-Z0-9]+)/) || [])[1] || '';
+            const sudahKategori = tokenPertama &&
+                allProducts.some(p => (p.name || '').toUpperCase().includes(tokenPertama.toUpperCase()));
+            return sudahKategori ? item : `${DEFAULT_KATEGORI_SHOPEE} ${item}`;
+        })
+        .join(' | ');
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
 // [ROUTE 1] WEBHOOK — Penerima data pesanan dari GAS
 // ═══════════════════════════════════════════════════════════════════════════════
 exports.handleShopeeEmailWebhook = async (req, res) => {
@@ -294,7 +332,10 @@ exports.handleShopeeEmailWebhook = async (req, res) => {
     }
 
     try {
-        const hasilProduk = await bedahDanCariLink(orderData.detail_produk);
+        // Normalisasi prefix kategori KHUSUS Shopee (jalur Web tidak tersentuh):
+        // variasi tanpa tag (mis. "mtk,1") ditempeli "PAG" → "PAG mtk,1".
+        const detailNormal = await tambahPrefixKategoriShopee(orderData.detail_produk);
+        const hasilProduk = await bedahDanCariLink(detailNormal);
 
         const rekapDetail = hasilProduk
             .map(item => item.url ? `${item.label} (${item.url})` : item.label)
