@@ -316,7 +316,7 @@ MIDTRANS_SERVER_KEY   = <server key Midtrans, JANGAN pernah ditulis plaintext di
 MIDTRANS_CLIENT_KEY   = GANTI_DENGAN_MIDTRANS_CLIENT_KEY_ANDA
 MIDTRANS_IS_PRODUCTION= true
 FRONTEND_URL          = https://hanunstore.com
-EMAIL_USER            = email@ganti-toko-anda.com
+EMAIL_USER            = hanunstore25@gmail.com
 EMAIL_PASS            = <app password Gmail>
 FONNTE_TOKEN          = <token Fonnte untuk kirim WA>
 TELEGRAM_TOKEN        = <token bot Telegram>
@@ -398,8 +398,8 @@ Kunci kombinasi dibuat dari: nilai variasi diurutkan sesuai `variasi_config`, di
 
 ## 📞 Kontak Admin
 
-- **WhatsApp:** `GANTI_NOMOR_WA_ADMIN` — placeholder, hardcoded di beberapa file (lihat `SETUP-TOKO-BARU.md` di root untuk daftar lengkap)
-- **Email:** `email@ganti-toko-anda.com` — placeholder di `contact.html` & `tnc.html`
+- **WhatsApp:** `628155163614` — placeholder, hardcoded di beberapa file (lihat `SETUP-TOKO-BARU.md` di root untuk daftar lengkap)
+- **Email:** `hanunstore25@gmail.com` — placeholder di `contact.html` & `tnc.html`
 - **Toko Shopee:** `https://shopee.co.id/GANTI_NAMA_TOKO_SHOPEE` — placeholder, ditampilkan di kartu "Informasi Toko" `contact.html`
 - **Template WA admin (link belum ada):**
   ```

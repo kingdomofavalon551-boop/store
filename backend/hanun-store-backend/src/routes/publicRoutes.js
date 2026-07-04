@@ -45,7 +45,7 @@ const transporter = nodemailer.createTransport({
 });
 
 // ── Helpers ──────────────────────────────────────────────────────
-const ADMIN_WA = 'GANTI_NOMOR_WA_ADMIN';
+const ADMIN_WA = '628155163614';
 
 async function kirimKeTelegram(pesan) {
     try {
@@ -791,7 +791,7 @@ router.post('/midtrans/notification', async (req, res) => {
         const pesanLinkKosong = adaKosong
             ? `<p style="background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:12px;margin:12px 0;color:#dc2626;">
                ⚠️ Beberapa link belum tersedia otomatis. Admin akan mengirimkan link tersebut segera.
-               Jika belum menerima dalam 1 jam, hubungi WA Admin: <strong>GANTI-NOMOR-WA-ADMIN</strong></p>`
+               Jika belum menerima dalam 1 jam, hubungi WA Admin: <strong>0815-5163-614</strong></p>`
             : '';
 
         const emailPromise = transporter.sendMail({
@@ -818,7 +818,7 @@ router.post('/midtrans/notification', async (req, res) => {
                     <p style="margin-top:20px;"><strong>📋 Catatan Penting:</strong><br>
                     • Simpan email ini sebagai bukti pembelian<br>
                     • Link dapat diakses kapan saja<br>
-                    • Kendala? WA Admin: <strong>GANTI-NOMOR-WA-ADMIN</strong></p>
+                    • Kendala? WA Admin: <strong>0815-5163-614</strong></p>
                     <hr style="border:none;border-top:1px solid #e2e8f0;margin:20px 0;">
                     <p style="color:#64748b;font-size:12px;text-align:center;">— Salam Hangat, Hanun Store —</p>
                 </div>
@@ -1182,7 +1182,7 @@ router.post('/midtrans/kirim-link', adminAuth, async (req, res) => {
                     <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;">
                         ${daftarLinkHtml}
                     </div>
-                    <p style="margin-top:16px;font-size:12px;color:#64748b;">Simpan email ini sebagai bukti. Kendala? WA: <strong>GANTI-NOMOR-WA-ADMIN</strong></p>
+                    <p style="margin-top:16px;font-size:12px;color:#64748b;">Simpan email ini sebagai bukti. Kendala? WA: <strong>0815-5163-614</strong></p>
                 </div>
             </div>`
         }).catch(e => console.error('Email error:', e.message));

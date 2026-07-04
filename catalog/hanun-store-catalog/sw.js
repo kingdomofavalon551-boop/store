@@ -1,4 +1,4 @@
-const CACHE = 'hanun-store-v2';
+const CACHE = 'hanun-store-v3';
 const ASSETS = ['/', '/index.html'];
 
 self.addEventListener('install', e => {

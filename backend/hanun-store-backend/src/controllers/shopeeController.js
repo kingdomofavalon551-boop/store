@@ -488,7 +488,7 @@ exports.handleTelegramInteractiveWebhook = async (req, res) => {
                     • Mohon berikan ulasan bintang 5 untuk mendukung kami 🌟<br>
                     • Perangkat Ajar Lengkap (1 Tahun / 2 Semester)<br>
                     • Format Word &amp; PPT · Sudah Deep Learning<br>
-                    • Kendala? Hubungi WA Admin: <strong>GANTI-NOMOR-WA-ADMIN</strong></p>
+                    • Kendala? Hubungi WA Admin: <strong>0815-5163-614</strong></p>
                     <p style='color:#64748b;font-size:12px;margin-top:24px;'>— Salam Hangat, Hanun Store</p>
                 </div>`
             });
@@ -698,7 +698,7 @@ exports.kirimEmailManual = async (req, res) => {
                 • Mohon berikan ulasan bintang 5 untuk mendukung kami 🌟<br>
                 • Perangkat Ajar Lengkap (1 Tahun / 2 Semester)<br>
                 • Format Word &amp; PPT · Sudah Deep Learning<br>
-                • Kendala? Hubungi WA Admin: <strong>GANTI-NOMOR-WA-ADMIN</strong></p>
+                • Kendala? Hubungi WA Admin: <strong>0815-5163-614</strong></p>
                 <p style='color:#64748b;font-size:12px;margin-top:24px;'>— Salam Hangat, Hanun Store</p>
             </div>`
         });

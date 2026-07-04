@@ -57,8 +57,8 @@ mudah dicari (case-sensitive, coba "Find in Files" di editor Anda):
 | `Hanun Store` | Nama toko Anda | Judul halaman, manifest.json, footer, teks email/WA (semua file HTML+JS) |
 | `hanun-store-backend.vercel.app` | Domain project backend Vercel Anda | `const API=...` di semua HTML dashboard admin & storefront |
 | `hanunstore.com` | Domain custom storefront Anda | fallback `FRONTEND_URL` di `publicRoutes.js` |
-| `email@ganti-toko-anda.com` | Email toko Anda | `contact.html`, `tnc.html` |
-| `GANTI_NOMOR_WA_ADMIN` / `GANTI-NOMOR-WA-ADMIN` | Nomor WA admin (format `62...` utk link `wa.me`, format `08xx-xxxx-xxxx` utk teks tampilan) | `publicRoutes.js`, `shopeeController.js`, banyak file di `catalog/` |
+| `hanunstore25@gmail.com` | Email toko Anda | `contact.html`, `tnc.html` |
+| `628155163614` / `0815-5163-614` | Nomor WA admin (format `62...` utk link `wa.me`, format `08xx-xxxx-xxxx` utk teks tampilan) | `publicRoutes.js`, `shopeeController.js`, banyak file di `catalog/` |
 | `GANTI_NAMA_TOKO_SHOPEE` | Username toko Shopee Anda | `contact.html` |
 | `GANTI_DENGAN_URL_LOGO_ANDA` | URL logo Anda (upload ke Cloudinary/host lain) | header + favicon di semua halaman `catalog/` |
 | `GANTI_DENGAN_MIDTRANS_CLIENT_KEY_ANDA` | Client key Midtrans **produksi** Anda | `checkout.html`, `pending.html` (script `snap.js`) |

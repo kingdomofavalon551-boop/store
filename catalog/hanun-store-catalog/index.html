@@ -364,7 +364,7 @@ footer a{color:var(--orange);text-decoration:none;font-weight:600;}
 
 <footer>
   &copy; 2025 Hanun Store &nbsp;·&nbsp;
-  Butuh bantuan? <a href="https://wa.me/GANTI_NOMOR_WA_ADMIN" target="_blank" rel="noopener">WhatsApp Admin</a>
+  Butuh bantuan? <a href="https://wa.me/628155163614" target="_blank" rel="noopener">WhatsApp Admin</a>
   &nbsp;·&nbsp; <a href="pending.html">Pembayaran Tertunda</a>
   &nbsp;·&nbsp; <a href="contact.html">Kontak</a>
   &nbsp;·&nbsp; <a href="tnc.html">Syarat & Ketentuan</a>
@@ -376,7 +376,7 @@ footer a{color:var(--orange);text-decoration:none;font-weight:600;}
 // KONFIGURASI — ganti setelah deploy
 // ════════════════════════════════════════
 const API = 'https://hanun-store-backend.vercel.app/api/public';
-const ADMIN_WA = 'GANTI_NOMOR_WA_ADMIN';
+const ADMIN_WA = '628155163614';
 
 // ════════════════════════════════════════
 // KATALOG
@@ -576,7 +576,7 @@ async function salin(btn, url) {
 function buildMail(list, no) {
   let b=`Halo,\n\nBerikut link pesanan Hanun Store Anda:\nNo. Pesanan: ${no}\n\n`;
   list.forEach((p,i)=>{ b+=`${i+1}. ${p.label}\n`; b+=p.url?`   ${p.url}\n\n`:`   (Link belum tersedia)\n\n`; });
-  b+=`Salam,\nHanun Store | WA: GANTI-NOMOR-WA-ADMIN`;
+  b+=`Salam,\nHanun Store | WA: 0815-5163-614`;
   return b;
 }
 

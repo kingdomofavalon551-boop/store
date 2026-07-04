@@ -86,7 +86,7 @@ header{background:var(--navy);padding:14px 20px;display:flex;align-items:center;
 
 <script>
 const API      = 'https://hanun-store-backend.vercel.app/api/public';
-const ADMIN_WA = 'GANTI_NOMOR_WA_ADMIN';
+const ADMIN_WA = '628155163614';
 
 const params   = new URLSearchParams(location.search);
 const orderId  = params.get('order_id') || localStorage.getItem('pd_last_order');
@@ -263,7 +263,7 @@ async function salin(btn, url) {
 function buildMailBody(list, orderId) {
   let b=`Halo,\n\nBerikut link pesanan Hanun Store Anda:\nNo. Pesanan: ${orderId}\n\n`;
   list.forEach((l,i)=>{ b+=`${i+1}. ${l.label}\n${l.url||'(Link menyusul)'}\n\n`; });
-  b+=`Salam,\nHanun Store | WA: GANTI-NOMOR-WA-ADMIN`;
+  b+=`Salam,\nHanun Store | WA: 0815-5163-614`;
   return b;
 }
 
