@@ -11,8 +11,8 @@
 //   DATABASE_URL, ADMIN_SECRET, FONNTE_TOKEN
 //   EMAIL_USER, EMAIL_PASS
 //   TELEGRAM_TOKEN, TELEGRAM_CHAT_ID
-//   MIDTRANS_SERVER_KEY=Mid-server-_OdBDMdIbTUKnfbktlC4RaIf
-//   MIDTRANS_CLIENT_KEY=GANTI_DENGAN_MIDTRANS_CLIENT_KEY_ANDA
+//   MIDTRANS_SERVER_KEY=<isi di .env lokal / Vercel — JANGAN tulis nilai di sini>
+//   MIDTRANS_CLIENT_KEY=<client key produksi>
 //   MIDTRANS_IS_PRODUCTION=true
 // ═══════════════════════════════════════════════════════════════════
 

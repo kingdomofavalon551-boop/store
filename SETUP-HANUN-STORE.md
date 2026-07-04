@@ -61,7 +61,7 @@ mudah dicari (case-sensitive, coba "Find in Files" di editor Anda):
 | `628155163614` / `0815-5163-614` | Nomor WA admin (format `62...` utk link `wa.me`, format `08xx-xxxx-xxxx` utk teks tampilan) | `publicRoutes.js`, `shopeeController.js`, banyak file di `catalog/` |
 | `GANTI_NAMA_TOKO_SHOPEE` | Username toko Shopee Anda | `contact.html` |
 | `GANTI_DENGAN_URL_LOGO_ANDA` | URL logo Anda (upload ke Cloudinary/host lain) | header + favicon di semua halaman `catalog/` |
-| `GANTI_DENGAN_MIDTRANS_CLIENT_KEY_ANDA` | Client key Midtrans **produksi** Anda | `checkout.html`, `pending.html` (script `snap.js`) |
+| `Mid-client-U968NIUMwqErvm5Z` | Client key Midtrans **produksi** Anda | `checkout.html`, `pending.html` (script `snap.js`) |
 
 **Penting:** kunci Midtrans di frontend cuma **client key** (memang publik by
 design). **Server key** JANGAN pernah taruh di file — hanya di environment

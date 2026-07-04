@@ -250,7 +250,7 @@ status_aksi     TEXT    -- diupdate ke 'TERKIRIM' saat pembeli ambil link sendir
 ## 💳 Midtrans
 
 - **Mode:** Production (`MIDTRANS_IS_PRODUCTION=true`)
-- **Client Key:** `GANTI_DENGAN_MIDTRANS_CLIENT_KEY_ANDA` (hardcoded di `checkout.html`)
+- **Client Key:** `Mid-client-U968NIUMwqErvm5Z` (hardcoded di `checkout.html`)
 - **Snap.js:** Di-load dari `https://app.midtrans.com/snap/snap.js`
 - **Webhook URL:** `https://hanun-store-backend.vercel.app/api/public/midtrans/notification`
 - **Finish URL:** `https://hanunstore.com/success.html`
@@ -313,7 +313,7 @@ Set di Vercel Dashboard → hanun-store-backend → Settings → Environment Var
 DATABASE_URL          = postgresql://... (Supabase connection string)
 ADMIN_SECRET          = <password admin>
 MIDTRANS_SERVER_KEY   = <server key Midtrans, JANGAN pernah ditulis plaintext di sini>
-MIDTRANS_CLIENT_KEY   = GANTI_DENGAN_MIDTRANS_CLIENT_KEY_ANDA
+MIDTRANS_CLIENT_KEY   = Mid-client-U968NIUMwqErvm5Z
 MIDTRANS_IS_PRODUCTION= true
 FRONTEND_URL          = https://hanunstore.com
 EMAIL_USER            = hanunstore25@gmail.com
