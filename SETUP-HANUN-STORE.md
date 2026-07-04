@@ -23,8 +23,10 @@ hubungkan ke repo GitHub Anda sendiri kapan pun siap.
 ## 1. Yang HARUS Anda kerjakan di luar kode (tidak bisa saya lakukan)
 
 - [ ] Buat project **Supabase** baru (database Postgres) untuk toko ini.
-- [ ] Jalankan migrasi tabel dasar (via Prisma `migrate` atau SQL manual) **dan**
-      `files/SQL_MIGRATION_FITUR_BARU.sql` di Supabase SQL Editor.
+- [ ] **Buat semua tabel:** jalankan `files/SQL_INIT_DATABASE.sql` di Supabase
+      SQL Editor (untuk database BARU yang masih kosong — membuat 8 tabel dari nol,
+      idempoten). File `SQL_MIGRATION_FITUR_BARU.sql` yang lama TIDAK perlu lagi
+      untuk DB baru (isinya cuma ADD COLUMN, sudah termasuk di init).
 - [ ] Buat akun/app baru untuk: **Midtrans** (server key + client key produksi),
       **Gmail** (App Password untuk `EMAIL_USER`/`EMAIL_PASS`), **Fonnte** (token WA),
       **Telegram Bot** (token + chat ID admin).
