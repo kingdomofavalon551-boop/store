@@ -320,7 +320,7 @@ function escHtml(s) {
 
 router.get('/share/:id', async (req, res) => {
     const id = parseInt(req.params.id);
-    const frontendUrl = process.env.FRONTEND_URL || 'https://ganti-domain-toko-anda.com';
+    const frontendUrl = process.env.FRONTEND_URL || 'https://hanun-store-catalog.vercel.app';
     const targetUrl = `${frontendUrl}/produk.html?id=${id}`;
 
     if (isNaN(id)) return res.redirect(302, `${frontendUrl}/produk.html`);
@@ -509,7 +509,7 @@ router.post('/midtrans/create-transaction', async (req, res) => {
             },
             item_details: itemDetails,
             callbacks: {
-                finish: `${process.env.FRONTEND_URL || 'https://ganti-domain-toko-anda.com'}/success.html`
+                finish: `${process.env.FRONTEND_URL || 'https://hanun-store-catalog.vercel.app'}/success.html`
             }
         };
 
@@ -978,7 +978,7 @@ router.post('/midtrans/order/:order_id/regenerate-token', async (req, res) => {
                 quantity: parseInt(i.qty) || 1
             })),
             callbacks: {
-                finish: `${process.env.FRONTEND_URL || 'https://ganti-domain-toko-anda.com'}/success.html`
+                finish: `${process.env.FRONTEND_URL || 'https://hanun-store-catalog.vercel.app'}/success.html`
             }
         };
 

@@ -38,4 +38,4 @@ Buka URL dashboard → Menu (⋮) → "Add to Home Screen" → Install
 Buka URL dashboard → Share button → "Add to Home Screen" → Add
 
 ---
-Domain yang akan didapat: `GANTI-URL-ADMIN-ANDA.vercel.app` (atau custom domain)
+Domain yang akan didapat: `hanun-store-frontend.vercel.app` (atau custom domain)
