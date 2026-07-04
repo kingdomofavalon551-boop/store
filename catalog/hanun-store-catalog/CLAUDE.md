@@ -8,7 +8,7 @@ Dokumen ini berisi konteks lengkap proyek **hanun-store-catalog** untuk membantu
 
 **Hanun Store** adalah toko digital yang menjual perangkat ajar (Modul Ajar, PPT, KKTP, ATP, Prota, Promes) untuk guru Indonesia. Produk berupa file Google Drive yang dikirim otomatis setelah pembayaran.
 
-**Repository ini** (`hanun-store-catalog`) adalah **frontend statis** yang di-deploy ke Vercel dan dapat diakses di `https://hanun-store-catalog.vercel.app`.
+**Repository ini** (`hanun-store-catalog`) adalah **frontend statis** yang di-deploy ke Vercel dan dapat diakses di `https://hanunstore.com`.
 
 Ada **repository terpisah** bernama `hanun-store-backend` yang di-deploy di `https://hanun-store-backend.vercel.app` — frontend ini mengakses semua data melalui API backend tersebut.
 
@@ -20,7 +20,7 @@ Ada **repository terpisah** bernama `hanun-store-backend` yang di-deploy di `htt
 hanun-store-catalog (repo ini)        hanun-store-backend (repo terpisah)
 ├── Frontend statis (HTML/CSS/JS)  →   ├── Express.js + Prisma
 ├── Di-deploy ke Vercel                ├── Database: Supabase (PostgreSQL)
-└── Domain: hanun-store-catalog.vercel.app            ├── Di-deploy ke Vercel
+└── Domain: hanunstore.com            ├── Di-deploy ke Vercel
                                        └── URL: hanun-store-backend.vercel.app
 ```
 
@@ -253,7 +253,7 @@ status_aksi     TEXT    -- diupdate ke 'TERKIRIM' saat pembeli ambil link sendir
 - **Client Key:** `GANTI_DENGAN_MIDTRANS_CLIENT_KEY_ANDA` (hardcoded di `checkout.html`)
 - **Snap.js:** Di-load dari `https://app.midtrans.com/snap/snap.js`
 - **Webhook URL:** `https://hanun-store-backend.vercel.app/api/public/midtrans/notification`
-- **Finish URL:** `https://hanun-store-catalog.vercel.app/success.html`
+- **Finish URL:** `https://hanunstore.com/success.html`
 
 ---
 
@@ -315,7 +315,7 @@ ADMIN_SECRET          = <password admin>
 MIDTRANS_SERVER_KEY   = <server key Midtrans, JANGAN pernah ditulis plaintext di sini>
 MIDTRANS_CLIENT_KEY   = GANTI_DENGAN_MIDTRANS_CLIENT_KEY_ANDA
 MIDTRANS_IS_PRODUCTION= true
-FRONTEND_URL          = https://hanun-store-catalog.vercel.app
+FRONTEND_URL          = https://hanunstore.com
 EMAIL_USER            = email@ganti-toko-anda.com
 EMAIL_PASS            = <app password Gmail>
 FONNTE_TOKEN          = <token Fonnte untuk kirim WA>
@@ -330,7 +330,7 @@ TELEGRAM_CHAT_ID      = <chat ID admin>
 **Frontend (repo ini):**
 - Auto-deploy via Vercel setiap push ke `main`
 - Tidak ada build step — file statis langsung di-serve
-- Domain custom: `hanun-store-catalog.vercel.app`
+- Domain custom: `hanunstore.com`
 
 **Backend (repo terpisah):**
 - Auto-deploy via Vercel setiap push ke `main`
