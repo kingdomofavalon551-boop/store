@@ -1,4 +1,4 @@
-const CACHE = 'hanun-store-v1';
+const CACHE = 'hanun-store-v2';
 const ASSETS = [
   '/',
   '/index.html',
